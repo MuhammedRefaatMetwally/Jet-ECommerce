@@ -1,10 +1,9 @@
-package com.example.jet_ecommerce.ui.navigation_comp
+package com.example.jet_ecommerce.ui.navigation_comp.bottomNav
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.example.jet_ecommerce.ui.features.categories.CategoriesScreen
 import com.example.jet_ecommerce.ui.features.home.HomeScreen
 import com.example.jet_ecommerce.ui.features.profile.ProfileScreen

@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">Jet-ECommerce</string>
+    <string name="welcome_back_to_route">Welcome Back To Route</string>
+    <string name="please_sign_in_with_your_mail">please sign in with your mail</string>
+    <string name="user_name">User Name</string>
+    <string name="enter_your_email">Enter your Email</string>
+    <string name="password">Password</string>
+    <string name="enter_your_password">Enter your Password</string>
+    <string name="forget_password">Forget Password</string>
+    <string name="login">Login</string>
+    <string name="don_t_have_an_account_create_account">Don\'t have an account? Create Account</string>
+    <string name="full_name">Full Name</string>
+    <string name="enter_your_full_name">Enter Your Full Name</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="enter_your_mobile_number">Enter Your Mobile Number</string>
+    <string name="e_mail_address">E-mail Address</string>
+    <string name="enter_your_email_address">Enter Your Email Address</string>
+    <string name="sign_up">Sign Up</string>
 </resources>

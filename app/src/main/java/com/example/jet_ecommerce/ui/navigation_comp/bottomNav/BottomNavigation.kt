@@ -1,16 +1,14 @@
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+package com.example.jet_ecommerce.ui.navigation_comp.bottomNav
+
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Surface
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -19,7 +17,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.jet_ecommerce.R
 import com.example.jet_ecommerce.ui.components.SelectedNavIcon
-import com.example.jet_ecommerce.ui.navigation_comp.BottomNavItem
 
 @Composable
 fun BottomNavigationBar(navController: NavHostController) {
@@ -29,7 +26,12 @@ fun BottomNavigationBar(navController: NavHostController) {
         BottomNavItem.WishList,
         BottomNavItem.Profile,)
 
-    BottomNavigation(
+    BottomNavigation(modifier = Modifier.clip(
+        shape = RoundedCornerShape(
+            topStart = 16.dp,
+            topEnd = 16.dp,
+        )
+    ),
         backgroundColor = colorResource(id = R.color.main_color),
         contentColor = Color.Black
     ) {

@@ -1,7 +1,6 @@
 package com.example.jet_ecommerce.ui.features.splash
 
 import android.view.animation.OvershootInterpolator
-import android.window.SplashScreen
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
@@ -15,7 +14,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavHostController
 import com.example.jet_ecommerce.R
-import com.example.jet_ecommerce.ui.navigation_comp.ECommerceScreens
+import com.example.jet_ecommerce.ui.navigation_comp.screensNav.ECommerceScreens
 import kotlinx.coroutines.delay
 
 
@@ -40,6 +39,7 @@ fun SplashScreen(navController: NavHostController) {
 @Composable
 fun SplashContent() {
     Surface(Modifier.fillMaxSize()) {
-        Image(painter = painterResource(id = R.drawable.splash_bg), contentDescription ="splash", contentScale = ContentScale.Crop )
+        Image(painter = painterResource(id = R.drawable.splash_bg),
+            contentDescription ="splash", contentScale = ContentScale.Crop )
     }
 }
