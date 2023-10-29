@@ -1,4 +1,4 @@
-package com.example.jet_ecommerce.ui.navigation_comp
+package com.example.jet_ecommerce.ui.navigation_comp.screensNav
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost

@@ -1,4 +1,4 @@
-package com.example.jet_ecommerce.ui.navigation_comp
+package com.example.jet_ecommerce.ui.navigation_comp.screensNav
 
 enum class ECommerceScreens {
     SplashScreen,
