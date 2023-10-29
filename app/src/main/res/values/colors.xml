@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="main_color">#004182</color>
+    <color name="hint_color_70op">#000000</color>     <!-- op = opacity!-->
+    <color name="grey_color">#808080</color>
+    <color name="description_color_60op">#06004F</color>
+    <color name="text_color">#06004F</color>
+    <color name="stroke_color_30op">#004182</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>
