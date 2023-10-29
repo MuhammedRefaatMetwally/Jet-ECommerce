@@ -1,4 +1,4 @@
-package com.example.jet_ecommerce.ui.navigation_comp
+package com.example.jet_ecommerce.ui.navigation_comp.bottomNav
 
 import com.example.jet_ecommerce.R
 
