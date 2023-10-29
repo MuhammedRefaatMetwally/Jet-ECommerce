@@ -4,13 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.jet_ecommerce.ui.features.categories.CategoriesScreen
-import com.example.jet_ecommerce.ui.features.home.HomeScreen
 import com.example.jet_ecommerce.ui.features.login.LoginScreen
-import com.example.jet_ecommerce.ui.features.profile.ProfileScreen
+import com.example.jet_ecommerce.ui.features.main.MainScreen
 import com.example.jet_ecommerce.ui.features.register.RegisterScreen
 import com.example.jet_ecommerce.ui.features.splash.SplashScreen
-import com.example.jet_ecommerce.ui.features.wishlist.WishListScreen
 
 @Composable
 fun ECommerceNavigation() {
@@ -22,12 +19,12 @@ fun ECommerceNavigation() {
     ) {
 
         composable(ECommerceScreens.SplashScreen.name) {
-          //  val viewModel = SplashViewModel()
+            //  val viewModel = SplashViewModel()
             SplashScreen(navController = navController)
         }
 
         composable(ECommerceScreens.LoginScreen.name) {
-          //  val viewModel = LoginViewModel()
+            //  val viewModel = LoginViewModel()
             LoginScreen(navController = navController)
         }
 
@@ -36,22 +33,10 @@ fun ECommerceNavigation() {
             RegisterScreen(navController = navController)
         }
 
-        composable(ECommerceScreens.HomeScreen.name) {
+        composable(ECommerceScreens.MainScreen.name) {
 
-           HomeScreen(navController = navController)
+            MainScreen()
         }
 
-        composable(ECommerceScreens.CategoriesScreen.name) {
-
-            CategoriesScreen(navController = navController)
-        }
-        composable(ECommerceScreens.WishListScreen.name) {
-
-            WishListScreen(navController = navController)
-        }
-        composable(ECommerceScreens.ProfileScreen.name) {
-
-            ProfileScreen(navController = navController)
-        }
     }
 }

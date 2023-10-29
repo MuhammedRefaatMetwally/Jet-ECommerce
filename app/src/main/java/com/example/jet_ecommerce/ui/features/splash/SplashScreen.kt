@@ -32,7 +32,7 @@ fun SplashScreen(navController: NavHostController) {
             }
         ))
         delay(2500L)
-        navController.navigate(ECommerceScreens.HomeScreen.name)
+        navController.navigate(ECommerceScreens.MainScreen.name)
     }
     SplashContent()
 }
