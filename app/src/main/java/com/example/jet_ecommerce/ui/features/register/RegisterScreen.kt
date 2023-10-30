@@ -30,10 +30,8 @@ import androidx.navigation.compose.rememberNavController
 import com.example.jet_ecommerce.R
 import com.example.jet_ecommerce.ui.components.CustomButton
 import com.example.jet_ecommerce.ui.components.CustomText
-import com.example.jet_ecommerce.ui.components.CustomTextButton
 import com.example.jet_ecommerce.ui.components.CustomTextField
-import com.example.jet_ecommerce.ui.features.login.LoginScreen
-import com.example.jet_ecommerce.ui.viewModels.loginViewModel.LoginViewModel
+import com.example.jet_ecommerce.ui.viewModels.loginViewModel.RegisterViewModel
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -57,11 +55,8 @@ fun RegisterScreen(navController: NavHostController) {
 }
 
 
-
-
-
 @Composable
-fun RegisterContent(viewModel: LoginViewModel = viewModel()) {
+fun RegisterContent(viewModel: RegisterViewModel = viewModel()) {
 
     Column(
 
@@ -89,7 +84,7 @@ fun RegisterContent(viewModel: LoginViewModel = viewModel()) {
             contentScale = ContentScale.FillBounds
         )
 
-        
+
 
         CustomText(
 
@@ -102,8 +97,8 @@ fun RegisterContent(viewModel: LoginViewModel = viewModel()) {
         CustomTextField(
             label = stringResource(R.string.enter_your_full_name),
             state = viewModel.emailState,
-            errorState = viewModel.emailError ,
-            keyboardType = KeyboardType.Email ,
+            errorState = viewModel.emailError,
+            keyboardType = KeyboardType.Email,
             visualTransformation = VisualTransformation.None
         )
 
@@ -121,8 +116,8 @@ fun RegisterContent(viewModel: LoginViewModel = viewModel()) {
         CustomTextField(
             label = stringResource(R.string.enter_your_mobile_number),
             state = viewModel.emailState,
-            errorState = viewModel.emailError ,
-            keyboardType = KeyboardType.Email ,
+            errorState = viewModel.emailError,
+            keyboardType = KeyboardType.Email,
             visualTransformation = VisualTransformation.None
         )
 
@@ -138,8 +133,8 @@ fun RegisterContent(viewModel: LoginViewModel = viewModel()) {
         CustomTextField(
             label = stringResource(R.string.enter_your_email_address),
             state = viewModel.emailState,
-            errorState = viewModel.emailError ,
-            keyboardType = KeyboardType.Email ,
+            errorState = viewModel.emailError,
+            keyboardType = KeyboardType.Email,
             visualTransformation = VisualTransformation.None
         )
 
@@ -154,8 +149,8 @@ fun RegisterContent(viewModel: LoginViewModel = viewModel()) {
 
         CustomTextField(
             label = stringResource(R.string.enter_your_password),
-            state =  viewModel.passwordState,
-            errorState =viewModel.passwordError ,
+            state = viewModel.passwordState,
+            errorState = viewModel.passwordError,
             keyboardType = KeyboardType.Password,
             visualTransformation = PasswordVisualTransformation()
         )
@@ -163,8 +158,6 @@ fun RegisterContent(viewModel: LoginViewModel = viewModel()) {
 
         CustomButton(title = stringResource(R.string.sign_up),
             onClick = {})
-
-
 
 
     }
