@@ -1,13 +1,15 @@
 package com.example.jet_ecommerce.ui.navigation_comp.bottomNav
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.jet_ecommerce.ui.features.categories.CategoriesScreen
-import com.example.jet_ecommerce.ui.features.home.HomeScreen
-import com.example.jet_ecommerce.ui.features.profile.ProfileScreen
-import com.example.jet_ecommerce.ui.features.wishlist.WishListScreen
+import com.example.jet_ecommerce.ui.features.main.categories.CategoriesScreen
+import com.example.jet_ecommerce.ui.features.main.home.HomeScreen
+import com.example.jet_ecommerce.ui.features.main.home.HomeViewModel
+import com.example.jet_ecommerce.ui.features.main.profile.ProfileScreen
+import com.example.jet_ecommerce.ui.features.main.wishlist.WishListScreen
 
 @Composable
 fun ECommerceBottomNavigation(navController: NavHostController) {
@@ -18,8 +20,8 @@ fun ECommerceBottomNavigation(navController: NavHostController) {
     ) {
 
         composable(BottomNavItem.Home.screen_route) {
-          //  val viewModel = SplashViewModel()
-            HomeScreen(navController = navController)
+           val viewModel = hiltViewModel<HomeViewModel>()
+            HomeScreen(navController = navController, viewModel = viewModel)
         }
 
         composable(BottomNavItem.Categories.screen_route) {

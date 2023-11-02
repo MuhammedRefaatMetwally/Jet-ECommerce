@@ -8,4 +8,7 @@
     <color name="stroke_color_30op">#004182</color>
     <color name="black">#000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="star1">#F4B400</color>
+    <color name="star2">#FDD835</color>
+    <color name="star3">#FFFF8D</color>
 </resources>

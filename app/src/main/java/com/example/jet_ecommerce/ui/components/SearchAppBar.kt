@@ -70,18 +70,16 @@ fun SearchField(
     onSearchClick: () -> Unit = {},
     onClose: () -> Unit = {}
 ) {
-    var showClearButton by remember { mutableStateOf(false) }
+   /* var showClearButton by remember { mutableStateOf(false) }
+    val focusRequester = remember { FocusRequester() }*/
     val keyboardController = LocalSoftwareKeyboardController.current
-    val focusRequester = remember { FocusRequester() }
-
     OutlinedTextField(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, top = 16.dp)
-            .onFocusChanged { focusState ->
+            .fillMaxWidth(.9f)
+            .padding( end = 16.dp, top = 16.dp)
+            /*.onFocusChanged { focusState ->
                 showClearButton = (focusState.isFocused)
-            }
-            .focusRequester(focusRequester),
+            }.focusRequester(focusRequester)*/,
         value = searchText,
         onValueChange = onSearchTextChanged,
         placeholder = {
@@ -98,22 +96,22 @@ fun SearchField(
         shape = RoundedCornerShape(CornerSize(24.dp)),
 
         leadingIcon = {
-
-            AnimatedVisibility(
+            IconButton(onClick = { onSearchClick() }) {
+                Icon(
+                    modifier = Modifier.size(24.dp),
+                    painter =  painterResource(id =R.drawable.__icon__search_ ),
+                    contentDescription = "close",
+                    tint = colorResource(id = R.color.main_color )
+                )
+            }
+           /* AnimatedVisibility(
                 visible = showClearButton,
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {
-                IconButton(onClick = { onSearchClick() }) {
-                    Icon(
-                        modifier = Modifier.size(24.dp),
-                        painter =  painterResource(id =R.drawable.__icon__search_ ),
-                        contentDescription = "close",
-                        tint = colorResource(id = R.color.main_color )
-                    )
-                }
 
-            }
+
+            }*/
         },
         trailingIcon = {
             IconButton(onClick = { onClose() }) {
@@ -132,8 +130,8 @@ fun SearchField(
             keyboardController?.hide()
         }),
     )
-    LaunchedEffect(Unit) {
+  /*  LaunchedEffect(Unit) {
         focusRequester.requestFocus()
-    }
+    }*/
 
 }

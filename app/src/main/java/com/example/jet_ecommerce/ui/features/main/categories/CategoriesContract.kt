@@ -1,4 +1,4 @@
-package com.example.jet_ecommerce.ui.features.categories
+package com.example.jet_ecommerce.ui.features.main.categories
 
 import androidx.lifecycle.LiveData
 import com.example.domain.features.category.model.Category
@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.StateFlow
 // States- > When ViewModel Wants to send data to Fragment/Activity
 
 // Actions -> When Activity/Fragment wants to send Action To ViewModel
+
 class CategoriesContract {
     interface ViewModel{
         val states : StateFlow<State>
