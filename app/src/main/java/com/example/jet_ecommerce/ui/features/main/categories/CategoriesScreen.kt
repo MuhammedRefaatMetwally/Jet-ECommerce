@@ -139,7 +139,7 @@ fun ShowCategoriesList(
                 }
                 Column(
                     Modifier
-                        .padding(8.dp)
+                        .padding(start = 8.dp , end = 8.dp)
                         .fillMaxHeight()
                         .fillMaxWidth()
                         .background(Color.Transparent)
@@ -153,7 +153,61 @@ fun ShowCategoriesList(
         }
     }
 }
+@Composable
+fun CategoriesLazyColumn(
+    categoryList: List<Category?>?,
+    onCategoryClick: (category: Category) -> Unit
+) {
+    var selectedIndex by remember { mutableIntStateOf(0) }
+    LazyColumn() {
+        items(categoryList!!.size) { index ->
+            val item = categoryList[index]
+            if (selectedIndex == index) onCategoryClick(item!!)
+            CategoryItem(category = item!!, modifier = Modifier.selectable(selectedIndex == index) {
+                selectedIndex = index
+            }, isSelected = selectedIndex == index)
+        }
+    }
+}
 
+@Composable
+fun CategoryItem(category: Category, modifier: Modifier, isSelected: Boolean) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .fillMaxWidth()
+            .background(
+                color = if (isSelected) Color.Transparent else colorResource(id = R.color.stroke_color_30op)
+            )
+    ) {
+        if (isSelected) Box(
+            Modifier
+                .padding(5.dp)
+                .width(7.dp)
+                .height(72.dp)
+                .background(color = Color(0xFF004182), shape = RoundedCornerShape(size = 20.dp))
+        ) else Spacer(
+            Modifier
+                .padding(5.dp)
+                .width(7.dp)
+                .height(72.dp)
+                .background(color = Color.Transparent, shape = RoundedCornerShape(size = 20.dp))
+
+        )
+
+        Text(
+            text = category.name ?: "", style = TextStyle(
+                fontSize = 14.sp,
+                lineHeight = 18.sp,
+                fontWeight = FontWeight(500),
+                color = Color(0xFF06004F),
+                textAlign = TextAlign.Center,
+            )
+        )
+    }
+
+
+}
 @Composable
 fun ShowSubCategoriesList(
     category: Category,
@@ -268,62 +322,7 @@ fun SubCategoryItem(
     }
 }
 
-@Composable
-fun CategoriesLazyColumn(
-    categoryList: List<Category?>?,
-    onCategoryClick: (category: Category) -> Unit
-) {
-    var selectedIndex by remember { mutableIntStateOf(0) }
-    LazyColumn() {
-        items(categoryList!!.size) { index ->
-            val item = categoryList[index]
-            if (selectedIndex == index) onCategoryClick(item!!)
-            CategoryItem(category = item!!, modifier = Modifier.selectable(selectedIndex == index) {
-                selectedIndex = index
-                onCategoryClick(item)
-            }, isSelected = selectedIndex == index)
-        }
-    }
-}
 
-@Composable
-fun CategoryItem(category: Category, modifier: Modifier, isSelected: Boolean) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .fillMaxWidth()
-            .background(
-                color = if (isSelected) Color.Transparent else colorResource(id = R.color.stroke_color_30op)
-            )
-    ) {
-        if (isSelected) Box(
-            Modifier
-                .padding(5.dp)
-                .width(7.dp)
-                .height(72.dp)
-                .background(color = Color(0xFF004182), shape = RoundedCornerShape(size = 20.dp))
-        ) else Spacer(
-            Modifier
-                .padding(5.dp)
-                .width(7.dp)
-                .height(72.dp)
-                .background(color = Color.Transparent, shape = RoundedCornerShape(size = 20.dp))
-
-        )
-
-        Text(
-            text = category.name ?: "", style = TextStyle(
-                fontSize = 14.sp,
-                lineHeight = 18.sp,
-                fontWeight = FontWeight(500),
-                color = Color(0xFF06004F),
-                textAlign = TextAlign.Center,
-            )
-        )
-    }
-
-
-}
 
 @Composable
 fun ShowError(

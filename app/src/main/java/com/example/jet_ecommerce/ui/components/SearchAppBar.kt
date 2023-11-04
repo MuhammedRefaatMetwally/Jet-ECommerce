@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,7 +16,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -52,17 +52,13 @@ fun SearchField(
     onSearchClick: () -> Unit = {},
     onClose: () -> Unit = {}
 ) {
-    var showClearButton by remember { mutableStateOf(false) }
+    val showClearButton by remember { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = remember { FocusRequester() }
 
     OutlinedTextField(
         modifier = modifier
-            .fillMaxWidth()
-            .onFocusChanged { focusState ->
-                showClearButton = (focusState.isFocused)
-            }
-            .focusRequester(focusRequester),
+            .fillMaxWidth().padding(8.dp),
         value = searchText,
         onValueChange = onSearchTextChanged,
         placeholder = {
@@ -71,9 +67,9 @@ fun SearchField(
                 style = TextStyle(color = Color.LightGray, fontSize = 16.sp)
             )
         },
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedTextColor = colorResource(id = R.color.main_color),
-            unfocusedTextColor = colorResource(id = R.color.main_color),
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            textColor = colorResource(id = R.color.main_color),
+            disabledTextColor = colorResource(id = R.color.main_color),
             cursorColor = colorResource(id = R.color.main_color),
             focusedBorderColor = colorResource(id = R.color.text_color),
             unfocusedBorderColor = colorResource(id = R.color.text_color),
@@ -83,12 +79,6 @@ fun SearchField(
         shape = RoundedCornerShape(CornerSize(24.dp)),
 
         leadingIcon = {
-
-            AnimatedVisibility(
-                visible = showClearButton,
-                enter = fadeIn(),
-                exit = fadeOut()
-            ) {
                 IconButton(onClick = { onSearchClick() }) {
                     Icon(
                         modifier = Modifier.size(24.dp),
@@ -98,7 +88,6 @@ fun SearchField(
                     )
                 }
 
-            }
         },
         trailingIcon = {
             IconButton(onClick = { onClose() }) {
@@ -117,9 +106,9 @@ fun SearchField(
             keyboardController?.hide()
         }),
     )
-    LaunchedEffect(Unit) {
+   /* LaunchedEffect(Unit) {
         focusRequester.requestFocus()
         keyboardController?.hide()
-    }
+    }*/
 
 }

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.common.ResultWrapper
 import com.example.domain.features.category.usecase.GetCategoriesUseCase
-import com.example.domain.features.products.usecase.GetProductsUseCase
+import com.example.domain.features.product.usecase.GetProductsUseCase
 import com.example.jet_ecommerce.IoDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher

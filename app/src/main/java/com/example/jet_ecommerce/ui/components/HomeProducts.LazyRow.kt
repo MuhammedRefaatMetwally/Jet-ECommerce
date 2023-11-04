@@ -25,19 +25,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingSource
-import com.example.domain.features.products.model.Product
+import com.example.domain.features.product.model.Product
 import com.example.jet_ecommerce.R
 import com.example.jet_ecommerce.ui.features.main.home.HomeViewModel
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.launch
-import kotlin.random.Random
+
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeProductsLazyRow(products: List<Product?>? , viewModel: HomeViewModel) {
+fun HomeProductsLazyRow(products: List<Product?>?) {
     CustomTitle(title = products?.get(0)?.title ?: "")
     val state = rememberLazyListState()
     val showScrollToTopButton by remember {
