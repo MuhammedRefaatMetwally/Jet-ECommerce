@@ -1,4 +1,4 @@
-package com.example.data.features.product.datasourceContract
+package com.example.data.features.product.dataSourceContract
 
 import com.example.domain.common.ResultWrapper
 import com.example.domain.features.product.model.Product
