@@ -1,8 +1,8 @@
-package com.example.domain.features.products.usecase
+package com.example.domain.features.product.usecase
 
 import com.example.domain.common.ResultWrapper
-import com.example.domain.features.products.model.Product
-import com.example.domain.features.products.repository.ProductRepository
+import com.example.domain.features.product.model.Product
+import com.example.domain.features.product.repository.ProductRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

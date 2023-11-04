@@ -4,7 +4,8 @@ enum class ECommerceScreens {
     SplashScreen,
     LoginScreen,
     RegisterScreen,
-    MainScreen;
+    MainScreen,
+    SubCategoriesScreen;
 
     companion object {
         fun fromRoute(route: String?): ECommerceScreens

@@ -18,18 +18,16 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.jet_ecommerce.R
-import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun PageView() {
     val slideImage = remember { mutableIntStateOf(R.drawable.home_page_1) }
     val pagerState = rememberPagerState()
     val scope = rememberCoroutineScope()
-    HorizontalPager(modifier = Modifier.height(224.dp),count = 3, state = pagerState) { page ->
+    HorizontalPager(modifier = Modifier.height(224.dp), count = 3, state = pagerState) { page ->
         when (page) {
 
             0 -> {
@@ -66,11 +64,11 @@ fun PageView() {
                         pagerState.animateScrollToPage(it)
                     }
                 }
-                if (page==0 || page ==2) CustomButton(
+                if (page == 0 || page == 2) CustomButton(
                     title = "Shop Now",
                     modifier = Modifier.padding(end = 216.dp, bottom = 32.dp),
-                    textColor =if(page==0) R.color.white else R.color.main_color,
-                    btnColor = if(page==0) R.color.main_color else R.color.white,
+                    textColor = if (page == 0) R.color.white else R.color.main_color,
+                    btnColor = if (page == 0) R.color.main_color else R.color.white,
                     onClick = { /*TODO*/ })
                 else
                     CustomButton(

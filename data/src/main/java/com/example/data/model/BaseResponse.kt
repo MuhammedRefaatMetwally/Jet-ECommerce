@@ -4,10 +4,9 @@ import com.google.gson.annotations.SerializedName
 
 open class BaseResponse<T>(
     @field:SerializedName("statusMsg")
-    val statusMsg : String? = null,
+    val statusMsg: String? = null,
     @field:SerializedName("message")
-    val message : String? = null,
-
+    val message: String? = null,
     @field:SerializedName("data")
-    val data : T? = null
+    val data: T? = null
 )

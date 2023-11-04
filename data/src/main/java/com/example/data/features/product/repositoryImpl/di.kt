@@ -1,6 +1,6 @@
-package com.example.data.features.product.repository
+package com.example.data.features.product.repositoryImpl
 
-import com.example.domain.features.products.repository.ProductRepository
+import com.example.domain.features.product.repository.ProductRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
