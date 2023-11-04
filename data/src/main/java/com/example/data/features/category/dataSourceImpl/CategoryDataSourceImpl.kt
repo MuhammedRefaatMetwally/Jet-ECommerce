@@ -11,7 +11,7 @@ import javax.inject.Inject
 class CategoryDataSourceImpl @Inject constructor(
     private val webServices: WebServices
 ) : CategoryDataSource {
-    override suspend fun getCategories(page : Int): Flow<ResultWrapper<List<Category?>?>> {
-    return safeAPiCall { webServices.getCategories() }
+    override suspend fun getCategories(page: Int): Flow<ResultWrapper<List<Category?>?>> {
+        return safeAPiCall { webServices.getCategories() }
     }
 }

@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class CategoriesRepositoryImpl @Inject constructor(
-    private  val dataSource: CategoryDataSource
+    private val dataSource: CategoryDataSource
 ) : CategoriesRepository {
     override suspend fun getAllCategories(page: Int): Flow<ResultWrapper<List<Category?>?>> {
-      return dataSource.getCategories()
+        return dataSource.getCategories()
     }
 }

@@ -1,15 +1,14 @@
-package com.example.domain.features.category.model
+package com.example.domain.features.brand.model
 
 import android.os.Parcelable
-import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
+
 @Parcelize
-data class Category(
+data class Brand(
     val image: String? = null,
     val createdAt: String? = null,
     val name: String? = null,
-    @SerializedName("_id")
     val id: String? = null,
     val slug: String? = null,
     val updatedAt: String? = null
