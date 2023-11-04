@@ -17,8 +17,10 @@ interface WebServices {
 
     @GET("/api/v1/categories/{category_id}/subcategories")
     suspend fun getSubCategoriesOnCategory(@Path("category_id") categoryId: String): BaseResponse<List<SubCategory>>
+
     @GET("/api/v1/products")
-    suspend fun getProductsList(@Query("category[in]") categoryId: String?=null):BaseResponse<List<Product>>
+    suspend fun getProductsList(@Query("category[in]") categoryId: String? = null): BaseResponse<List<Product>>
+
     @POST("api/v1/auth/refreshToken")
     fun refreshToken(oldToken: String): Call<BaseResponse<String>>
 }

@@ -5,5 +5,5 @@ import com.example.domain.features.product.model.Product
 import kotlinx.coroutines.flow.Flow
 
 interface ProductRepository {
-    suspend fun getProducts(categoryId:String?=null):Flow<ResultWrapper<List<Product>>>
+    suspend fun  getProducts() : Flow<ResultWrapper<List<Product?>?>>
 }

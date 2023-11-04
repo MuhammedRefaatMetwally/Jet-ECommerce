@@ -15,6 +15,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -70,12 +71,13 @@ fun SearchField(
                 style = TextStyle(color = Color.LightGray, fontSize = 16.sp)
             )
         },
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = colorResource(id = R.color.text_color),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedTextColor = colorResource(id = R.color.main_color),
+            unfocusedTextColor = colorResource(id = R.color.main_color),
             cursorColor = colorResource(id = R.color.main_color),
+            focusedBorderColor = colorResource(id = R.color.text_color),
             unfocusedBorderColor = colorResource(id = R.color.text_color),
             unfocusedLabelColor = colorResource(id = R.color.text_color),
-            textColor = colorResource(id = R.color.main_color),
             focusedSupportingTextColor = Color.Red,
         ),
         shape = RoundedCornerShape(CornerSize(24.dp)),

@@ -1,4 +1,4 @@
-package com.example.jet_ecommerce.ui.features.categories
+package com.example.jet_ecommerce.ui.features.main.categories
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf

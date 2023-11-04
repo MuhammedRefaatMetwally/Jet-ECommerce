@@ -7,9 +7,9 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetProductsUseCase @Inject constructor(
-    private val repo :ProductRepository
+    private  val repository: ProductRepository
 ) {
-    suspend operator fun invoke(categoryId:String?=null) : Flow<ResultWrapper<List<Product>>>{
-      return  repo.getProducts(categoryId)
+    suspend fun invoke(): Flow<ResultWrapper<List<Product?>?>> {
+        return repository.getProducts()
     }
 }

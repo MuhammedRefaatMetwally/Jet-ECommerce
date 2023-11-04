@@ -9,9 +9,10 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class ProductDataSourceImpl @Inject constructor(
-    val webServices: WebServices
-):ProductDataSource {
+    private val webServices: WebServices
+) : ProductDataSource {
     override suspend fun getProducts(categoryId: String?): Flow<ResultWrapper<List<Product>>> {
         return safeAPiCall { webServices.getProductsList(categoryId) }
     }
+
 }
