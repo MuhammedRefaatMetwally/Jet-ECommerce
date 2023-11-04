@@ -9,7 +9,6 @@ import dagger.hilt.android.components.ViewModelComponent
 @Module
 @InstallIn(ViewModelComponent::class)
 abstract class di {
-
     @Binds
     abstract fun bindCategoriesRepository(
         repo: CategoriesRepositoryImpl

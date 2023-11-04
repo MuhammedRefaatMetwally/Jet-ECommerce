@@ -15,7 +15,7 @@ fun ECommerceNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = ECommerceScreens.SplashScreen.name
+        startDestination = ECommerceScreens.MainScreen.name
     ) {
 
         composable(ECommerceScreens.SplashScreen.name) {
