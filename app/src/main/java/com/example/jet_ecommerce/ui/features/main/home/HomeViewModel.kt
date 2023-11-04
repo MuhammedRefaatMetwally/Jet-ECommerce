@@ -4,12 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import com.example.domain.common.ResultWrapper
 import com.example.domain.features.category.usecase.GetCategoriesUseCase
+import com.example.domain.features.products.model.Product
 import com.example.domain.features.products.usecase.GetProductsUseCase
 import com.example.jet_ecommerce.IoDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -45,7 +48,6 @@ class HomeViewModel @Inject constructor(
     private val _productEvents = MutableLiveData<ProductContract.Event>()
     override val productEvents: LiveData<ProductContract.Event>
         get() = _productEvents
-
 
 
     override fun invokeCategoriesAction(action: HomeContract.Action) {

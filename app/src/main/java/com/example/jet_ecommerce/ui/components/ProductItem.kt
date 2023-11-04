@@ -1,5 +1,6 @@
 package com.example.jet_ecommerce.ui.components
 
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,17 +40,18 @@ import com.example.jet_ecommerce.R
 
 @Composable
 
-fun ProductItem(
+fun ProductItem(modifier: Modifier = Modifier,
     imageURL: String, productTitle: String,
     price: Int, review: Double,
 ) {
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .width(160.dp)
             .height(200.dp),
         shape = RoundedCornerShape(CornerSize(16.dp))
     ) {
+
         Column() {
             Box(contentAlignment = Alignment.TopEnd) {
                 Image(

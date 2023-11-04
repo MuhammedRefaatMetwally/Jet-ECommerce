@@ -17,7 +17,7 @@ import com.example.domain.features.category.model.Category
 fun HomeCategoriesGrid(categories: List<Category?>?, span: ((Int) -> StaggeredGridItemSpan)) {
     CustomTitle(title = "Categories")
     LazyHorizontalStaggeredGrid(
-        rows = StaggeredGridCells.Fixed(count = 2),
+        rows = StaggeredGridCells.Adaptive(128.dp),
         horizontalItemSpacing = 16.dp,
         contentPadding = PaddingValues(all = 8.dp),
         verticalArrangement = Arrangement.SpaceEvenly,
