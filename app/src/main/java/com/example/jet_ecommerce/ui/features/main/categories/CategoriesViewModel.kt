@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CategoriesViewModel @Inject constructor(
     private val getCategoriesUseCase: GetCategoriesUseCase,
-    val getSubCategoriesOnCategoryUseCase: GetSubCategoriesOnCategoryUseCase
+    private val getSubCategoriesOnCategoryUseCase: GetSubCategoriesOnCategoryUseCase
 ) : ViewModel(), CategoriesContract.ViewModel {
     private val _states =
         MutableStateFlow<CategoriesContract.State>(CategoriesContract.State.Loading)
@@ -27,7 +27,7 @@ class CategoriesViewModel @Inject constructor(
     var subCategoriesList = mutableStateOf<List<SubCategory>>(listOf())
     override val states: StateFlow<CategoriesContract.State> = _states
     override val events: StateFlow<CategoriesContract.Event> = _events
-    val firstCategory = mutableStateOf(Category(id = "6439d5b90049ad0b52b90048"))
+    private val firstCategory = mutableStateOf(Category(id = "6439d5b90049ad0b52b90048"))
 
     init {
         invokeAction(CategoriesContract.Action.LoadCategories)

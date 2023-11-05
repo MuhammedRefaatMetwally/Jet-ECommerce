@@ -1,14 +1,13 @@
 package com.example.jet_ecommerce.ui.components
 
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -31,16 +30,16 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.example.jet_ecommerce.R
 
 
 @Composable
 
-fun ProductItem(modifier: Modifier = Modifier,
+fun ProductItem(
+    modifier: Modifier = Modifier,
     imageURL: String, productTitle: String,
     price: Int, review: Double,
 ) {
@@ -52,14 +51,20 @@ fun ProductItem(modifier: Modifier = Modifier,
         shape = RoundedCornerShape(CornerSize(16.dp))
     ) {
 
-        Column() {
+        Column(
+            modifier = Modifier.border(
+                width = 2.dp,
+                color = Color(0x4D004182),
+                shape = RoundedCornerShape(size = 15.dp)
+            ),
+        ) {
             Box(contentAlignment = Alignment.TopEnd) {
                 Image(
-                    painter = rememberImagePainter(data = imageURL),
+                    painter = rememberAsyncImagePainter(model = imageURL),
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(124.dp),
-                    contentScale = ContentScale.Inside,
+                    contentScale = ContentScale.Crop,
                     alignment = Alignment.TopCenter,
                     contentDescription = "img"
                 )

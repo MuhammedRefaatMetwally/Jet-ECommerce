@@ -15,6 +15,9 @@ import com.example.domain.features.category.model.Category
 
 @Composable
 fun HomeCategoriesGrid(categories: List<Category?>?, span: ((Int) -> StaggeredGridItemSpan)) {
+    val newList = categories?.toMutableList()
+    newList?.removeAt(0)
+
     CustomTitle(title = "Categories")
     LazyHorizontalStaggeredGrid(
         rows = StaggeredGridCells.Adaptive(128.dp),
@@ -25,10 +28,10 @@ fun HomeCategoriesGrid(categories: List<Category?>?, span: ((Int) -> StaggeredGr
             .fillMaxWidth()
             .height(380.dp),
         content = {
-            items(count = categories?.size ?: 0, span = span) { index ->
+            items(count = newList?.size ?: 0, span = span) { index ->
                 CategoryWidget(
-                    imageUrl = categories?.get(index)?.image ?: "",
-                    categoryTitle = categories?.get(index)?.name ?: ""
+                    imageUrl = newList?.get(index)?.image ?: "",
+                    categoryTitle = newList?.get(index)?.name ?: ""
                 )
 
 

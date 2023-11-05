@@ -4,9 +4,13 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 
 @Composable
  fun CustomLoadingWidget(){
@@ -17,5 +21,9 @@ import androidx.compose.runtime.getValue
         initialValue = 0.0f,
         targetValue = progressValue,animationSpec = infiniteRepeatable(animation = tween(900)))
 
-    CircularProgressIndicator(progress = progressAnimationValue)
+    Box(
+        modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(progress = progressAnimationValue)
+    }
 }

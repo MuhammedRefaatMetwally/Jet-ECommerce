@@ -5,11 +5,12 @@ enum class ECommerceScreens {
     LoginScreen,
     RegisterScreen,
     MainScreen,
-    SubCategoriesScreen;
+    NestedCategory,
+    ProductsScreen,
+    ProductDetailsScreen;
 
     companion object {
-        fun fromRoute(route: String?): ECommerceScreens
-        = when(route?.substringBefore("/")) {
+        fun fromRoute(route: String?): ECommerceScreens = when (route?.substringBefore("/")) {
             SplashScreen.name -> SplashScreen
             LoginScreen.name -> LoginScreen
             RegisterScreen.name -> RegisterScreen
