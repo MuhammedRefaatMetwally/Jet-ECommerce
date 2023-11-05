@@ -27,7 +27,6 @@ class CategoriesViewModel @Inject constructor(
     var subCategoriesList = mutableStateOf<List<SubCategory>>(listOf())
     override val states: StateFlow<CategoriesContract.State> = _states
     override val events: StateFlow<CategoriesContract.Event> = _events
-    private val firstCategory = mutableStateOf(Category(id = "6439d5b90049ad0b52b90048"))
 
     init {
         invokeAction(CategoriesContract.Action.LoadCategories)
@@ -48,10 +47,8 @@ class CategoriesViewModel @Inject constructor(
     }
 
     private fun categoryClick(category: Category) {
-        Log.w("Category in ViewModel ", "$category")
-        val categoryId = firstCategory.value.id
         viewModelScope.launch(Dispatchers.IO) {
-            getSubCategoriesOnCategoryUseCase.invoke(category.id ?: categoryId!!).collect {
+            getSubCategoriesOnCategoryUseCase.invoke(category.id!!).collect {
                 when (it) {
                     is ResultWrapper.Error -> {}
                     is ResultWrapper.Loading -> {}

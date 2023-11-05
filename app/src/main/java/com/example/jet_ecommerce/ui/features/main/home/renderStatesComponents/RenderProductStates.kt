@@ -1,8 +1,6 @@
 package com.example.jet_ecommerce.ui.features.main.home.renderStatesComponents
 
-import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
@@ -27,8 +25,7 @@ import com.example.jet_ecommerce.ui.features.main.home.ProductContract
 
 @Composable
 fun RenderProductStates(
-    viewModel: HomeViewModel = hiltViewModel(),
-    navController: NavHostController
+    viewModel: HomeViewModel = hiltViewModel(), navController: NavHostController
 ) {
 
     val states = produceState<ProductContract.State>(initialValue = ProductContract.State.Idle) {
@@ -41,7 +38,8 @@ fun RenderProductStates(
 
         is ProductContract.State.Error -> {
             var showDialog by remember { mutableStateOf(true) }
-            CustomAlertDialog(showDialog = showDialog, dialogDescription = states.message,
+            CustomAlertDialog(showDialog = showDialog,
+                dialogDescription = states.message,
                 onConfirm = {
 //                    focusRequester.requestFocus()
                     showDialog = false
@@ -83,8 +81,7 @@ fun RenderProductStates(
             HomeProductsLazyRow(eloProducts)
 
         }
-    }
-    /* when (viewModel.events.value) {
+    }/* when (viewModel.events.value) {
          is HomeContract.Event.Idle -> {
 
          }
