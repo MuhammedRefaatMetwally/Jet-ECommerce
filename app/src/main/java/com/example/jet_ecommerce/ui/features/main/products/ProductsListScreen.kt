@@ -2,6 +2,7 @@ package com.example.jet_ecommerce.ui.features.main.products
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -78,7 +79,9 @@ fun ProductsContent(productsLazyPagingItems: LazyPagingItems<Product>) {
 fun ProductsVerticalGrid(productsLazyPagingItems: LazyPagingItems<Product>, modifier: Modifier) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
-        modifier = Modifier.padding(8.dp)
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxHeight(0.93f)
     ) {
         items(productsLazyPagingItems.itemCount) { index ->
             val item = productsLazyPagingItems[index]
@@ -90,8 +93,8 @@ fun ProductsVerticalGrid(productsLazyPagingItems: LazyPagingItems<Product>, modi
                 review = item?.ratingsAverage ?: 0.0
             )
         }
-
         productsLazyPagingItems.apply {
+
             when {
                 loadState.refresh is LoadState.Loading -> {
                     item { CustomLoadingWidget() }

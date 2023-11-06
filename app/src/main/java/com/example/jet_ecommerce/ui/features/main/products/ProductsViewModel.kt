@@ -7,8 +7,9 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.domain.features.product.model.Product
 import com.example.domain.features.product.usecase.GetProductsPagingUseCase
-import com.example.domain.features.product.usecase.GetProductsUseCase
+import com.example.jet_ecommerce.IoDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductsViewModel @Inject constructor(
     private val getProductsPagingUseCase: GetProductsPagingUseCase,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     //    private val _states: MutableStateFlow<ProductsContract.States> =
@@ -26,12 +28,12 @@ class ProductsViewModel @Inject constructor(
 //    override val states = _states
 //    override val events = _events
     private var _productState: MutableStateFlow<PagingData<Product>> =
-        MutableStateFlow<PagingData<Product>>(value = PagingData.empty())
+        MutableStateFlow(value = PagingData.empty())
     val productState: MutableStateFlow<PagingData<Product>> = _productState
 
     init {
         val categoryId = savedStateHandle.get<String>("category_id")
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             getProductsPagingUseCase.invoke(categoryId).cachedIn(viewModelScope).collect {
                 _productState.value = it
             }

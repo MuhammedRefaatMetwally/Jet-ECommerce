@@ -1,6 +1,5 @@
 package com.example.jet_ecommerce.ui.features.main.categories
 
-import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,8 +8,9 @@ import com.example.domain.features.category.model.Category
 import com.example.domain.features.category.usecase.GetCategoriesUseCase
 import com.example.domain.features.subCategories.model.SubCategory
 import com.example.domain.features.subCategories.usecase.GetSubCategoriesOnCategoryUseCase
+import com.example.jet_ecommerce.IoDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -19,7 +19,9 @@ import javax.inject.Inject
 @HiltViewModel
 class CategoriesViewModel @Inject constructor(
     private val getCategoriesUseCase: GetCategoriesUseCase,
-    private val getSubCategoriesOnCategoryUseCase: GetSubCategoriesOnCategoryUseCase
+    private val getSubCategoriesOnCategoryUseCase: GetSubCategoriesOnCategoryUseCase,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+
 ) : ViewModel(), CategoriesContract.ViewModel {
     private val _states =
         MutableStateFlow<CategoriesContract.State>(CategoriesContract.State.Loading)
@@ -47,7 +49,7 @@ class CategoriesViewModel @Inject constructor(
     }
 
     private fun categoryClick(category: Category) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(ioDispatcher) {
             getSubCategoriesOnCategoryUseCase.invoke(category.id!!).collect {
                 when (it) {
                     is ResultWrapper.Error -> {}
@@ -60,7 +62,7 @@ class CategoriesViewModel @Inject constructor(
     }
 
     private fun loadCategories() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(ioDispatcher) {
             getCategoriesUseCase.invoke().collect {
                 when (it) {
                     is ResultWrapper.Loading -> {

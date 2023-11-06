@@ -15,6 +15,7 @@ import javax.inject.Inject
 class ProductDataSourceImpl @Inject constructor(
     private val webServices: WebServices,
 ) : ProductDataSource {
+    //
     override suspend fun getProducts(categoryId: String?): Flow<ResultWrapper<List<Product>>> {
         return safeAPiCall { webServices.getProductsList(categoryId = categoryId) }
     }
@@ -22,7 +23,7 @@ class ProductDataSourceImpl @Inject constructor(
     override suspend fun getProductsPaging(categoryId: String?): Flow<PagingData<Product>> {
         return Pager(
             config = PagingConfig(pageSize = 8),
-            pagingSourceFactory = { ProductsPagingSource(webServices) }
+            pagingSourceFactory = { ProductsPagingSource(webServices,categoryId) }
         ).flow
     }
 

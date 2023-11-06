@@ -8,7 +8,8 @@ import com.example.domain.features.product.model.Product
 import javax.inject.Inject
 
 class ProductsPagingSource @Inject constructor(
-    val webServices: WebServices
+    val webServices: WebServices,
+    val categoryId: String? = null
 ) : PagingSource<Int, Product>() {
     override fun getRefreshKey(state: PagingState<Int, Product>): Int? {
         return state.anchorPosition
@@ -17,8 +18,8 @@ class ProductsPagingSource @Inject constructor(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Product> {
         return try {
             val currentPage = params.key ?: 1
-            Log.w("paging", "page number:$currentPage ", )
-            val products = webServices.getProductsList(pageNumber = currentPage)
+            Log.w("paging", "page number:$currentPage ")
+            val products = webServices.getProductsList(pageNumber = currentPage, categoryId = categoryId)
             LoadResult.Page(
                 data = products.data!!,
                 prevKey = if (currentPage == 1) null else currentPage,
