@@ -1,7 +1,7 @@
 package com.example.jet_ecommerce.ui.features.main.home
 
 import androidx.lifecycle.LiveData
-import com.example.domain.features.product.model.Product
+import com.example.domain.features.products.model.Product
 import kotlinx.coroutines.flow.StateFlow
 
 sealed class ProductContract {

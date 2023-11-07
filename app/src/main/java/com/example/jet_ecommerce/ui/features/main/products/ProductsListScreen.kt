@@ -17,7 +17,7 @@ import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.example.domain.features.product.model.Product
+import com.example.domain.features.products.model.Product
 import com.example.jet_ecommerce.ui.components.CustomAlertDialog
 import com.example.jet_ecommerce.ui.components.CustomLoadingWidget
 import com.example.jet_ecommerce.ui.components.CustomTopBar

@@ -1,4 +1,4 @@
-package com.example.data.features.category.repository
+package com.example.data.features.categories.repository
 
 import com.example.domain.features.category.repository.CategoriesRepository
 import dagger.Binds

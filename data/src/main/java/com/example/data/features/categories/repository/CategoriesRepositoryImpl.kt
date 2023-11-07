@@ -1,6 +1,6 @@
-package com.example.data.features.category.repository
+package com.example.data.features.categories.repository
 
-import com.example.data.features.category.dataSourceContract.CategoryDataSource
+import com.example.data.features.categories.dataSourceContract.CategoryDataSource
 import com.example.domain.common.ResultWrapper
 import com.example.domain.features.category.model.Category
 import com.example.domain.features.category.repository.CategoriesRepository

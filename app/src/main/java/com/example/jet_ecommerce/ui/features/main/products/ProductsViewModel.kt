@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.domain.features.product.model.Product
-import com.example.domain.features.product.usecase.GetProductsPagingUseCase
+import com.example.domain.features.products.model.Product
+import com.example.domain.features.products.usecase.GetProductsPagingUseCase
 import com.example.jet_ecommerce.IoDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
