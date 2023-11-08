@@ -1,6 +1,6 @@
-package com.example.data.features.category.dataSourceImpl
+package com.example.data.features.categories.dataSourceImpl
 
-import com.example.data.features.category.dataSourceContract.CategoryDataSource
+import com.example.data.features.categories.dataSourceContract.CategoryDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

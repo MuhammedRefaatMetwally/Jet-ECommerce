@@ -1,6 +1,6 @@
 package com.example.jet_ecommerce.ui.features.main.products
 
-import com.example.domain.features.product.model.Product
+import com.example.domain.features.products.model.Product
 import kotlinx.coroutines.flow.StateFlow
 
 class ProductsContract {

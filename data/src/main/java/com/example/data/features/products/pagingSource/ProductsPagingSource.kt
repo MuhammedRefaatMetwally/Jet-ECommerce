@@ -1,10 +1,10 @@
-package com.example.data.features.product.pagingSource
+package com.example.data.features.products.pagingSource
 
 import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.data.api.WebServices
-import com.example.domain.features.product.model.Product
+import com.example.domain.features.products.model.Product
 import javax.inject.Inject
 
 class ProductsPagingSource @Inject constructor(

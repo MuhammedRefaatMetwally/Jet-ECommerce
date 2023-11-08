@@ -1,7 +1,7 @@
-package com.example.data.features.category.dataSourceImpl
+package com.example.data.features.categories.dataSourceImpl
 
 import com.example.data.api.WebServices
-import com.example.data.features.category.dataSourceContract.CategoryDataSource
+import com.example.data.features.categories.dataSourceContract.CategoryDataSource
 import com.example.data.safeAPiCall
 import com.example.domain.common.ResultWrapper
 import com.example.domain.features.category.model.Category

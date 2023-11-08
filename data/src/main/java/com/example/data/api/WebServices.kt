@@ -3,7 +3,7 @@ package com.example.data.api
 
 import com.example.data.model.BaseResponse
 import com.example.domain.features.category.model.Category
-import com.example.domain.features.product.model.Product
+import com.example.domain.features.products.model.Product
 import com.example.domain.features.subCategories.model.SubCategory
 import retrofit2.Call
 import retrofit2.http.GET

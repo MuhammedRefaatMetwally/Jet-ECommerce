@@ -1,4 +1,4 @@
-package com.example.domain.features.product.model
+package com.example.domain.features.products.model
 
 import android.os.Parcelable
 import com.example.domain.features.brand.model.Brand

@@ -1,4 +1,4 @@
-package com.example.data.features.category.dataSourceContract
+package com.example.data.features.categories.dataSourceContract
 
 import com.example.domain.common.ResultWrapper
 import com.example.domain.features.category.model.Category

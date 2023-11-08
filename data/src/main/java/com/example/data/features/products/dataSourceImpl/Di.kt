@@ -1,6 +1,6 @@
-package com.example.data.features.product.dataSourceImpl
+package com.example.data.features.products.dataSourceImpl
 
-import com.example.data.features.product.dataSourceContract.ProductDataSource
+import com.example.data.features.products.dataSourceContract.ProductDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -8,11 +8,11 @@ import dagger.hilt.android.components.ViewModelComponent
 
 @Module
 @InstallIn(ViewModelComponent::class)
-abstract class di {
+abstract class Di {
 
     @Binds
     abstract fun bindProductDataSource(
-        productDataSourceImpl: ProductDataSourceImpl
+        productDataSourceImpl: ProductsDataSourceImpl
     ): ProductDataSource
 
 }
