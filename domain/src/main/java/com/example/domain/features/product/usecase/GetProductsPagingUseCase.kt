@@ -1,16 +1,16 @@
 package com.example.domain.features.product.usecase
 
-import com.example.domain.common.ResultWrapper
+import androidx.paging.PagingData
 import com.example.domain.features.product.model.Product
 import com.example.domain.features.product.repository.ProductRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetProductsUseCase @Inject constructor(
+class GetProductsPagingUseCase @Inject constructor(
     private val repository: ProductRepository
 ) {
-    suspend fun invoke(categoryId: String? = null): Flow<ResultWrapper<List<Product?>?>> {
-        return repository.getProducts(categoryId)
+    suspend fun invoke(categoryId: String? = null): Flow<PagingData<Product>> {
+        return repository.getProductsPaging(categoryId)
     }
 
 

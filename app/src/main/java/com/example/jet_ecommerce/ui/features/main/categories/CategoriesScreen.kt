@@ -84,7 +84,7 @@ fun RenderViewState(vm: CategoriesViewModel, navController: NavHostController) {
         is CategoriesContract.Event.NavigateToProductsList -> {
             // navigate to product screen
             navController.navigate(
-                "${ECommerceScreens.ProductsScreen.name}/{${(events as CategoriesContract.Event.NavigateToProductsList).categoryId}}"
+                "${ECommerceScreens.ProductsScreen.name}/${(events as CategoriesContract.Event.NavigateToProductsList).categoryId}"
             )
         }
     }
