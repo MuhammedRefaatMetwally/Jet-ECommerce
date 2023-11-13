@@ -27,4 +27,8 @@ class ProductsDataSourceImpl @Inject constructor(
         ).flow
     }
 
+    override suspend fun getSpecificProduct(productId: String): Flow<ResultWrapper<Product>> {
+        return safeAPiCall { webServices.getSpecificProduct(productId) }
+    }
+
 }

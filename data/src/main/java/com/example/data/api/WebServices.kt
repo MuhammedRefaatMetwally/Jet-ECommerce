@@ -26,8 +26,13 @@ interface WebServices {
     suspend fun getProductsList(
         @Query("category[in]") categoryId: String? = null,
 //        @Query("limit") productsPerPage: Int = 8,
-        @Query("page") pageNumber: Int ?=null
+        @Query("page") pageNumber: Int? = null
     ): BaseResponse<List<Product>>
+
+    @GET("/api/v1/products/{product_id}")
+    suspend fun getSpecificProduct(
+        @Path("product_id") productId: String
+    ): BaseResponse<Product>
 
     @POST("api/v1/auth/refreshToken")
     fun refreshToken(oldToken: String): Call<BaseResponse<String>>

@@ -9,4 +9,5 @@ interface ProductsRepository {
     suspend fun getProducts(categoryId: String? = null): Flow<ResultWrapper<List<Product?>?>>
 
     suspend fun getProductsPaging(categoryId: String? = null): Flow<PagingData<Product>>
+    suspend fun getSpecificProduct(productId:String):Flow<ResultWrapper<Product>>
 }

@@ -20,5 +20,9 @@ class ProductsRepositoryImpl @Inject constructor(
        return dataSource.getProductsPaging(categoryId)
     }
 
+    override suspend fun getSpecificProduct(productId: String): Flow<ResultWrapper<Product>> {
+        return  dataSource.getSpecificProduct(productId)
+    }
+
 
 }
