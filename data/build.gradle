@@ -52,6 +52,8 @@ dependencies {
     implementation "androidx.paging:paging-runtime-ktx:3.2.1"
     implementation 'androidx.paging:paging-compose:3.3.0-alpha02'
 
+    implementation "androidx.paging:paging-runtime-ktx:3.2.1"
+    implementation 'androidx.paging:paging-compose:3.3.0-alpha02'
     //hilt
     implementation "com.google.dagger:hilt-android:2.48.1"
     kapt "com.google.dagger:hilt-compiler:2.48.1"

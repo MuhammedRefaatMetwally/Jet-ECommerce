@@ -12,14 +12,14 @@ sealed class HomeContract {
     }
 
     sealed class State{
-        object Idle : State()
+        data object Idle : State()
         class Error(val message:String) : State()
         class CategorySuccess(val categories:List<Category?>?) : State()
-        object Loading : State()
+        data object Loading : State()
     }
 
     sealed class  Action{
-        object LoadCategories : Action()
+        data object LoadCategories : Action()
         class CategoryClick(val category: Category) : Action()
     }
 

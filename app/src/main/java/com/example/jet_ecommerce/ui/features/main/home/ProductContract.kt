@@ -12,14 +12,14 @@ sealed class ProductContract {
     }
 
     sealed class State{
-        object Idle : State()
+        data object Idle : State()
         class Error(val message:String) : State()
         class ProductSuccess(val products:List<Product?>?) :State()
-        object Loading : State()
+        data object Loading : State()
     }
 
     sealed class  Action{
-        object LoadProducts : Action()
+        data object LoadProducts : Action()
         class CategoryClick(val product: Product) : Action()
     }
 
