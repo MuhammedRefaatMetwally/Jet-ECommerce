@@ -26,13 +26,13 @@ import com.example.jet_ecommerce.R
 @Composable
 fun DotsIndicator(
     modifier: Modifier = Modifier,
-    secondStyle : Boolean = false,
-    totalDots : Int,
-    selectedIndex : Int,
+    secondStyle: Boolean = false,
+    totalDots: Int,
+    selectedIndex: Int,
     selectedColor: Color,
     unSelectedColor: Color,
-    onDotClick : (Int) -> Unit,
-){
+    onDotClick: (Int) -> Unit,
+) {
 
     LazyRow(
         modifier = modifier
@@ -44,17 +44,17 @@ fun DotsIndicator(
 
         items(totalDots) { index ->
             if (index == selectedIndex) {
-                if(secondStyle){
+                if (secondStyle) {
                     Box(
                         modifier = Modifier
                             .width(30.dp)
                             .height(7.dp)
                             .clip(RoundedCornerShape(CornerSize(30.dp)))
-                            .background(colorResource(id = R.color.main_color))
+                            .background(selectedColor)
 
                     )
-                   
-                }else{
+
+                } else {
                     Box(
                         modifier = modifier
                             .size(10.dp)
@@ -68,9 +68,22 @@ fun DotsIndicator(
             } else {
                 Box(
                     modifier = modifier
-                        .size(10.dp)
+                        .size(
+                            if (secondStyle) {
+                                7.dp
+                            } else {
+                                10.dp
+                            }
+
+                        )
                         .clip(CircleShape)
-                        .background(unSelectedColor)
+                        .background(
+                            if (secondStyle) {
+                                Color.White
+                            } else {
+                                unSelectedColor
+                            }
+                        )
                         .clickable {
                             onDotClick.invoke(index)
                         }
