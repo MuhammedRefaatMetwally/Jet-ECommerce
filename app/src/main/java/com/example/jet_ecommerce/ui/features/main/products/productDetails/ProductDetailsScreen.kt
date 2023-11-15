@@ -441,11 +441,8 @@ fun TopAppBar(navController: NavHostController) {
             textAlign = TextAlign.Center
         )
     }, navigationIcon = {
-        val lastRoute = navController.previousBackStackEntry?.destination?.route
         IconButton(onClick = {
-            if (lastRoute != null) {
-                navController.navigate(lastRoute)
-            }
+            //back button
         }) {
             Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
         }
