@@ -8,11 +8,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import com.example.domain.features.products.model.Product
 import com.example.jet_ecommerce.ui.features.main.categories.CategoriesScreen
 import com.example.jet_ecommerce.ui.features.main.categories.CategoriesViewModel
 import com.example.jet_ecommerce.ui.features.main.home.HomeScreen
 import com.example.jet_ecommerce.ui.features.main.products.ProductsListScreen
 import com.example.jet_ecommerce.ui.features.main.products.ProductsViewModel
+import com.example.jet_ecommerce.ui.features.main.products.productDetails.ProductDetailsScreen
+import com.example.jet_ecommerce.ui.features.main.products.productDetails.ProductDetailsViewModel
 import com.example.jet_ecommerce.ui.features.main.profile.ProfileScreen
 import com.example.jet_ecommerce.ui.features.main.wishlist.WishListScreen
 import com.example.jet_ecommerce.ui.navigation_comp.screensNav.ECommerceScreens
@@ -39,7 +42,7 @@ fun ECommerceBottomNavigation(navController: NavHostController) {
                 CategoriesScreen(vm, navController = navController)
             }
             composable(
-                "${ECommerceScreens.ProductsScreen.name}/{category_id}",
+                route = "${ECommerceScreens.ProductsScreen.name}/{category_id}",
                 arguments = listOf(navArgument("category_id") {
                     type = NavType.StringType
                 })
@@ -47,9 +50,14 @@ fun ECommerceBottomNavigation(navController: NavHostController) {
                 val vm: ProductsViewModel = hiltViewModel()
                 ProductsListScreen(vm = vm, navController = navController)
             }
-            composable(ECommerceScreens.ProductDetailsScreen.name) {
-//                val vm : ProductDetailsViewModel = hiltViewModel()
-//                ProductDetailsScreen(vm = vm, navController =navController )
+            composable(
+                route = "${ECommerceScreens.ProductDetailsScreen.name}/{product_id}",
+                arguments = listOf(navArgument("product_id") {
+                    type = NavType.StringType
+                })
+            ) {
+                val vm: ProductDetailsViewModel = hiltViewModel()
+                ProductDetailsScreen(vm = vm, navController = navController)
             }
         }
 

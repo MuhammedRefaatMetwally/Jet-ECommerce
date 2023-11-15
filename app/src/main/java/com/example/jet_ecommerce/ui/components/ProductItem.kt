@@ -2,6 +2,7 @@ package com.example.jet_ecommerce.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
@@ -40,17 +42,22 @@ import com.example.jet_ecommerce.R
 
 fun ProductItem(
     modifier: Modifier = Modifier,
-    imageURL: String, productTitle: String,
-    price: Int, review: Double,
+    imageURL: String,
+    productTitle: String,
+    price: Int,
+    review: Double,
+    isInWishList: Boolean = false,
+    onItemClick: () -> Unit = {},
+    onAddToCartClick: () -> Unit = {},
+    onAddToWishListClick: () -> Unit = {}
 ) {
-
     Card(
         modifier = modifier
             .width(160.dp)
-            .height(200.dp),
+            .height(200.dp)
+            .clickable { onItemClick() },
         shape = RoundedCornerShape(CornerSize(16.dp))
     ) {
-
         Column(
             modifier = Modifier.border(
                 width = 2.dp,
@@ -68,7 +75,9 @@ fun ProductItem(
                     alignment = Alignment.TopCenter,
                     contentDescription = "img"
                 )
-                FavoriteItem()
+                FavoriteItem(isInWishList) {
+                    onAddToWishListClick()
+                }
             }
 
             Text(
@@ -125,7 +134,10 @@ fun ProductItem(
                 )
 
                 Icon(
-                    modifier = Modifier.padding(end = 8.dp, bottom = 8.dp),
+                    modifier = Modifier
+                        .size(30.dp)
+                        .padding(end = 8.dp, bottom = 8.dp)
+                        .clickable { onAddToCartClick() },
                     painter = painterResource(id = R.drawable.__icon__plus_circle_),
                     tint = colorResource(id = R.color.main_color),
                     contentDescription = "plus"
@@ -140,11 +152,15 @@ fun ProductItem(
 
 
 @Composable
-fun FavoriteItem() {
-    Card(shape = CircleShape, modifier = Modifier.padding(8.dp)) {
+fun FavoriteItem(isInWishList: Boolean, onAddToWishListClick: () -> Unit) {
+    Card(shape = CircleShape, modifier = Modifier
+        .padding(8.dp)
+        .clickable {
+            onAddToWishListClick()
+        }) {
         Icon(
             modifier = Modifier.padding(8.dp),
-            painter = painterResource(id = R.drawable.unactive_heart),
+            painter = painterResource(id = if (isInWishList) R.drawable.active_heart else R.drawable.unactive_heart),
             contentDescription = "favorite"
         )
     }

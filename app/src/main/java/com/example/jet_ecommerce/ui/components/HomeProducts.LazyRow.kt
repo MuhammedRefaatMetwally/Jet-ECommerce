@@ -1,5 +1,6 @@
 package com.example.jet_ecommerce.ui.components
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -70,7 +71,7 @@ fun HomeProductsLazyRow(products: List<Product?>?) {
                         imageURL = it?.images?.get(0) ?: "",
                         productTitle = it?.title ?: "",
                         price = it?.price ?: 0,
-                        review = it?.ratingsAverage ?: 0.0,
+                        review = it?.ratingsAverage ?: 0.0
                     )
                     Spacer(modifier = Modifier.width(16.dp))
 
