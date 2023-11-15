@@ -71,7 +71,7 @@ fun ProductItem(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(124.dp),
-                    contentScale = ContentScale.Crop,
+                    contentScale = ContentScale.FillBounds,
                     alignment = Alignment.TopCenter,
                     contentDescription = "img"
                 )

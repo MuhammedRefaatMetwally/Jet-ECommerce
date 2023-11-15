@@ -17,10 +17,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -40,7 +40,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -132,11 +131,13 @@ fun ProductDetailsItem(
     onAddToWishListClick: () -> Unit,
     onAddToCartClick: () -> Unit
 ) {
-
     Column(
         modifier = Modifier
             .padding(16.dp)
-            .fillMaxSize(), verticalArrangement = Arrangement.spacedBy(16.dp)
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(bottom = 60.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Card(shape = RoundedCornerShape(16.dp)) {
             AutoSlidingCarousel(
@@ -147,7 +148,7 @@ fun ProductDetailsItem(
                             .data(product.images?.get(index))
                             .build(),
                         contentDescription = null,
-                        contentScale = ContentScale.Fit,
+                        contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .border(
                                 width = 1.dp,
@@ -162,13 +163,14 @@ fun ProductDetailsItem(
         }
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Text(
+                modifier = Modifier.width(250.dp),
                 text = product.title ?: "",
                 style = TextStyle(
                     fontSize = 18.sp,
                     lineHeight = 18.sp,
                     fontWeight = FontWeight(500),
                     color = Color(0xFF06004F),
-                    textAlign = TextAlign.Center,
+
                 )
             )
             Text(
@@ -178,7 +180,7 @@ fun ProductDetailsItem(
                     lineHeight = 18.sp,
                     fontWeight = FontWeight(500),
                     color = Color(0xFF06004F),
-                    textAlign = TextAlign.Center,
+
                 )
             )
         }
@@ -195,9 +197,10 @@ fun ProductDetailsItem(
                         shape = RoundedCornerShape(size = 20.dp)
                     )
                     .padding(0.5.dp)
-                    .width(102.dp)
-                    .height(34.dp)
-                    .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
+                    .width(115.dp)
+                    .height(35.dp)
+                    .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp),
+                contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "${product.sold} Sold",
@@ -216,7 +219,8 @@ fun ProductDetailsItem(
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.star),
-                    contentDescription = "Star icon"
+                    contentDescription = "Star icon",
+                    tint = Color.Unspecified
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
@@ -230,6 +234,7 @@ fun ProductDetailsItem(
                     )
                 )
             }
+            Spacer(modifier = Modifier.width(30.dp))
             Row(
                 Modifier
                     .width(122.dp)
@@ -242,7 +247,7 @@ fun ProductDetailsItem(
                 Icon(
                     painter = painterResource(id = R.drawable.__icon__subtract_circle_minus_remove_),
                     contentDescription = "Subtract icon",
-                    tint = Color.White
+                    tint = Color.Unspecified
                 )
                 Text(
                     text = "${product.quantity}",
@@ -257,7 +262,7 @@ fun ProductDetailsItem(
                 Icon(
                     painter = painterResource(id = R.drawable.__icon__plus_circle_),
                     contentDescription = "plus icon",
-                    tint = Color.White
+                    tint = Color.Unspecified
                 )
 
             }
@@ -317,16 +322,18 @@ fun ProductDetailsItem(
                 .height(48.dp)
                 .background(color = Color(0xFF004182), shape = RoundedCornerShape(size = 20.dp))
                 .padding(start = 32.dp, top = 12.dp, end = 79.dp, bottom = 12.dp),
-                onClick = { 
+                onClick = {
                     //handle add to cart button
                 }) {
-                Row(modifier = Modifier.fillMaxWidth(),
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically) {
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Icon(
                         painter = painterResource(id = R.drawable.cart__2__),
                         contentDescription = "cart icon",
-                        tint = Color.White
+                        tint = Color.Unspecified
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                     Text(
@@ -444,16 +451,24 @@ fun TopAppBar(navController: NavHostController) {
         IconButton(onClick = {
             //back button
         }) {
-            Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+            Icon(
+                painter = painterResource(id = R.drawable.__icon__arrow_back_outline_),
+                contentDescription = "Back",
+                tint = Color.Unspecified
+            )
         }
     }, actions = {
         IconButton(onClick = { /* Handle search icon click */ }) {
-            Icon(painterResource(id = R.drawable.__icon__search_), contentDescription = "Search")
+            Icon(
+                painterResource(id = R.drawable.__icon__search_), contentDescription = "Search",
+                tint = Color.Unspecified
+            )
         }
         IconButton(onClick = { /* Handle shopping cart icon click */ }) {
             Icon(
                 painterResource(id = R.drawable.__icon__shopping_cart_),
-                contentDescription = "Cart"
+                contentDescription = "Cart",
+                tint = Color.Unspecified
             )
         }
     })
