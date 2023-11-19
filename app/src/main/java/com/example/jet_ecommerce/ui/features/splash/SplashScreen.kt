@@ -31,7 +31,7 @@ fun SplashScreen(navController: NavHostController) {
             }
         ))
         delay(2500L)
-        navController.navigate(ECommerceScreens.MainScreen.name)
+        navController.navigate(ECommerceScreens.RegisterScreen.name)
     }
     SplashContent()
 }
@@ -39,6 +39,7 @@ fun SplashScreen(navController: NavHostController) {
 @Composable
 fun SplashContent() {
     Surface(Modifier.fillMaxSize()) {
-        Image(painter = painterResource(id = R.drawable.splash_bg), contentDescription ="splash", contentScale = ContentScale.Crop )
+        Image(painter = painterResource(id = R.drawable.splash_bg),
+            contentDescription ="splash", contentScale = ContentScale.Crop )
     }
 }

@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,18 +27,68 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.domain.features.register.model.RegisterEntity
+import com.example.domain.features.register.model.RegisterRequest
 import com.example.jet_ecommerce.R
+import com.example.jet_ecommerce.ui.components.CustomAlertDialog
 import com.example.jet_ecommerce.ui.components.CustomButton
+import com.example.jet_ecommerce.ui.components.CustomLoadingWidget
 import com.example.jet_ecommerce.ui.components.CustomText
 import com.example.jet_ecommerce.ui.components.CustomTextField
+import com.example.jet_ecommerce.ui.navigation_comp.screensNav.ECommerceScreens
 
+@Composable
+fun RenderViewState(viewModel: RegisterViewModel, navController: NavHostController) {
+    val states by viewModel.states.collectAsState()
+    val events by viewModel.events.collectAsState()
+
+    // States
+    when (states) {
+
+        is RegisterContract.State.Idle -> {
+            RegisterContent()
+
+        }
+
+        is RegisterContract.State.Error -> {
+
+            CustomAlertDialog(showDialog = viewModel.showDialog.value,
+                dialogDescription = (states as RegisterContract.State.Error).message,
+                onDismiss = { viewModel.showDialog.value = false },
+                onConfirm = { viewModel.showDialog.value = false })
+        }
+
+        is RegisterContract.State.Loading -> CustomLoadingWidget()
+
+        is RegisterContract.State.Success ->{
+
+            // save token into sharedPreferences
+            // Token
+
+        }}
+
+
+    // Events
+    when (events) {
+        is RegisterContract.Event.Idle -> {
+            RegisterContent()}
+        is RegisterContract.Event.NavigateAuthenticatedUserToHome -> {
+            navController.navigate(ECommerceScreens.ProductDetailsScreen .name)
+        }
+    }
+
+}
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegisterScreen(navController: NavHostController) {
+fun RegisterScreen(
+    navController: NavHostController,
+    viewModel: RegisterViewModel = hiltViewModel()
+) {
 
     Scaffold(
 
@@ -45,8 +97,8 @@ fun RegisterScreen(navController: NavHostController) {
 
         content = {
 
+            RenderViewState(viewModel = viewModel, navController = navController)
 
-            RegisterContent()
 
         })
 
@@ -55,10 +107,11 @@ fun RegisterScreen(navController: NavHostController) {
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun RegisterContent() {
+fun RegisterContent(
 
+    vm: RegisterViewModel = hiltViewModel()
+) {
     Column(
-
         modifier = Modifier
             .fillMaxSize()
             .background(
@@ -68,14 +121,12 @@ fun RegisterContent() {
             ),
     ) {
 
-
         Image(
             modifier = Modifier
                 .padding(vertical = 32.dp)
                 .width(237.dp)
                 .height(71.1.dp)
                 .align(alignment = Alignment.CenterHorizontally),
-
             painter = painterResource(
                 id = R.drawable.route_logo
             ),
@@ -95,28 +146,9 @@ fun RegisterContent() {
 
         CustomTextField(
             label = stringResource(R.string.enter_your_full_name),
-            state = mutableStateOf("") ,
-            errorState = mutableStateOf(""),
-            keyboardType = KeyboardType.Email,
-            visualTransformation = VisualTransformation.None
-        )
-
-
-
-        Spacer(modifier = Modifier.padding(top = 24.dp))
-
-        CustomText(
-            text = stringResource(R.string.mobile_number),
-
-            fontWeight = FontWeight(600),
-            fontSize = 18
-        )
-
-        CustomTextField(
-            label = stringResource(R.string.enter_your_mobile_number),
-            state = mutableStateOf("") ,
-            errorState = mutableStateOf(""),
-            keyboardType = KeyboardType.Email,
+            state = vm.name,
+            errorState = vm.nameError,
+            keyboardType = KeyboardType.Text,
             visualTransformation = VisualTransformation.None
         )
 
@@ -131,8 +163,8 @@ fun RegisterContent() {
 
         CustomTextField(
             label = stringResource(R.string.enter_your_email_address),
-            state = mutableStateOf(""),
-            errorState =mutableStateOf("") ,
+            state = vm.password,
+            errorState = vm.passwordError,
             keyboardType = KeyboardType.Email,
             visualTransformation = VisualTransformation.None
         )
@@ -148,20 +180,43 @@ fun RegisterContent() {
 
         CustomTextField(
             label = stringResource(R.string.enter_your_password),
-            state =mutableStateOf("") ,
-            errorState =mutableStateOf("") ,
+            state = vm.rePassword,
+            errorState = vm.rePasswordError,
             keyboardType = KeyboardType.Password,
             visualTransformation = PasswordVisualTransformation()
+        )
+
+
+        Spacer(modifier = Modifier.padding(top = 24.dp))
+
+        CustomText(
+            text = stringResource(R.string.rePassword),
+
+            fontWeight = FontWeight(600),
+            fontSize = 18
+        )
+
+        CustomTextField(
+            label = stringResource(R.string.enter_the_rePassword),
+            state = vm.email,
+            errorState = vm.emailError,
+            keyboardType = KeyboardType.Email,
+            visualTransformation = VisualTransformation.None
         )
         Spacer(modifier = Modifier.padding(top = 32.dp))
 
         CustomButton(title = stringResource(R.string.sign_up),
-            onClick = {})
+            onClick = {
+
+                vm.invokeAction(RegisterContract.Action.Register(vm.getRequest()))
+
+            })
 
 
     }
 
 }
+
 
 @Composable
 @Preview(showSystemUi = true, showBackground = true)
