@@ -4,6 +4,8 @@ package com.example.data.api
 import com.example.domain.features.register.model.RegisterResponse
 import com.example.data.model.BaseResponse
 import com.example.domain.features.category.model.Category
+import com.example.domain.features.login.model.LoginRequest
+import com.example.domain.features.login.model.LoginResponse
 import com.example.domain.features.products.model.Product
 import com.example.domain.features.register.model.RegisterEntity
 import com.example.domain.features.register.model.RegisterRequest
@@ -44,4 +46,6 @@ interface WebServices {
 
     @POST("api/v1/auth/signup")
     suspend fun registration(@Body registerRequest: RegisterRequest): RegisterResponse
+    @POST("api/v1/auth/signin")
+    suspend fun login(@Body loginRequest: LoginRequest):LoginResponse
 }

@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,19 +27,65 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.jet_ecommerce.R
+import com.example.jet_ecommerce.ui.components.CustomAlertDialog
 import com.example.jet_ecommerce.ui.components.CustomButton
+import com.example.jet_ecommerce.ui.components.CustomLoadingWidget
 import com.example.jet_ecommerce.ui.components.CustomText
 import com.example.jet_ecommerce.ui.components.CustomTextButton
 import com.example.jet_ecommerce.ui.components.CustomTextField
+import com.example.jet_ecommerce.ui.navigation_comp.screensNav.ECommerceScreens
+
+@Composable
+fun RenderViewState(navController: NavHostController, viewModel: LoginViewModel) {
+    val states by viewModel.state.collectAsState()
+    val events by viewModel.event.collectAsState()
+
+    // state
+    when (states) {
+        is LoginContract.State.Idle -> {
+            LoginContent(navController = navController)
+        }
+
+        is LoginContract.State.Loading -> CustomLoadingWidget()
+
+        is LoginContract.State.Success -> {}
+
+        is LoginContract.State.Error -> {
+            CustomAlertDialog(showDialog = viewModel.showDialog.value,
+                dialogDescription = (states as LoginContract.State.Error).message,
+                onDismiss = { viewModel.showDialog.value = false },
+                onConfirm = { viewModel.showDialog.value = false })
+        }
+    }
+
+    // Event
+    when (events) {
+
+        is LoginContract.Event.Idle -> {
+            LoginContent(navController = navController)
+        }
+
+        is LoginContract.Event.NavigateAuthenticatedLoginToHome -> {
+            navController.navigate(ECommerceScreens.ProductDetailsScreen.name)
+        }
+
+    }
+
+
+}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun LoginScreen(navController: NavHostController) {
+fun LoginScreen(
+    navController: NavHostController,
+    viewModel: LoginViewModel = hiltViewModel()
+) {
     Scaffold(
 
         modifier = Modifier
@@ -45,7 +93,7 @@ fun LoginScreen(navController: NavHostController) {
 
         content = {
 
-            LoginContent()
+            RenderViewState(navController = navController, viewModel = viewModel)
 
         })
 
@@ -54,7 +102,7 @@ fun LoginScreen(navController: NavHostController) {
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun LoginContent() {
+fun LoginContent(viewModel: LoginViewModel = hiltViewModel(), navController: NavHostController) {
 
     Column(
 
@@ -65,7 +113,7 @@ fun LoginContent() {
                     id = R.color.stroke_color_30op
                 )
             ),
-        ) {
+    ) {
 
 
         Image(
@@ -106,14 +154,15 @@ fun LoginContent() {
             fontWeight = FontWeight(600),
             fontSize = 18
         )
-       // Spacer(modifier = Modifier.padding(top = 0.dp))
+        // Spacer(modifier = Modifier.padding(top = 0.dp))
 
         CustomTextField(
             label = stringResource(
-                R.string.enter_your_email),
-            state = mutableStateOf(""),
-            errorState = mutableStateOf("") ,
-            keyboardType = KeyboardType.Email ,
+                R.string.enter_your_email
+            ),
+            state = viewModel.email,
+            errorState = viewModel.emailError,
+            keyboardType = KeyboardType.Email,
             visualTransformation = VisualTransformation.None
         )
         Spacer(modifier = Modifier.padding(top = 24.dp))
@@ -128,8 +177,8 @@ fun LoginContent() {
 
         CustomTextField(
             label = stringResource(R.string.enter_your_password),
-            state =  mutableStateOf(""),
-            errorState = mutableStateOf("") ,
+            state = viewModel.password,
+            errorState = viewModel.passwordError,
             keyboardType = KeyboardType.Password,
             visualTransformation = PasswordVisualTransformation()
         )
@@ -151,7 +200,9 @@ fun LoginContent() {
         Spacer(modifier = Modifier.padding(top = 4.dp, bottom = 48.dp))
 
         CustomButton(title = stringResource(R.string.login),
-            onClick = {})
+            onClick = {
+                viewModel.invokeAction(LoginContract.Action.Login(viewModel.getRequest()))
+            })
         Spacer(modifier = Modifier.padding(top = 10.dp))
 
         CustomTextButton(
@@ -160,9 +211,10 @@ fun LoginContent() {
 
             fontWeight = FontWeight(400),
             fontSize = 16,
-            onClick = {}
+            onClick = {
+                navController.navigate(ECommerceScreens.RegisterScreen.name)
+            }
         )
-
 
 
     }
@@ -172,6 +224,6 @@ fun LoginContent() {
 @Composable
 @Preview(showSystemUi = true, showBackground = true)
 fun preview() {
-    LoginScreen(navController = rememberNavController())
+    // LoginScreen()
 
 }

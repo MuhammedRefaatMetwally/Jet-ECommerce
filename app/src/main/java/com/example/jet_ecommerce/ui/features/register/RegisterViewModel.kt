@@ -40,13 +40,10 @@ class RegisterViewModel @Inject constructor(
 
     }
     override fun invokeAction(action: RegisterContract.Action) {
-//        Fragment or Activity -> View Model -> Actions
-//        ViewModel -> Activity or Fragment -> States or Events
 
         when (action) {
             is RegisterContract.Action.Register -> register(action.registerRequest)
-
-
+            else -> {}
         }
     }
     private fun validateFields():Boolean{
@@ -89,7 +86,7 @@ class RegisterViewModel @Inject constructor(
 
                     val data = getRegisterUseCase(registerRequest)
                     _states.value = RegisterContract.State.Success(data)
-                    _events.value = RegisterContract.Event.NavigateAuthenticatedUserToHome
+                    _events.value = RegisterContract.Event.NavigateAuthenticatedRegisterToHome
                 }catch (ex:Exception){
                     _states.value = RegisterContract.State.Error("${ex.message}")
 

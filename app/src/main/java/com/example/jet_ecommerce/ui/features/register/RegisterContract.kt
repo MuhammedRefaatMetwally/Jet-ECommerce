@@ -21,7 +21,7 @@ sealed class RegisterContract {
 
     sealed interface Event {
         data object Idle : Event
-        data object NavigateAuthenticatedUserToHome : Event
+        data object NavigateAuthenticatedRegisterToHome : Event
 
     }
 

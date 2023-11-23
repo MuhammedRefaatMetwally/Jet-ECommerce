@@ -14,7 +14,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -30,8 +29,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.domain.features.register.model.RegisterEntity
-import com.example.domain.features.register.model.RegisterRequest
 import com.example.jet_ecommerce.R
 import com.example.jet_ecommerce.ui.components.CustomAlertDialog
 import com.example.jet_ecommerce.ui.components.CustomButton
@@ -75,7 +72,7 @@ fun RenderViewState(viewModel: RegisterViewModel, navController: NavHostControll
     when (events) {
         is RegisterContract.Event.Idle -> {
             RegisterContent()}
-        is RegisterContract.Event.NavigateAuthenticatedUserToHome -> {
+        is RegisterContract.Event.NavigateAuthenticatedRegisterToHome -> {
             navController.navigate(ECommerceScreens.ProductDetailsScreen .name)
         }
     }
@@ -200,8 +197,8 @@ fun RegisterContent(
             label = stringResource(R.string.enter_the_rePassword),
             state = vm.email,
             errorState = vm.emailError,
-            keyboardType = KeyboardType.Email,
-            visualTransformation = VisualTransformation.None
+            keyboardType = KeyboardType.Password,
+            visualTransformation = PasswordVisualTransformation()
         )
         Spacer(modifier = Modifier.padding(top = 32.dp))
 
