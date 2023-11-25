@@ -70,7 +70,7 @@ fun RenderViewState(navController: NavHostController, viewModel: LoginViewModel)
         }
 
         is LoginContract.Event.NavigateAuthenticatedLoginToHome -> {
-            navController.navigate(ECommerceScreens.ProductDetailsScreen.name)
+            navController.navigate(ECommerceScreens.MainScreen.name)
         }
 
     }

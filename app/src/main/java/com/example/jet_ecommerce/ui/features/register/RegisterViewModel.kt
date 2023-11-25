@@ -42,7 +42,7 @@ class RegisterViewModel @Inject constructor(
     override fun invokeAction(action: RegisterContract.Action) {
 
         when (action) {
-            is RegisterContract.Action.Register -> register(action.registerRequest)
+            is RegisterContract.Action.Register -> validateAndRegister(action.registerRequest)
             else -> {}
         }
     }
@@ -58,6 +58,7 @@ class RegisterViewModel @Inject constructor(
             return false
         } else
             emailError.value = ""
+
         if (password.value.isEmpty() || password.value.isBlank()) {
             passwordError.value = "Password Required"
             return false
@@ -67,19 +68,22 @@ class RegisterViewModel @Inject constructor(
         if (rePassword.value.isEmpty() || rePassword.value.isBlank()) {
             rePasswordError.value = "RePassword Required"
             return false
-        } else
+        } else{
             rePasswordError.value = ""
+        }
         return true
     }
 
+  private  fun validateAndRegister(registerRequest: RegisterRequest){
+        if (!validateFields()) return
+        showDialog.value = true
+        register(registerRequest)
+    }
     private fun register(registerRequest: RegisterRequest){
 
         _states.value = RegisterContract.State.Loading
-        if (validateFields()){
-            showDialog.value = false
 
-        }
-        else{
+
             viewModelScope.launch {
                 try {
 
@@ -97,4 +101,4 @@ class RegisterViewModel @Inject constructor(
 
 
     }
-}
+

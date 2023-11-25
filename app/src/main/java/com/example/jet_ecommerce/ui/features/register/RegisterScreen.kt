@@ -73,7 +73,7 @@ fun RenderViewState(viewModel: RegisterViewModel, navController: NavHostControll
         is RegisterContract.Event.Idle -> {
             RegisterContent()}
         is RegisterContract.Event.NavigateAuthenticatedRegisterToHome -> {
-            navController.navigate(ECommerceScreens.ProductDetailsScreen .name)
+            navController.navigate(ECommerceScreens.MainScreen .name)
         }
     }
 
@@ -160,8 +160,8 @@ fun RegisterContent(
 
         CustomTextField(
             label = stringResource(R.string.enter_your_email_address),
-            state = vm.password,
-            errorState = vm.passwordError,
+            state = vm.email,
+            errorState = vm.emailError,
             keyboardType = KeyboardType.Email,
             visualTransformation = VisualTransformation.None
         )
@@ -177,8 +177,8 @@ fun RegisterContent(
 
         CustomTextField(
             label = stringResource(R.string.enter_your_password),
-            state = vm.rePassword,
-            errorState = vm.rePasswordError,
+            state = vm.password,
+            errorState = vm.passwordError,
             keyboardType = KeyboardType.Password,
             visualTransformation = PasswordVisualTransformation()
         )
@@ -195,8 +195,8 @@ fun RegisterContent(
 
         CustomTextField(
             label = stringResource(R.string.enter_the_rePassword),
-            state = vm.email,
-            errorState = vm.emailError,
+            state = vm.rePassword,
+            errorState = vm.rePasswordError,
             keyboardType = KeyboardType.Password,
             visualTransformation = PasswordVisualTransformation()
         )

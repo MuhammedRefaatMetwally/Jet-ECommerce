@@ -21,16 +21,16 @@ class LoginViewModel @Inject constructor(
 
     private val _states = MutableStateFlow<LoginContract.State>(LoginContract.State.Idle)
 
-    override val state: StateFlow<LoginContract.State> get() =_states
+    override val state: StateFlow<LoginContract.State>  =_states
 
     private val _events = MutableStateFlow<LoginContract.Event>(LoginContract.Event.Idle)
-    override val event: StateFlow<LoginContract.Event> get() = _events
+    override val event: StateFlow<LoginContract.Event>  = _events
     var email = mutableStateOf("")
     var emailError = mutableStateOf("")
 
     var password = mutableStateOf("")
     var passwordError = mutableStateOf("")
-    var showDialog = mutableStateOf(true)
+    var showDialog = mutableStateOf(false)
 
     fun getRequest():LoginRequest{
 
@@ -57,16 +57,18 @@ class LoginViewModel @Inject constructor(
 
     override fun invokeAction(action: LoginContract.Action) {
         when (action) {
-            is LoginContract.Action.Login -> login(action.loginRequest)
+            is LoginContract.Action.Login -> validateAndLogin(action.loginRequest)
         }
     }
 
+    private fun validateAndLogin(loginRequest: LoginRequest){
+        if (!validateFiled())return
+        showDialog.value = true
+        login(loginRequest)
+    }
     private fun login(loginRequest: LoginRequest){
         _states.value = LoginContract.State.Loading
-        if (validateFiled()){
-            showDialog.value = false
-        }
-        else{
+
             viewModelScope.launch {
                 try {
                    val data = getLoginUseCase(loginRequest)
@@ -80,4 +82,3 @@ class LoginViewModel @Inject constructor(
 
         }
     }
-}
