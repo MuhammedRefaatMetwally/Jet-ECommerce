@@ -19,7 +19,7 @@ class AuthenticateInterceptor @Inject constructor(
     override fun authenticate(route: Route?, response: Response): Request{
         val tokenResponse = webServices.refreshToken("asda").execute()
         val token = tokenResponse.body()?.data
-        sharedPreferences.edit().putString("token",token) // bt7fz el token lma tlogin wa lma ytgdd
+        sharedPreferences.edit().putString("token",token)// bt7fz el token lma tlogin wa lma ytgdd
         return response.request.newBuilder().header(
             "token",
             token ?: ""

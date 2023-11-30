@@ -24,9 +24,9 @@ class ProductDetailsContract {
 
     sealed interface Action {
         data class LoadProduct(val productId: String) : Action
-        data class AddProductToCart(val product: Product) : Action
-        data class AddProductToWishList(val product: Product) : Action
-        data class UpdateCartProductQuantity(val quantity: Int) : Action
+        data class AddProductToCart(val productId: String) : Action
+        data class AddProductToWishList(val productId: String) : Action
+//        data class UpdateCartProductQuantity(val quantity: Int) : Action
         data object ClickOnCartIcon : Action
     }
 }
