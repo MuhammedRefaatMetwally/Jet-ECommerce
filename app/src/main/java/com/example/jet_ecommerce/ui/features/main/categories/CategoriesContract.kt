@@ -16,19 +16,19 @@ class CategoriesContract {
     }
 
     sealed interface State {
-        class Error(val message: String) : State
-        class Success(val categories: List<Category?>?) : State
+        data class Error(val message: String) : State
+        data class Success(val categories: List<Category?>?) : State
         data object Loading : State
     }
 
     sealed interface Action {
         data object LoadCategories : Action
-        class CategoryClick(val category: Category) : Action
-        class SubCategoryItemClick(val categoryId:String) : Action
+        data class CategoryClick(val categoryId: String) : Action
+        data class SubCategoryItemClick(val categoryId: String) : Action
     }
 
     sealed interface Event {
         data object Idle : Event
-        class NavigateToProductsList(val categoryId:String) : Event
+        data class NavigateToProductsList(val categoryId: String) : Event
     }
 }

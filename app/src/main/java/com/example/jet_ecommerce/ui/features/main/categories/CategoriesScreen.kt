@@ -54,7 +54,7 @@ fun RenderViewState(vm: CategoriesViewModel, navController: NavHostController) {
 
     val states by vm.states.collectAsState()
     val events by vm.events.collectAsState()
-    val subCategoriesList = vm.subCategoriesList.value
+    val subCategoriesState by vm.subCategoriesState.collectAsState()
 
     when (states) {
         is CategoriesContract.State.Error -> {
@@ -71,9 +71,9 @@ fun RenderViewState(vm: CategoriesViewModel, navController: NavHostController) {
 
         is CategoriesContract.State.Loading -> CustomLoadingWidget()
         is CategoriesContract.State.Success -> CategoriesContent((states as CategoriesContract.State.Success).categories,
-            subCategoriesList,
+            subCategoriesState,
             onCategoryItemClick = {
-                vm.invokeAction(CategoriesContract.Action.CategoryClick(it))
+                vm.invokeAction(CategoriesContract.Action.CategoryClick(it.id!!))
             },
             onSubCategoryItemClick = {
                 vm.invokeAction(CategoriesContract.Action.SubCategoryItemClick(it))

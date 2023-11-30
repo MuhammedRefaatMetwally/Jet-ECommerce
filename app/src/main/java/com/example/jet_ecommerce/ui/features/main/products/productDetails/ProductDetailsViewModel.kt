@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.common.ResultWrapper
-import com.example.domain.features.products.model.Product
 import com.example.domain.features.products.usecase.GetSpecificProductUseCase
 import com.example.jet_ecommerce.IoDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,20 +38,20 @@ class ProductDetailsViewModel @Inject constructor(
             }
 
             is ProductDetailsContract.Action.AddProductToCart -> {
-                addProductToCart(action.product)
+                addProductToCart(action.productId)
             }
 
             is ProductDetailsContract.Action.AddProductToWishList -> {
-                addProductToWishList(action.product)
+                addProductToWishList(action.productId)
             }
 
             is ProductDetailsContract.Action.ClickOnCartIcon -> {
                 cartIconClick()
             }
 
-            is ProductDetailsContract.Action.UpdateCartProductQuantity -> {
-                updateCartProductQuantity(action.quantity)
-            }
+//            is ProductDetailsContract.Action.UpdateCartProductQuantity -> {
+//                updateCartProductQuantity(action.quantity)
+//            }
         }
     }
 
@@ -66,12 +65,13 @@ class ProductDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun addProductToWishList(product: Product) {
+    private fun addProductToWishList(productId: String) {
         TODO("Not yet implemented")
     }
 
-    private fun addProductToCart(product: Product) {
+    private fun addProductToCart(productId: String) {
         TODO("Not yet implemented")
+//        updateCartProductQuantity()
     }
 
     private fun loadProduct(productId: String) {

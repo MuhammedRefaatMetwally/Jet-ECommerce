@@ -2,6 +2,7 @@ package com.example.jet_ecommerce.ui.features.main.products.productDetails
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.collectIsDraggedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -90,10 +91,10 @@ fun RenderViewState(vm: ProductDetailsViewModel, navController: NavHostControlle
                 navController = navController,
                 product = product,
                 onAddToCartClick = {
-                    vm.invokeAction(ProductDetailsContract.Action.AddProductToCart(product))
+                    vm.invokeAction(ProductDetailsContract.Action.AddProductToCart(product.id!!))
                 },
                 onAddToWishListClick = {
-                    vm.invokeAction(ProductDetailsContract.Action.AddProductToWishList(product))
+                    vm.invokeAction(ProductDetailsContract.Action.AddProductToWishList(product.id!!))
                 })
         }
     }
@@ -171,7 +172,7 @@ fun ProductDetailsItem(
                     fontWeight = FontWeight(500),
                     color = Color(0xFF06004F),
 
-                )
+                    )
             )
             Text(
                 text = "EGP ${product.price}",
@@ -181,7 +182,7 @@ fun ProductDetailsItem(
                     fontWeight = FontWeight(500),
                     color = Color(0xFF06004F),
 
-                )
+                    )
             )
         }
         Row(
@@ -245,12 +246,16 @@ fun ProductDetailsItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
+                    modifier = Modifier.clickable {
+                        if (product.productQuantity > 1)
+                            product.productQuantity--
+                    },
                     painter = painterResource(id = R.drawable.__icon__subtract_circle_minus_remove_),
                     contentDescription = "Subtract icon",
                     tint = Color.Unspecified
                 )
                 Text(
-                    text = "${product.quantity}",
+                    text = "${product.productQuantity}",
                     style = TextStyle(
                         fontSize = 18.sp,
                         lineHeight = 18.sp,
@@ -260,6 +265,10 @@ fun ProductDetailsItem(
                     )
                 )
                 Icon(
+                    modifier = Modifier.clickable {
+                        if (product.productQuantity <= product.quantity!!)
+                            product.productQuantity++
+                    },
                     painter = painterResource(id = R.drawable.__icon__plus_circle_),
                     contentDescription = "plus icon",
                     tint = Color.Unspecified
@@ -306,8 +315,9 @@ fun ProductDetailsItem(
                         textAlign = TextAlign.Center,
                     )
                 )
+                product.totalPrice = product.price!! * product.productQuantity
                 Text(
-                    text = "EGP 3,500",
+                    text = "${product.totalPrice}",
                     style = TextStyle(
                         fontSize = 18.sp,
                         lineHeight = 18.sp,

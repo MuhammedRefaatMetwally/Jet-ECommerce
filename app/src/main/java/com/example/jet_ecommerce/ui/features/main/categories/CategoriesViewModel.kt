@@ -4,7 +4,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.common.ResultWrapper
-import com.example.domain.features.category.model.Category
 import com.example.domain.features.category.usecase.GetCategoriesUseCase
 import com.example.domain.features.subCategories.model.SubCategory
 import com.example.domain.features.subCategories.usecase.GetSubCategoriesOnCategoryUseCase
@@ -26,10 +25,13 @@ class CategoriesViewModel @Inject constructor(
     private val _states =
         MutableStateFlow<CategoriesContract.State>(CategoriesContract.State.Loading)
     private val _events = MutableStateFlow<CategoriesContract.Event>(CategoriesContract.Event.Idle)
-    var subCategoriesList = mutableStateOf<List<SubCategory>>(listOf())
+
     override val states: StateFlow<CategoriesContract.State> = _states
     override val events: StateFlow<CategoriesContract.Event> = _events
 
+    private val _subCategoriesState: MutableStateFlow<List<SubCategory>> =
+        MutableStateFlow(emptyList())
+    val subCategoriesState: StateFlow<List<SubCategory>> = _subCategoriesState
     init {
         invokeAction(CategoriesContract.Action.LoadCategories)
     }
@@ -37,10 +39,12 @@ class CategoriesViewModel @Inject constructor(
     override fun invokeAction(action: CategoriesContract.Action) {
         when (action) {
             is CategoriesContract.Action.LoadCategories -> loadCategories()
-            is CategoriesContract.Action.CategoryClick -> categoryClick(action.category)
+            is CategoriesContract.Action.CategoryClick -> loadSubCategories(action.categoryId)
             is CategoriesContract.Action.SubCategoryItemClick -> subCategoryClick(action.categoryId)
         }
     }
+
+
 
     private fun subCategoryClick(categoryId: String) {
         viewModelScope.launch {
@@ -48,19 +52,19 @@ class CategoriesViewModel @Inject constructor(
         }
     }
 
-    private fun categoryClick(category: Category) {
+    private fun loadSubCategories(categoryId: String) {
         viewModelScope.launch(ioDispatcher) {
-            getSubCategoriesOnCategoryUseCase.invoke(category.id!!).collect {
+            getSubCategoriesOnCategoryUseCase.invoke(categoryId).collect {
                 when (it) {
                     is ResultWrapper.Error -> {}
                     is ResultWrapper.Loading -> {}
                     is ResultWrapper.ServerError -> {}
-                    is ResultWrapper.Success -> subCategoriesList.value = it.data
+                    is ResultWrapper.Success -> _subCategoriesState.emit(it.data)
                 }
             }
         }
-    }
 
+    }
     private fun loadCategories() {
         viewModelScope.launch(ioDispatcher) {
             getCategoriesUseCase.invoke().collect {
