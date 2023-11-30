@@ -11,5 +11,5 @@ import dagger.hilt.android.components.ViewModelComponent
 @InstallIn(ViewModelComponent::class)
 abstract class di {
     @Binds
-    abstract fun bindCartRepository(cartRepositoryImpl: WishListRepositoryImpl): CartRepository
+    abstract fun bindCartRepository(cartRepositoryImpl: CartRepositoryImpl): CartRepository
 }

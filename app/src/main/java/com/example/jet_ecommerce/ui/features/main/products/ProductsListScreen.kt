@@ -49,8 +49,8 @@ fun RenderViewState(vm: ProductsViewModel, navController: NavHostController) {
         is ProductsContract.States.Success -> ProductsContent(
             (states as ProductsContract.States.Success).productsList?.collectAsLazyPagingItems()!!,
             onItemClick = { vm.invokeAction(ProductsContract.Action.ProductClick(it)) },
-            onAddToCartClick = { vm.invokeAction(ProductsContract.Action.AddToCartButtonClick(it.id)) },
-            onAddToWishListClick = { vm.invokeAction(ProductsContract.Action.AddToWishListButtonClick(it.id)) },
+            onAddToCartClick = { vm.invokeAction(ProductsContract.Action.AddToCartButtonClick(it.id!!)) },
+            onAddToWishListClick = { vm.invokeAction(ProductsContract.Action.AddToWishListButtonClick(it.id!!)) },
         )
     }
     when (events) {

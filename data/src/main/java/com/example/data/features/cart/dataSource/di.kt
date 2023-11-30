@@ -11,7 +11,7 @@ import dagger.hilt.android.components.ViewModelComponent
 abstract class di {
     @Binds
     abstract fun bindCartDataSource(
-        cartDataSourceImpl: WishListDataSourceImpl
+        cartDataSourceImpl: CartDataSourceImpl
     ):CartDataSource
 
 }
