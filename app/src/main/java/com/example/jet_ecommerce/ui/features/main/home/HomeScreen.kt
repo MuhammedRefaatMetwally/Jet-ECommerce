@@ -32,7 +32,7 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hilt
         content = {
 
             item {
-                CustomTopBar(modifier = Modifier.clickable {
+                CustomTopBar(isMainScreen = true,modifier = Modifier.clickable {
                     tokenViewModel.deleteToken()
                     navController.popBackStack()
                     navController.navigate(ECommerceScreens.LoginScreen.name)

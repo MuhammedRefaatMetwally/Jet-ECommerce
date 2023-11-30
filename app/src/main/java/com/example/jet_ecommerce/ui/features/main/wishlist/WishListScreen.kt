@@ -7,5 +7,5 @@ import com.example.jet_ecommerce.ui.components.CustomTopBar
 
 @Composable
 fun WishListScreen(navController: NavHostController) {
-    CustomTopBar()
+    CustomTopBar(isMainScreen = false)
 }

@@ -179,7 +179,7 @@ fun LoginContent(viewModel: LoginViewModel = hiltViewModel(), navController: Nav
             keyboardType = KeyboardType.Email,
             visualTransformation = VisualTransformation.None,
             focusedLabelColor = Color.White,
-            unfocusedLabelColor = Color.White,
+            unfocusedLabelColor = Color.Black,
             containerColor = Color.White
         )
         Spacer(modifier = Modifier.padding(top = 24.dp))
@@ -201,7 +201,7 @@ fun LoginContent(viewModel: LoginViewModel = hiltViewModel(), navController: Nav
             keyboardType = KeyboardType.Password,
             visualTransformation = PasswordVisualTransformation(),
             focusedLabelColor = Color.White,
-            unfocusedLabelColor = Color.White,
+            unfocusedLabelColor = Color.Black,
             containerColor = Color.White
         )
         Spacer(modifier = Modifier.padding(top = 4.dp))

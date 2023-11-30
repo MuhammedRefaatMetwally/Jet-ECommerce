@@ -27,7 +27,7 @@ import com.example.jet_ecommerce.ui.features.auth.TokenViewModel
 import com.example.jet_ecommerce.ui.navigation_comp.screensNav.ECommerceScreens
 
 @Composable
-fun CustomTopBar(modifier: Modifier =Modifier) {
+fun CustomTopBar(modifier: Modifier =Modifier, isMainScreen : Boolean = false) {
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(horizontalArrangement = Arrangement.SpaceBetween) {
@@ -36,14 +36,17 @@ fun CustomTopBar(modifier: Modifier =Modifier) {
                 modifier = Modifier.padding(8.dp),
                 contentDescription = "logo"
             )
-            Spacer(modifier = Modifier.fillMaxWidth(.85f))
-            Image(
-                imageVector = Icons.Default.ExitToApp,
-                modifier = modifier
-                    .padding(8.dp),
-                contentDescription = "LogOut",
-                colorFilter = ColorFilter.tint(colorResource(id = R.color.main_color))
-            )
+            if(isMainScreen){
+                Spacer(modifier = Modifier.fillMaxWidth(.85f))
+                Image(
+                    imageVector = Icons.Default.ExitToApp,
+                    modifier = modifier
+                        .padding(8.dp),
+                    contentDescription = "LogOut",
+                    colorFilter = ColorFilter.tint(colorResource(id = R.color.main_color))
+                )
+            }
+
         }
 
         Row(horizontalArrangement = Arrangement.SpaceBetween) {
