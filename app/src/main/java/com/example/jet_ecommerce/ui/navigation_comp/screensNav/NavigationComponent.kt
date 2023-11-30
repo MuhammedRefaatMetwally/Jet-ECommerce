@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.jet_ecommerce.ui.features.login.LoginScreen
+import com.example.jet_ecommerce.ui.features.auth.login.LoginScreen
 import com.example.jet_ecommerce.ui.features.main.MainScreen
-import com.example.jet_ecommerce.ui.features.register.RegisterScreen
+import com.example.jet_ecommerce.ui.features.auth.register.RegisterScreen
 import com.example.jet_ecommerce.ui.features.splash.SplashScreen
 
 @Composable
@@ -36,6 +36,8 @@ fun ECommerceNavigation() {
         composable(ECommerceScreens.MainScreen.name) {
             MainScreen()
         }
+
+
 
     }
 }

@@ -1,11 +1,10 @@
-package com.example.jet_ecommerce.ui.features.login
+package com.example.jet_ecommerce.ui.features.auth.login
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.features.login.model.LoginRequest
 import com.example.domain.features.login.useCase.GetLoginUseCase
-import com.example.jet_ecommerce.ui.features.register.RegisterContract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,7 +35,7 @@ class LoginViewModel @Inject constructor(
 
         return LoginRequest(email.value,password.value) }
 
-   private fun validateFiled():Boolean{
+    private fun validateFiled():Boolean{
         if (email.value.isEmpty() || email.value.isEmpty()){
             emailError.value = " Email required"
             return false
@@ -69,16 +68,16 @@ class LoginViewModel @Inject constructor(
     private fun login(loginRequest: LoginRequest){
         _states.value = LoginContract.State.Loading
 
-            viewModelScope.launch {
-                try {
-                   val data = getLoginUseCase(loginRequest)
-                    _states.value = LoginContract.State.Success(data)
-                    _events.value = LoginContract.Event.NavigateAuthenticatedLoginToHome
-                }
-                catch (ex:Exception){
-                    _states.value = LoginContract.State.Error("${ex.message}")
-                }
+        viewModelScope.launch {
+            try {
+                val data = getLoginUseCase(loginRequest)
+                _states.value = LoginContract.State.Success(data)
+                _events.value = LoginContract.Event.NavigateToHome
             }
-
+            catch (ex:Exception){
+                _states.value = LoginContract.State.Error("${ex.message}")
+            }
         }
+
     }
+}

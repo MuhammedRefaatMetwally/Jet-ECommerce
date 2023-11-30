@@ -50,7 +50,14 @@ fun RenderViewState(vm: ProductsViewModel, navController: NavHostController) {
             (states as ProductsContract.States.Success).productsList?.collectAsLazyPagingItems()!!,
             onItemClick = { vm.invokeAction(ProductsContract.Action.ProductClick(it)) },
             onAddToCartClick = { vm.invokeAction(ProductsContract.Action.AddToCartButtonClick(it)) },
-            onAddToWishListClick = { vm.invokeAction(ProductsContract.Action.AddToWishListButtonClick(it)) }
+            onAddToWishListClick = {
+                vm.invokeAction(
+                    ProductsContract.Action.AddToWishListButtonClick(
+                        it
+                    )
+                )
+            },
+
         )
     }
     when (events) {
@@ -74,7 +81,7 @@ fun ProductsContent(
     productsLazyPagingItems: LazyPagingItems<Product>,
     onItemClick: (productId: String) -> Unit,
     onAddToCartClick: (item: Product) -> Unit,
-    onAddToWishListClick: (item: Product) -> Unit
+    onAddToWishListClick: (item: Product) -> Unit,
 ) {
 
     Column(verticalArrangement = Arrangement.SpaceBetween) {

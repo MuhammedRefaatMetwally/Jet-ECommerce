@@ -4,15 +4,16 @@ package com.example.data.api
 import com.example.domain.features.register.model.RegisterResponse
 import com.example.data.model.BaseResponse
 import com.example.domain.features.category.model.Category
+import com.example.domain.features.login.model.LoginEntity
 import com.example.domain.features.login.model.LoginRequest
 import com.example.domain.features.login.model.LoginResponse
 import com.example.domain.features.products.model.Product
-import com.example.domain.features.register.model.RegisterEntity
 import com.example.domain.features.register.model.RegisterRequest
 import com.example.domain.features.subCategories.model.SubCategory
-import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -41,11 +42,14 @@ interface WebServices {
     ): BaseResponse<Product>
 
     @POST("api/v1/auth/refreshToken")
-    fun refreshToken(oldToken: String): Call<BaseResponse<String>>
+    fun refreshToken(oldToken: String): Response<LoginEntity>
 
 
+    @Headers("Content-Type: application/json")
     @POST("api/v1/auth/signup")
     suspend fun registration(@Body registerRequest: RegisterRequest): RegisterResponse
+
+    @Headers("Content-Type: application/json")
     @POST("api/v1/auth/signin")
-    suspend fun login(@Body loginRequest: LoginRequest):LoginResponse
+    suspend fun login(@Body loginRequest: LoginRequest): LoginResponse
 }

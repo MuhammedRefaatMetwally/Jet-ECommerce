@@ -104,7 +104,8 @@ fun CategoriesContent(
     categoriesList: List<Category?>?,
     subCategoriesList: List<SubCategory>,
     onCategoryItemClick: (category: Category) -> Unit,
-    onSubCategoryItemClick: (categoryId: String) -> Unit
+    onSubCategoryItemClick: (categoryId: String) -> Unit,
+
 ) {
     var category by remember { mutableStateOf(Category()) }
 

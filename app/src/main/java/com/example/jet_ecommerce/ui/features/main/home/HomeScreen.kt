@@ -13,13 +13,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.jet_ecommerce.ui.components.CustomTopBar
 import com.example.jet_ecommerce.ui.components.PageView
+import com.example.jet_ecommerce.ui.features.auth.TokenViewModel
 import com.example.jet_ecommerce.ui.features.main.home.renderStatesComponents.RenderCategoriesStates
 import com.example.jet_ecommerce.ui.features.main.home.renderStatesComponents.RenderProductStates
 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hiltViewModel()) {
+fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hiltViewModel(),tokenViewModel: TokenViewModel= hiltViewModel()) {
     viewModel.invokeCategoriesAction(HomeContract.Action.LoadCategories)
     viewModel.invokeProductsAction(ProductContract.Action.LoadProducts)
 
@@ -30,7 +31,7 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hilt
         content = {
 
             item {
-                CustomTopBar()
+                CustomTopBar(tokenViewModel=tokenViewModel)
             }
 
             item {
@@ -54,12 +55,11 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hilt
             item {
                 Spacer(modifier = Modifier.height(100.dp))
             }
+
         }
 
     )
 
 
 }
-
-
 
