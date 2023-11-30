@@ -1,5 +1,8 @@
 package com.example.jet_ecommerce.ui.features.main.products.productDetails
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -25,7 +28,8 @@ class ProductDetailsViewModel @Inject constructor(
         MutableStateFlow(ProductDetailsContract.Events.Idle)
     override val states = _states
     override val events = _events
-
+    val productQuantity = mutableIntStateOf(1)
+    val productTotalPrice = mutableIntStateOf(0)
     init {
         val productId = savedStateHandle.get<String>("product_id")
         invokeAction(ProductDetailsContract.Action.LoadProduct(productId ?: ""))

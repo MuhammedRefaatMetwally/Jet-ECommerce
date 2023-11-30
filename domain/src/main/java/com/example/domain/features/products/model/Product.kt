@@ -23,9 +23,7 @@ data class Product(
     val category: Category? = null,
     val brand: Brand? = null,
     val slug: String? = null,
-    val updatedAt: String? = null,
-    var productQuantity: Int = 1,
-    var totalPrice: Int? = null
+    val updatedAt: String? = null
 ) : Parcelable
 
 

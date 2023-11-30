@@ -31,6 +31,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -90,6 +91,8 @@ fun RenderViewState(vm: ProductDetailsViewModel, navController: NavHostControlle
             ProductDetailsContent(
                 navController = navController,
                 product = product,
+                vm.productQuantity,
+                vm.productTotalPrice,
                 onAddToCartClick = {
                     vm.invokeAction(ProductDetailsContract.Action.AddProductToCart(product.id!!))
                 },
@@ -111,6 +114,8 @@ fun RenderViewState(vm: ProductDetailsViewModel, navController: NavHostControlle
 fun ProductDetailsContent(
     navController: NavHostController,
     product: Product,
+    productQuantity: MutableIntState,
+    productTotalPrice: MutableIntState,
     onAddToWishListClick: () -> Unit,
     onAddToCartClick: () -> Unit
 ) {
@@ -118,6 +123,8 @@ fun ProductDetailsContent(
         TopAppBar(navController)
         ProductDetailsItem(
             product = product,
+            productQuantity,
+            productTotalPrice,
             onAddToWishListClick = { onAddToWishListClick() },
             onAddToCartClick = { onAddToCartClick() }
         )
@@ -129,6 +136,8 @@ fun ProductDetailsContent(
 @Composable
 fun ProductDetailsItem(
     product: Product,
+    productQuantity: MutableIntState,
+    productTotalPrice: MutableIntState,
     onAddToWishListClick: () -> Unit,
     onAddToCartClick: () -> Unit
 ) {
@@ -247,15 +256,15 @@ fun ProductDetailsItem(
             ) {
                 Icon(
                     modifier = Modifier.clickable {
-                        if (product.productQuantity > 1)
-                            product.productQuantity--
+                        if (productQuantity.intValue > 1)
+                            productQuantity.intValue--
                     },
                     painter = painterResource(id = R.drawable.__icon__subtract_circle_minus_remove_),
                     contentDescription = "Subtract icon",
                     tint = Color.Unspecified
                 )
                 Text(
-                    text = "${product.productQuantity}",
+                    text = "${productQuantity.intValue}",
                     style = TextStyle(
                         fontSize = 18.sp,
                         lineHeight = 18.sp,
@@ -266,8 +275,8 @@ fun ProductDetailsItem(
                 )
                 Icon(
                     modifier = Modifier.clickable {
-                        if (product.productQuantity <= product.quantity!!)
-                            product.productQuantity++
+                        if (productQuantity.intValue <= product.quantity!!)
+                            productQuantity.intValue++
                     },
                     painter = painterResource(id = R.drawable.__icon__plus_circle_),
                     contentDescription = "plus icon",
@@ -315,9 +324,9 @@ fun ProductDetailsItem(
                         textAlign = TextAlign.Center,
                     )
                 )
-                product.totalPrice = product.price!! * product.productQuantity
+                productTotalPrice.intValue = product.price!! * productQuantity.intValue
                 Text(
-                    text = "${product.totalPrice}",
+                    text = "${productTotalPrice.intValue} EGP",
                     style = TextStyle(
                         fontSize = 18.sp,
                         lineHeight = 18.sp,
