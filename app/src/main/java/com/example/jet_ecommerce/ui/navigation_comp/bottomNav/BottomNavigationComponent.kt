@@ -8,7 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import com.example.domain.features.products.model.Product
+import com.example.jet_ecommerce.ui.features.auth.login.LoginScreen
 import com.example.jet_ecommerce.ui.features.main.categories.CategoriesScreen
 import com.example.jet_ecommerce.ui.features.main.categories.CategoriesViewModel
 import com.example.jet_ecommerce.ui.features.main.home.HomeScreen
@@ -21,7 +21,10 @@ import com.example.jet_ecommerce.ui.features.main.wishlist.WishListScreen
 import com.example.jet_ecommerce.ui.navigation_comp.screensNav.ECommerceScreens
 
 @Composable
-fun ECommerceBottomNavigation(navController: NavHostController) {
+fun ECommerceBottomNavigation(
+    navController: NavHostController,
+    mainNavController: NavHostController
+) {
 
     NavHost(
         navController = navController,
@@ -69,6 +72,10 @@ fun ECommerceBottomNavigation(navController: NavHostController) {
         composable(BottomNavItem.Profile.screen_route) {
 
             ProfileScreen(navController = navController)
+        }
+        
+        composable(ECommerceScreens.LoginScreen.name){
+            LoginScreen(navController = mainNavController)
         }
 
     }

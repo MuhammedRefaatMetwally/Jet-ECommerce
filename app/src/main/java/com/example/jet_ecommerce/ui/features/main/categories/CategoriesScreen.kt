@@ -112,7 +112,7 @@ fun CategoriesContent(
     Column(
         modifier = Modifier.padding(start = 8.dp), verticalArrangement = Arrangement.SpaceBetween
     ) {
-        CustomTopBar()
+        CustomTopBar(isMainScreen = false)
         Row(
             Modifier
                 .padding(top = 16.dp, bottom = 36.dp)

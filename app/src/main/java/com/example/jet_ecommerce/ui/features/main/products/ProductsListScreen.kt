@@ -78,7 +78,7 @@ fun ProductsContent(
 ) {
 
     Column(verticalArrangement = Arrangement.SpaceBetween) {
-        CustomTopBar()
+        CustomTopBar(isMainScreen = false)
         ProductsVerticalGrid(productsLazyPagingItems, Modifier.padding(8.dp),
             onItemClick = { onItemClick(it) },
             onAddToCartClick = { onAddToCartClick(it) },

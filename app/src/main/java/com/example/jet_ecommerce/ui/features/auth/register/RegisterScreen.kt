@@ -1,7 +1,6 @@
 package com.example.jet_ecommerce.ui.features.auth.register
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -10,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -23,10 +23,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,7 +46,11 @@ import com.example.jet_ecommerce.ui.features.auth.TokenViewModel
 import com.example.jet_ecommerce.ui.navigation_comp.screensNav.ECommerceScreens
 
 @Composable
-fun RenderViewState(viewModel: RegisterViewModel, tokenViewModel: TokenViewModel = hiltViewModel(), navController: NavHostController) {
+fun RenderViewState(
+    viewModel: RegisterViewModel,
+    tokenViewModel: TokenViewModel = hiltViewModel(),
+    navController: NavHostController
+) {
     val states by viewModel.states.collectAsState()
     val events by viewModel.events.collectAsState()
 
@@ -51,7 +58,7 @@ fun RenderViewState(viewModel: RegisterViewModel, tokenViewModel: TokenViewModel
     when (states) {
 
         is RegisterContract.State.Idle -> {
-            RegisterContent()
+            RegisterContent(navController = navController)
 
         }
 
@@ -65,17 +72,21 @@ fun RenderViewState(viewModel: RegisterViewModel, tokenViewModel: TokenViewModel
 
         is RegisterContract.State.Loading -> CustomLoadingWidget()
 
-        is RegisterContract.State.Success ->{
-         tokenViewModel.saveToken((states as RegisterContract.State.Success).entity.token ?:"N/A")
-        }}
+        is RegisterContract.State.Success -> {
+            tokenViewModel.saveToken(
+                (states as RegisterContract.State.Success).entity.token ?: "N/A"
+            )
+        }
+    }
 
 
     when (events) {
         is RegisterContract.Event.Idle -> {
-            RegisterContent()
+            RegisterContent(navController = navController)
         }
+
         is RegisterContract.Event.NavigateAuthenticatedRegisterToHome -> {
-            navController.navigate(ECommerceScreens.MainScreen .name)
+            navController.navigate(ECommerceScreens.MainScreen.name)
         }
     }
 
@@ -107,14 +118,15 @@ fun RegisterScreen(
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun RegisterContent(
-  vm: RegisterViewModel = hiltViewModel()
+    vm: RegisterViewModel = hiltViewModel(),
+    navController: NavHostController
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(
                 colorResource(
-                    id = R.color.stroke_color_30op
+                    id = R.color.main_color
                 )
             ),
     ) {
@@ -141,7 +153,8 @@ fun RegisterContent(
 
             fontWeight = FontWeight(600),
             fontSize = 18.sp,
-            color = Color.White
+            color = Color.White,
+            modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
         )
 
         CustomTextField(
@@ -159,7 +172,8 @@ fun RegisterContent(
 
             fontWeight = FontWeight(600),
             fontSize = 18.sp,
-            color = Color.White
+            color = Color.White,
+            modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
         )
 
         CustomTextField(
@@ -167,7 +181,10 @@ fun RegisterContent(
             state = vm.email,
             errorState = vm.emailError,
             keyboardType = KeyboardType.Email,
-            visualTransformation = VisualTransformation.None
+            visualTransformation = VisualTransformation.None,
+            focusedLabelColor = Color.White,
+            unfocusedLabelColor = Color.Black,
+            containerColor = Color.White
         )
 
         Spacer(modifier = Modifier.padding(top = 24.dp))
@@ -176,7 +193,8 @@ fun RegisterContent(
 
             fontWeight = FontWeight(600),
             fontSize = 18.sp,
-            color = Color.White
+            color = Color.White,
+            modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
         )
         Spacer(modifier = Modifier.padding(top = 0.dp))
 
@@ -185,18 +203,22 @@ fun RegisterContent(
             state = vm.password,
             errorState = vm.passwordError,
             keyboardType = KeyboardType.Password,
-            visualTransformation = PasswordVisualTransformation()
+            visualTransformation = PasswordVisualTransformation(),
+            focusedLabelColor = Color.White,
+            unfocusedLabelColor = Color.Black,
+            containerColor = Color.White
         )
 
 
         Spacer(modifier = Modifier.padding(top = 24.dp))
 
         CustomText(
-            text = stringResource(R.string.rePassword),
+            text = "Confirm Password",
 
             fontWeight = FontWeight(600),
             fontSize = 18.sp,
-            color = Color.White
+            color = Color.White,
+            modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
         )
 
         CustomTextField(
@@ -204,7 +226,10 @@ fun RegisterContent(
             state = vm.rePassword,
             errorState = vm.rePasswordError,
             keyboardType = KeyboardType.Password,
-            visualTransformation = PasswordVisualTransformation()
+            visualTransformation = PasswordVisualTransformation(),
+            focusedLabelColor = Color.White,
+            unfocusedLabelColor = Color.Black,
+            containerColor = Color.White
         )
         Spacer(modifier = Modifier.padding(top = 32.dp))
 
@@ -214,6 +239,30 @@ fun RegisterContent(
                 vm.invokeAction(RegisterContract.Action.Register(vm.getRequest()))
 
             })
+
+        ClickableText(
+            text = buildAnnotatedString {
+                withStyle(
+                    style = SpanStyle(
+                        fontSize = 18.sp,
+                        color = Color.White
+                    )
+                ) {
+                    append("Already Have an Account?  ")
+                }
+                withStyle(
+                    style = SpanStyle(
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = Color.White,
+
+                        )
+                ) {
+                    append("Sign In")
+                }
+            },
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            onClick = { navController.navigate(ECommerceScreens.LoginScreen.name) })
 
     }
 
