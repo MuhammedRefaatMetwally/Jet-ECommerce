@@ -1,4 +1,4 @@
-package com.example.jet_ecommerce.ui.features.login
+package com.example.jet_ecommerce.ui.features.auth.login
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -16,14 +16,14 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
 
     private val getLoginUseCase: GetLoginUseCase,
-) : ViewModel(), LoginContract.ViewModel {
+) :ViewModel(),LoginContract.ViewModel {
 
     private val _states = MutableStateFlow<LoginContract.State>(LoginContract.State.Idle)
 
-    override val state: StateFlow<LoginContract.State> = _states
+    override val state: StateFlow<LoginContract.State>  =_states
 
     private val _events = MutableStateFlow<LoginContract.Event>(LoginContract.Event.Idle)
-    override val event: StateFlow<LoginContract.Event> = _events
+    override val event: StateFlow<LoginContract.Event>  = _events
     var email = mutableStateOf("")
     var emailError = mutableStateOf("")
 
@@ -31,26 +31,27 @@ class LoginViewModel @Inject constructor(
     var passwordError = mutableStateOf("")
     var showDialog = mutableStateOf(false)
 
-    fun getRequest(): LoginRequest {
+    fun getRequest():LoginRequest{
 
-        return LoginRequest(email.value, password.value)
-    }
+        return LoginRequest(email.value,password.value) }
 
-    private fun validateFiled(): Boolean {
-        if (email.value.isEmpty() || email.value.isEmpty()) {
+    private fun validateFiled():Boolean{
+        if (email.value.isEmpty() || email.value.isEmpty()){
             emailError.value = " Email required"
             return false
-        } else {
-            emailError.value = ""
+        }else{
+            emailError.value= ""
         }
-        if (password.value.isEmpty() || password.value.isEmpty()) {
+        if (password.value.isEmpty()|| password.value.isEmpty()){
             passwordError.value = "Password required"
             return false
-        } else {
+        }
+        else{
             passwordError.value = ""
         }
         return true
     }
+
 
 
     override fun invokeAction(action: LoginContract.Action) {
@@ -59,21 +60,21 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun validateAndLogin(loginRequest: LoginRequest) {
-        if (!validateFiled()) return
+    private fun validateAndLogin(loginRequest: LoginRequest){
+        if (!validateFiled())return
         showDialog.value = true
         login(loginRequest)
     }
-
-    private fun login(loginRequest: LoginRequest) {
+    private fun login(loginRequest: LoginRequest){
         _states.value = LoginContract.State.Loading
 
         viewModelScope.launch {
             try {
                 val data = getLoginUseCase(loginRequest)
                 _states.value = LoginContract.State.Success(data)
-                _events.value = LoginContract.Event.NavigateAuthenticatedLoginToHome
-            } catch (ex: Exception) {
+                _events.value = LoginContract.Event.NavigateToHome
+            }
+            catch (ex:Exception){
                 _states.value = LoginContract.State.Error("${ex.message}")
             }
         }

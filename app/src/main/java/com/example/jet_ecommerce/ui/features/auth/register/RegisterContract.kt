@@ -1,4 +1,4 @@
-package com.example.jet_ecommerce.ui.features.register
+package com.example.jet_ecommerce.ui.features.auth.register
 
 import com.example.domain.features.register.model.RegisterEntity
 import com.example.domain.features.register.model.RegisterRequest
@@ -9,7 +9,7 @@ sealed class RegisterContract {
 
         val states: StateFlow<State>
         val events: StateFlow<Event>
-        fun invokeAction(action:Action)
+        fun invokeAction(action: Action)
     }
 
     sealed interface State {

@@ -31,6 +31,9 @@ fun CustomTextField(
     errorState: MutableState<String>,
     keyboardType: KeyboardType,
     visualTransformation: VisualTransformation,
+    focusedLabelColor: Color = Color.Transparent,
+    unfocusedLabelColor: Color= Color.Transparent,
+    containerColor : Color =  Color.Transparent,
 
     ) {
     OutlinedTextField(
@@ -40,7 +43,10 @@ fun CustomTextField(
             state.value = newValue
         },
         colors = TextFieldDefaults.textFieldColors(
-            containerColor = Color.Transparent
+            containerColor = containerColor,
+            focusedLabelColor = focusedLabelColor,
+            unfocusedLabelColor =unfocusedLabelColor ,
+            errorLabelColor = Color.Red
         ),
 
         shape = RoundedCornerShape(CornerSize(16.dp)),
@@ -48,6 +54,7 @@ fun CustomTextField(
         label = {
             Text(
                 text = label,
+                fontSize = 18.sp,
             )
         },
         isError = errorState.value.isNotEmpty(),

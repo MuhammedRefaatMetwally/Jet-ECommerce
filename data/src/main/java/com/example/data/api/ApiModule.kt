@@ -18,6 +18,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Qualifier
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -34,11 +35,15 @@ object ApiModule {
 
     @Provides
     fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor,
-    tokenInterceptor: TokenInterceptor
+    tokenInterceptor: TokenInterceptor,
+    authInterceptor: AuthInterceptor,
+    authAuthenticator: AuthAuthenticator,
                             ): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .addInterceptor(tokenInterceptor)
+            .addInterceptor(authInterceptor)
+            .authenticator(authAuthenticator)
             .build()
     }
 
@@ -82,8 +87,12 @@ object ApiModule {
         return CoroutineScope(coroutineDispatcher)
     }
 
+
+    @Singleton
     @Provides
-    fun provideAuthenticator(webServices: WebServices,scope: CoroutineScope,sharedPreferences: SharedPreferences):Authenticator{
-        return AuthenticateInterceptor(webServices,scope,sharedPreferences)
+    fun provideTokenManager(@ApplicationContext context: Context): TokenManager = TokenManager(context)
+    @Provides
+    fun provideAuthenticator(tokenManager: TokenManager):Interceptor{
+        return AuthInterceptor(tokenManager)
     }
 }

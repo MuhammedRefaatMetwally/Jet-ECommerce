@@ -1,4 +1,4 @@
-package com.example.jet_ecommerce.ui.features.register
+package com.example.jet_ecommerce.ui.features.auth.register
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
