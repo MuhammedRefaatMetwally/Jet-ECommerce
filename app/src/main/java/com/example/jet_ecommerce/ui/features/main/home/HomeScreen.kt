@@ -1,6 +1,7 @@
 package com.example.jet_ecommerce.ui.features.main.home
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -16,9 +17,9 @@ import com.example.jet_ecommerce.ui.components.PageView
 import com.example.jet_ecommerce.ui.features.auth.TokenViewModel
 import com.example.jet_ecommerce.ui.features.main.home.renderStatesComponents.RenderCategoriesStates
 import com.example.jet_ecommerce.ui.features.main.home.renderStatesComponents.RenderProductStates
+import com.example.jet_ecommerce.ui.navigation_comp.screensNav.ECommerceScreens
 
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hiltViewModel(),tokenViewModel: TokenViewModel= hiltViewModel()) {
     viewModel.invokeCategoriesAction(HomeContract.Action.LoadCategories)
@@ -31,7 +32,11 @@ fun HomeScreen(navController: NavHostController, viewModel: HomeViewModel = hilt
         content = {
 
             item {
-                CustomTopBar(tokenViewModel=tokenViewModel)
+                CustomTopBar(modifier = Modifier.clickable {
+                    tokenViewModel.deleteToken()
+                    navController.popBackStack()
+                    navController.navigate(ECommerceScreens.LoginScreen.name)
+                })
             }
 
             item {

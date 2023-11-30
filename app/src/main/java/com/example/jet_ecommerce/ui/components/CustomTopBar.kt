@@ -27,8 +27,7 @@ import com.example.jet_ecommerce.ui.features.auth.TokenViewModel
 import com.example.jet_ecommerce.ui.navigation_comp.screensNav.ECommerceScreens
 
 @Composable
-fun CustomTopBar(
-    tokenViewModel: TokenViewModel = hiltViewModel(),) {
+fun CustomTopBar(modifier: Modifier =Modifier) {
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(horizontalArrangement = Arrangement.SpaceBetween) {
@@ -40,12 +39,8 @@ fun CustomTopBar(
             Spacer(modifier = Modifier.fillMaxWidth(.85f))
             Image(
                 imageVector = Icons.Default.ExitToApp,
-                modifier = Modifier
-                    .padding(8.dp)
-                    .clickable {
-                        tokenViewModel.deleteToken()
-
-                    },
+                modifier = modifier
+                    .padding(8.dp),
                 contentDescription = "LogOut",
                 colorFilter = ColorFilter.tint(colorResource(id = R.color.main_color))
             )

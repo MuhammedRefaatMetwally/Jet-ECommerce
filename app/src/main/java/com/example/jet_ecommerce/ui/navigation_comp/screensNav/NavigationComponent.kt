@@ -34,7 +34,7 @@ fun ECommerceNavigation() {
         }
 
         composable(ECommerceScreens.MainScreen.name) {
-            MainScreen()
+            MainScreen(navController)
         }
 
 
