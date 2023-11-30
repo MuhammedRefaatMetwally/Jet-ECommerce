@@ -3,6 +3,8 @@ package com.example.data.api
 
 import com.example.domain.features.register.model.RegisterResponse
 import com.example.data.model.BaseResponse
+import com.example.domain.features.cart.model.Cart
+import com.example.domain.features.cart.model.CartResponse
 import com.example.domain.features.category.model.Category
 import com.example.domain.features.login.model.LoginEntity
 import com.example.domain.features.login.model.LoginRequest
@@ -10,9 +12,11 @@ import com.example.domain.features.login.model.LoginResponse
 import com.example.domain.features.products.model.Product
 import com.example.domain.features.register.model.RegisterRequest
 import com.example.domain.features.subCategories.model.SubCategory
+import com.example.domain.features.wishlist.model.WishListResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -52,4 +56,17 @@ interface WebServices {
     @Headers("Content-Type: application/json")
     @POST("api/v1/auth/signin")
     suspend fun login(@Body loginRequest: LoginRequest): LoginResponse
+    @Headers("Content-Type: application/json")
+    @POST("api/v1/cart")
+    suspend fun addProductToCart(@Header("token") token:String ,@Body productId:String ) :CartResponse
+    @Headers("Content-Type: application/json")
+    @GET("api/v1/cart")
+    suspend fun getLoggedUserCart(@Header("token") token:String ):BaseResponse<Cart>
+    @Headers("Content-Type: application/json")
+    @POST("api/v1/wishlist")
+    suspend fun addProductToWishList(@Header("token") token:String ,@Body productId:String ) : WishListResponse
+    @Headers("Content-Type: application/json")
+    @GET("/api/v1/wishlist")
+    suspend fun getLoggedUserWishList(@Header("token") token:String ):BaseResponse<List<Product>>
+
 }
