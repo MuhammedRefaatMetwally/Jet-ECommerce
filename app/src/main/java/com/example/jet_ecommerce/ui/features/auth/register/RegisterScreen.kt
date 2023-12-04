@@ -64,7 +64,7 @@ fun RenderViewState(
 
         is RegisterContract.State.Error -> {
 
-            CustomAlertDialog(showDialog = viewModel.showDialog.value,
+            CustomAlertDialog(dialogTitle = "Ops! Error",showDialog = viewModel.showDialog.value,
                 dialogDescription = (states as RegisterContract.State.Error).message,
                 onDismiss = { viewModel.showDialog.value = false },
                 onConfirm = { viewModel.showDialog.value = false })

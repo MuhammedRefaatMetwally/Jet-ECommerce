@@ -36,7 +36,7 @@ fun RenderCategoriesStates(
 
         is HomeContract.State.Error -> {
             var showDialog by remember { mutableStateOf(true) }
-            CustomAlertDialog(showDialog = showDialog, dialogDescription = states.message,
+            CustomAlertDialog(dialogTitle = "Ops! Error",showDialog = showDialog, dialogDescription = states.message,
                 onConfirm = {
 //                    focusRequester.requestFocus()
                     showDialog = false

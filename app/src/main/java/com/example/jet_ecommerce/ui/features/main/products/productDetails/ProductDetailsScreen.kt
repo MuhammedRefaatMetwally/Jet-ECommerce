@@ -80,7 +80,7 @@ fun RenderViewState(vm: ProductDetailsViewModel, navController: NavHostControlle
 
         is ProductDetailsContract.States.Error -> {
             var showDialog by remember { mutableStateOf(true) }
-            CustomAlertDialog(showDialog = showDialog,
+            CustomAlertDialog(dialogTitle = "Ops! Error",showDialog = showDialog,
                 dialogDescription = states.toString(),
                 onDismiss = { showDialog = false },
                 onConfirm = { showDialog = false })

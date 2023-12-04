@@ -38,7 +38,7 @@ fun RenderProductStates(
 
         is ProductContract.State.Error -> {
             var showDialog by remember { mutableStateOf(true) }
-            CustomAlertDialog(showDialog = showDialog,
+            CustomAlertDialog(dialogTitle = "Ops! Error",showDialog = showDialog,
                 dialogDescription = states.message,
                 onConfirm = {
 //                    focusRequester.requestFocus()

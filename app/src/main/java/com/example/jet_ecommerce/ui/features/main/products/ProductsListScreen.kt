@@ -35,7 +35,7 @@ fun RenderViewState(vm: ProductsViewModel, navController: NavHostController) {
         is ProductsContract.States.Error -> {
             var showDialog by remember { mutableStateOf(true) }
             (states as ProductsContract.States.Error).message?.let {
-                CustomAlertDialog(showDialog = showDialog, dialogDescription = it,
+                CustomAlertDialog(dialogTitle = "Ops! Error",showDialog = showDialog, dialogDescription = it,
                     onConfirm = { showDialog = false },
                     onDismiss = { showDialog = false }
                 )
@@ -126,7 +126,7 @@ fun ProductsVerticalGrid(
                     val error = productsLazyPagingItems.loadState.refresh as LoadState.Error
                     item {
                         var showDialog by remember { mutableStateOf(true) }
-                        CustomAlertDialog(showDialog = showDialog,
+                        CustomAlertDialog(dialogTitle = "Ops! Error",showDialog = showDialog,
                             dialogDescription = error.error.localizedMessage!!,
                             onConfirm = {
                                 retry()
@@ -146,7 +146,7 @@ fun ProductsVerticalGrid(
                     val error = productsLazyPagingItems.loadState.append as LoadState.Error
                     item {
                         var showDialog by remember { mutableStateOf(true) }
-                        CustomAlertDialog(showDialog = showDialog,
+                        CustomAlertDialog(dialogTitle = "Ops! Error",showDialog = showDialog,
                             dialogDescription = error.error.localizedMessage!!,
                             onConfirm = {
                                 retry()

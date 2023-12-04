@@ -7,9 +7,10 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun CustomAlertDialog(
+    dialogTitle : String,
     showDialog : Boolean,
     dialogDescription : String,
-    onDismiss: () -> Unit,
+    onDismiss: () -> Unit  = {},
     onConfirm: () -> Unit
 ) {
       if(showDialog)
@@ -23,7 +24,7 @@ fun CustomAlertDialog(
                 TextButton(onClick = onDismiss)
                 { Text(text = "Cancel") }
             },
-            title = { Text(text = "Oppss! Error") },
+            title = { Text(text = dialogTitle) },
             text = { Text(text = dialogDescription) }
         )
 }

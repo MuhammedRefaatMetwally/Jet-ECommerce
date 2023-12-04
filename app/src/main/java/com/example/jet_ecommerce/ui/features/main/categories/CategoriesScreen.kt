@@ -59,7 +59,7 @@ fun RenderViewState(vm: CategoriesViewModel, navController: NavHostController) {
     when (states) {
         is CategoriesContract.State.Error -> {
             var showDialog by remember { mutableStateOf(true) }
-            CustomAlertDialog(showDialog = showDialog,
+            CustomAlertDialog(dialogTitle = "Ops! Error",showDialog = showDialog,
                 (states as CategoriesContract.State.Error).message,
                 onConfirm = {
                     showDialog = false

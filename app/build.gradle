@@ -44,6 +44,7 @@ android {
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
+
         }
     }
 }
@@ -106,6 +107,8 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:2.2.0"
 
     implementation "androidx.datastore:datastore-preferences:1.0.0"
+
+    implementation 'com.github.GrenderG:Toasty:1.5.2'
 
     //constraint layout
     implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
