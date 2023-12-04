@@ -1,17 +1,20 @@
 package com.example.jet_ecommerce.ui.features.main.products.productDetails
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.data.api.TokenManager
 import com.example.domain.common.ResultWrapper
+import com.example.domain.features.cart.model.AddToCartRequest
+import com.example.domain.features.cart.model.UpdateUserCartRequest
+import com.example.domain.features.cart.usecase.AddProductToCartUseCase
+import com.example.domain.features.cart.usecase.UpdateCartProductQuantityUseCase
 import com.example.domain.features.products.usecase.GetSpecificProductUseCase
 import com.example.jet_ecommerce.IoDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,18 +22,35 @@ import javax.inject.Inject
 class ProductDetailsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    private val getSpecificProductUseCase: GetSpecificProductUseCase
+    private val getSpecificProductUseCase: GetSpecificProductUseCase,
+    private val addProductToCartUseCase: AddProductToCartUseCase,
+    private val updateCartProductQuantityUseCase: UpdateCartProductQuantityUseCase,
+    private val tokenManager: TokenManager,
 ) : ViewModel(), ProductDetailsContract.ViewModel {
 
-    private val _states: MutableStateFlow<ProductDetailsContract.States> =
-        MutableStateFlow(ProductDetailsContract.States.Loading)
-    private val _events: MutableStateFlow<ProductDetailsContract.Events> =
-        MutableStateFlow(ProductDetailsContract.Events.Idle)
-    override val states = _states
-    override val events = _events
-    val productQuantity = mutableIntStateOf(1)
-    val productTotalPrice = mutableIntStateOf(0)
+    private val _productDetailsStates: MutableStateFlow<ProductDetailsContract.ProductDetailsStates> =
+        MutableStateFlow(ProductDetailsContract.ProductDetailsStates.Loading)
+    private val _productDetailsEvents: MutableStateFlow<ProductDetailsContract.ProductDetailsEvents> =
+        MutableStateFlow(ProductDetailsContract.ProductDetailsEvents.Idle)
+    override val productDetailsStates get() = _productDetailsStates
+    override val productDetailsEvents get() = _productDetailsEvents
+
+    private val _addToCartStates: MutableStateFlow<ProductDetailsContract.AddToCartStates> =
+        MutableStateFlow(ProductDetailsContract.AddToCartStates.Idle)
+    override val addToCartStates: StateFlow<ProductDetailsContract.AddToCartStates>
+        get() = _addToCartStates
+
+    private val _addToWishListStates: MutableStateFlow<ProductDetailsContract.AddToWishListStates> =
+        MutableStateFlow(ProductDetailsContract.AddToWishListStates.Idle)
+    override val addToWishListStates: StateFlow<ProductDetailsContract.AddToWishListStates>
+        get() = _addToWishListStates
+    private lateinit var token: String
+
     init {
+        viewModelScope.launch {
+            tokenManager.getToken().collect { token = it!! }
+        }
+
         val productId = savedStateHandle.get<String>("product_id")
         invokeAction(ProductDetailsContract.Action.LoadProduct(productId ?: ""))
     }
@@ -42,7 +62,7 @@ class ProductDetailsViewModel @Inject constructor(
             }
 
             is ProductDetailsContract.Action.AddProductToCart -> {
-                addProductToCart(action.productId)
+                addProductToCart(action.productId, action.quantity)
             }
 
             is ProductDetailsContract.Action.AddProductToWishList -> {
@@ -53,19 +73,48 @@ class ProductDetailsViewModel @Inject constructor(
                 cartIconClick()
             }
 
-//            is ProductDetailsContract.Action.UpdateCartProductQuantity -> {
-//                updateCartProductQuantity(action.quantity)
-//            }
         }
-    }
-
-    private fun updateCartProductQuantity(quantity: Int) {
-        TODO("Not yet implemented")
     }
 
     private fun cartIconClick() {
         viewModelScope.launch {
-            _events.emit(ProductDetailsContract.Events.NavigateToCart)
+            _productDetailsEvents.emit(ProductDetailsContract.ProductDetailsEvents.NavigateToCart)
+        }
+    }
+
+    private fun addProductToCart(productId: String, quantity: Int) {
+        viewModelScope.launch(ioDispatcher) {
+            _addToCartStates.emit(ProductDetailsContract.AddToCartStates.Loading)
+            try {
+                val response = addProductToCartUseCase(token, AddToCartRequest(productId))
+                _addToCartStates.emit(ProductDetailsContract.AddToCartStates.Success(response!!))
+            } catch (e: Exception) {
+                _addToCartStates.emit(
+                    ProductDetailsContract.AddToCartStates.Error(
+                        e.localizedMessage ?: "error"
+                    )
+                )
+            }
+            if (quantity != 1)
+                updateCartProductQuantity(productId, quantity)
+        }
+    }
+
+    private fun updateCartProductQuantity(productId: String, quantity: Int) {
+        viewModelScope.launch(ioDispatcher) {
+            try {
+                val response = updateCartProductQuantityUseCase(
+                    token,
+                    UpdateUserCartRequest(quantity.toString()),
+                    productId,
+                )
+            } catch (e: Exception) {
+                _addToCartStates.emit(
+                    ProductDetailsContract.AddToCartStates.Error(
+                        e.localizedMessage ?: "error"
+                    )
+                )
+            }
         }
     }
 
@@ -73,34 +122,33 @@ class ProductDetailsViewModel @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    private fun addProductToCart(productId: String) {
-        TODO("Not yet implemented")
-//        updateCartProductQuantity()
-    }
-
     private fun loadProduct(productId: String) {
         viewModelScope.launch(ioDispatcher) {
             getSpecificProductUseCase.invoke(productId).collect {
                 when (it) {
                     is ResultWrapper.Loading -> {
-                        _states.emit(ProductDetailsContract.States.Loading)
+                        _productDetailsStates.emit(ProductDetailsContract.ProductDetailsStates.Loading)
                     }
 
                     is ResultWrapper.Error -> {
-                        _states.emit(
-                            ProductDetailsContract.States.Error(
+                        _productDetailsStates.emit(
+                            ProductDetailsContract.ProductDetailsStates.Error(
                                 it.error.message ?: "error"
                             )
                         )
                     }
 
                     is ResultWrapper.Success -> {
-                        _states.emit(ProductDetailsContract.States.Success(it.data))
+                        _productDetailsStates.emit(
+                            ProductDetailsContract.ProductDetailsStates.Success(
+                                it.data
+                            )
+                        )
                     }
 
                     is ResultWrapper.ServerError -> {
-                        _states.emit(
-                            ProductDetailsContract.States.Error(
+                        _productDetailsStates.emit(
+                            ProductDetailsContract.ProductDetailsStates.Error(
                                 it.error.message ?: "server error"
                             )
                         )

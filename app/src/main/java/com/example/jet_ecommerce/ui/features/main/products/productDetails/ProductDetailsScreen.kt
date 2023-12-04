@@ -31,9 +31,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -70,31 +70,35 @@ fun ProductDetailsScreen(vm: ProductDetailsViewModel, navController: NavHostCont
 
 @Composable
 fun RenderViewState(vm: ProductDetailsViewModel, navController: NavHostController) {
-    val states by vm.states.collectAsState()
-    val events by vm.events.collectAsState()
-
-    when (states) {
-        is ProductDetailsContract.States.Loading -> {
+    val productDetailsStates by vm.productDetailsStates.collectAsState()
+    val productDetailsEvents by vm.productDetailsEvents.collectAsState()
+    val addToCartStates by vm.addToCartStates.collectAsState()
+    when (productDetailsStates) {
+        is ProductDetailsContract.ProductDetailsStates.Loading -> {
             CustomLoadingWidget()
         }
 
-        is ProductDetailsContract.States.Error -> {
+        is ProductDetailsContract.ProductDetailsStates.Error -> {
             var showDialog by remember { mutableStateOf(true) }
             CustomAlertDialog(showDialog = showDialog,
-                dialogDescription = states.toString(),
+                dialogDescription = (productDetailsStates as ProductDetailsContract.ProductDetailsStates.Error).message,
                 onDismiss = { showDialog = false },
                 onConfirm = { showDialog = false })
         }
 
-        is ProductDetailsContract.States.Success -> {
-            val product = (states as ProductDetailsContract.States.Success).product
+        is ProductDetailsContract.ProductDetailsStates.Success -> {
+            val product =
+                (productDetailsStates as ProductDetailsContract.ProductDetailsStates.Success).product
             ProductDetailsContent(
                 navController = navController,
                 product = product,
-                vm.productQuantity,
-                vm.productTotalPrice,
-                onAddToCartClick = {
-                    vm.invokeAction(ProductDetailsContract.Action.AddProductToCart(product.id!!))
+                onAddToCartClick = { quantity ->
+                    vm.invokeAction(
+                        ProductDetailsContract.Action.AddProductToCart(
+                            product.id!!,
+                            quantity
+                        )
+                    )
                 },
                 onAddToWishListClick = {
                     vm.invokeAction(ProductDetailsContract.Action.AddProductToWishList(product.id!!))
@@ -102,9 +106,33 @@ fun RenderViewState(vm: ProductDetailsViewModel, navController: NavHostControlle
         }
     }
 
-    when (events) {
-        is ProductDetailsContract.Events.Idle -> {}
-        is ProductDetailsContract.Events.NavigateToCart -> {
+    when (addToCartStates) {
+        is ProductDetailsContract.AddToCartStates.Error -> {
+            var showDialog by remember { mutableStateOf(true) }
+            CustomAlertDialog(showDialog = showDialog,
+                dialogDescription = (addToCartStates as ProductDetailsContract.AddToCartStates.Error).message,
+                onDismiss = { showDialog = false },
+                onConfirm = { showDialog = false })
+        }
+
+        is ProductDetailsContract.AddToCartStates.Loading -> {
+            CustomLoadingWidget()
+        }
+
+        is ProductDetailsContract.AddToCartStates.Success -> {
+            var showDialog by remember { mutableStateOf(true) }
+            CustomAlertDialog(showDialog = showDialog,
+                dialogDescription = (addToCartStates as ProductDetailsContract.AddToCartStates.Success).response.message.toString(),
+                onDismiss = { showDialog = false },
+                onConfirm = { showDialog = false })
+        }
+
+        ProductDetailsContract.AddToCartStates.Idle -> {}
+    }
+
+    when (productDetailsEvents) {
+        is ProductDetailsContract.ProductDetailsEvents.Idle -> {}
+        is ProductDetailsContract.ProductDetailsEvents.NavigateToCart -> {
             //Navigate to CartScreen
         }
     }
@@ -114,19 +142,15 @@ fun RenderViewState(vm: ProductDetailsViewModel, navController: NavHostControlle
 fun ProductDetailsContent(
     navController: NavHostController,
     product: Product,
-    productQuantity: MutableIntState,
-    productTotalPrice: MutableIntState,
     onAddToWishListClick: () -> Unit,
-    onAddToCartClick: () -> Unit
+    onAddToCartClick: (quantity: Int) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
         TopAppBar(navController)
         ProductDetailsItem(
             product = product,
-            productQuantity,
-            productTotalPrice,
             onAddToWishListClick = { onAddToWishListClick() },
-            onAddToCartClick = { onAddToCartClick() }
+            onAddToCartClick = { onAddToCartClick(it) }
         )
     }
 
@@ -136,11 +160,12 @@ fun ProductDetailsContent(
 @Composable
 fun ProductDetailsItem(
     product: Product,
-    productQuantity: MutableIntState,
-    productTotalPrice: MutableIntState,
     onAddToWishListClick: () -> Unit,
-    onAddToCartClick: () -> Unit
+    onAddToCartClick: (quantity: Int) -> Unit
 ) {
+    val productQuantity = remember { mutableIntStateOf(1) }
+    val productTotalPrice = remember { mutableIntStateOf(0) }
+    productTotalPrice.intValue = product.price!! * productQuantity.intValue
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -324,7 +349,7 @@ fun ProductDetailsItem(
                         textAlign = TextAlign.Center,
                     )
                 )
-                productTotalPrice.intValue = product.price!! * productQuantity.intValue
+
                 Text(
                     text = "${productTotalPrice.intValue} EGP",
                     style = TextStyle(
@@ -336,37 +361,42 @@ fun ProductDetailsItem(
                     )
                 )
             }
-            IconButton(modifier = Modifier
+            Box(modifier = Modifier
                 .width(270.dp)
                 .height(48.dp)
-                .background(color = Color(0xFF004182), shape = RoundedCornerShape(size = 20.dp))
-                .padding(start = 32.dp, top = 12.dp, end = 79.dp, bottom = 12.dp),
-                onClick = {
-                    //handle add to cart button
-                }) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.cart__2__),
-                        contentDescription = "cart icon",
-                        tint = Color.Unspecified
+                .clickable { onAddToCartClick(productQuantity.intValue) }) {
+                IconButton(modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        color = Color(0xFF004182),
+                        shape = RoundedCornerShape(size = 20.dp)
                     )
-                    Spacer(modifier = Modifier.width(10.dp))
-                    Text(
-                        text = "Add to cart",
-                        style = TextStyle(
-                            fontSize = 20.sp,
-                            lineHeight = 18.sp,
-                            fontWeight = FontWeight(500),
-                            color = Color(0xFFFFFFFF),
-                            textAlign = TextAlign.Center,
+                    .padding(start = 32.dp, top = 12.dp, end = 79.dp, bottom = 12.dp),
+                    onClick = {}) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.cart__2__),
+                            contentDescription = "cart icon",
+                            tint = Color.Unspecified
                         )
-                    )
-                }
+                        Spacer(modifier = Modifier.width(10.dp))
+                        Text(
+                            text = "Add to cart",
+                            style = TextStyle(
+                                fontSize = 20.sp,
+                                lineHeight = 18.sp,
+                                fontWeight = FontWeight(500),
+                                color = Color(0xFFFFFFFF),
+                                textAlign = TextAlign.Center,
+                            )
+                        )
+                    }
 
+                }
             }
         }
     }
