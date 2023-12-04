@@ -161,7 +161,8 @@ fun FavoriteItem(isInWishList: Boolean, onAddToWishListClick: () -> Unit) {
         Icon(
             modifier = Modifier.padding(8.dp),
             painter = painterResource(id = if (isInWishList) R.drawable.active_heart else R.drawable.unactive_heart),
-            contentDescription = "favorite"
+            contentDescription = "favorite",
+            tint = Color.Unspecified
         )
     }
 
