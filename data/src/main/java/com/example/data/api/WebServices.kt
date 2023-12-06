@@ -94,7 +94,13 @@ interface WebServices {
     suspend fun getLoggedUserWishList(@Header("token") token: String): BaseResponse<List<Product>>
 
 
+    @DELETE("api/v1/cart/{product_id}")
+    suspend fun deleteSpecificCartItem(
+        @Header("token") token: String,
+        @Path("product_id") productId: String
+    ): BaseResponse<Any>
+
     @DELETE("api/v1/cart")
-    suspend fun clearCart(@Header("token") token : String) : BaseResponse<Any>
+    suspend fun clearCart(@Header("token") token: String): BaseResponse<Any>
 
 }

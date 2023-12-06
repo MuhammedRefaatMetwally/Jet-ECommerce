@@ -23,7 +23,6 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.domain.features.products.model.Product
 import com.example.jet_ecommerce.ui.components.CustomAlertDialog
 import com.example.jet_ecommerce.ui.components.CustomLoadingWidget
-import com.example.jet_ecommerce.ui.components.CustomTopBar
 import com.example.jet_ecommerce.ui.components.ProductItem
 import com.example.jet_ecommerce.ui.features.auth.TokenViewModel
 import com.example.jet_ecommerce.ui.features.main.carts.CartContract

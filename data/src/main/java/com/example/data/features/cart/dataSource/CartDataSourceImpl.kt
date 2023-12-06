@@ -22,12 +22,16 @@ class CartDataSourceImpl @Inject constructor(
         token: String,
         updateUserCartRequest: UpdateUserCartRequest,
         productId: String
-    ): CartQuantityResponse?{
+    ): CartQuantityResponse{
         return   webServices.updateCartProductQuantity(token, updateUserCartRequest, productId)
     }
 
     override suspend fun getLoggedUserCart(token: String): Flow<ResultWrapper<CartQuantity?>?> {
         return safeAPiCall { webServices.getLoggedUserCart(token) }
+    }
+
+    override suspend fun deleteSpecificCartItem(token: String, productId: String) {
+        webServices.deleteSpecificCartItem(token = token, productId = productId)
     }
 
     override suspend fun clearCart(token: String) {

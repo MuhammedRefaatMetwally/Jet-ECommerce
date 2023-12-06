@@ -3,6 +3,7 @@ package com.example.jet_ecommerce.ui.components.cart_component
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,6 +39,7 @@ fun CartItem(
     productName: String,
     productPrice: Int,
     quantityValue: Comparable<*>,
+    onDeleteClick : () -> Unit,
     onMinusClick: () -> Unit,
     onPlusClick: () -> Unit
 ) {
@@ -94,7 +96,9 @@ fun CartItem(
                         )
                     )
 
-                    Image(
+                    Image(modifier = Modifier.clickable {
+                        onDeleteClick()
+                    },
                         painter = painterResource(id = R.drawable.delete_icon),
                         contentDescription = "delete",
                         contentScale = ContentScale.None

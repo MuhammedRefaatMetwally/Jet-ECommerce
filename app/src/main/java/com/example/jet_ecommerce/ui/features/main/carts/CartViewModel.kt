@@ -5,13 +5,17 @@ import androidx.lifecycle.viewModelScope
 import com.example.data.api.TokenManager
 import com.example.domain.common.ResultWrapper
 import com.example.domain.features.cart.model.getLoggedUse.CartQuantity
+import com.example.domain.features.cart.model.getLoggedUse.ProductItem
 import com.example.domain.features.cart.usecase.ClearCartUseCase
+import com.example.domain.features.cart.usecase.DeleteSpecificCartItemUseCase
 import com.example.domain.features.cart.usecase.GetLoggedUserCartUseCase
 import com.example.jet_ecommerce.IoDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,6 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CartViewModel @Inject constructor(
     private val getLoggedUserCartUseCase: GetLoggedUserCartUseCase,
+    private val deleteSpecificCartItem: DeleteSpecificCartItemUseCase,
     private val clearCartUseCase : ClearCartUseCase,
     private val tokenManager: TokenManager,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
@@ -36,8 +41,13 @@ class CartViewModel @Inject constructor(
     override val events: StateFlow<CartContract.Event>
         get() = _events
 
+    var cartProducts = mutableListOf<ProductItem?>()
     var cartProductsSize : Int? = 0
+
+    private val eventChannel = Channel<CartContract.Event>(Channel.BUFFERED)
+    val eventsFlow = eventChannel.receiveAsFlow()//single live event
     init {
+
         viewModelScope.launch {
             tokenManager.getToken().collect { token = it!! }
         }
@@ -47,6 +57,27 @@ class CartViewModel @Inject constructor(
         when (action) {
             CartContract.Action.GetUserProducts -> getUserProducts()
             CartContract.Action.ClearCart -> clearCart()
+
+            is CartContract.Action.DeleteSpecificCartItem -> {
+               deleteSpecificItem(action.productId, action.product)
+
+            }
+        }
+    }
+
+
+    private fun deleteSpecificItem(productId: String, product: ProductItem?) {
+        viewModelScope.launch(ioDispatcher) {
+            if(cartProducts.size>=1){
+                cartProducts.remove(product)
+                deleteSpecificCartItem.invoke(token, productId = productId)
+                _states.emit(CartContract.State.Loading)
+                getUserProducts()
+                eventChannel.send(CartContract.Event.ShowSuccess)
+            }else{
+                eventChannel.send(CartContract.Event.ShowError)
+            }
+
         }
     }
 
@@ -79,8 +110,8 @@ class CartViewModel @Inject constructor(
                     }
 
                     is ResultWrapper.Success -> {
-
                         _states.emit(CartContract.State.Success(data = it.data ?: CartQuantity()))
+                        cartProducts = it.data?.products?.toMutableList()!!
                         cartProductsSize = it.data?.products?.size ?: 0
                     }
 

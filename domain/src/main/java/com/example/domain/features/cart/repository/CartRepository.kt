@@ -12,5 +12,6 @@ interface CartRepository {
     suspend fun addProductToCart(token:String,addToCartRequest: AddToCartRequest): CartResponse?
     suspend fun updateCartProductQuantity(token: String, updateUserCartRequest: UpdateUserCartRequest, productId: String): CartQuantityResponse?
     suspend fun getLoggedUserCart(token: String): Flow<ResultWrapper<CartQuantity?>?>
+    suspend fun deleteSpecificCartItem(token: String,productId : String ) : Any
     suspend fun clearCart(token: String) : Any
 }

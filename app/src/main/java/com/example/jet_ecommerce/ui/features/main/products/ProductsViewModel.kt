@@ -1,6 +1,5 @@
 package com.example.jet_ecommerce.ui.features.main.products
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
