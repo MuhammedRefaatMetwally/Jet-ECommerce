@@ -5,16 +5,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.api.TokenManager
 import com.example.domain.common.ResultWrapper
-import com.example.domain.features.cart.model.AddToCartRequest
-import com.example.domain.features.cart.model.UpdateUserCartRequest
+import com.example.domain.features.cart.model.addToCart.AddToCartRequest
+import com.example.domain.features.cart.model.updateUserCart.UpdateUserCartRequest
 import com.example.domain.features.cart.usecase.AddProductToCartUseCase
 import com.example.domain.features.cart.usecase.UpdateCartProductQuantityUseCase
 import com.example.domain.features.products.usecase.GetSpecificProductUseCase
 import com.example.jet_ecommerce.IoDispatcher
+import com.example.jet_ecommerce.ui.features.main.carts.CartContract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -46,6 +49,8 @@ class ProductDetailsViewModel @Inject constructor(
         get() = _addToWishListStates
     private lateinit var token: String
 
+    private val eventChannel = Channel<ProductDetailsContract.ProductDetailsEvents>(Channel.BUFFERED)
+    val eventsFlow = eventChannel.receiveAsFlow()//single live event
     init {
         viewModelScope.launch {
             tokenManager.getToken().collect { token = it!! }
@@ -88,12 +93,14 @@ class ProductDetailsViewModel @Inject constructor(
             try {
                 val response = addProductToCartUseCase(token, AddToCartRequest(productId))
                 _addToCartStates.emit(ProductDetailsContract.AddToCartStates.Success(response!!))
+                eventChannel.send(ProductDetailsContract.ProductDetailsEvents.ShowSuccess)
             } catch (e: Exception) {
                 _addToCartStates.emit(
                     ProductDetailsContract.AddToCartStates.Error(
                         e.localizedMessage ?: "error"
                     )
                 )
+                eventChannel.send(ProductDetailsContract.ProductDetailsEvents.ShowError)
             }
             if (quantity != 1)
                 updateCartProductQuantity(productId, quantity)

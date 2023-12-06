@@ -1,7 +1,6 @@
 package com.example.domain.features.wishlist.usecase
 
 import com.example.domain.common.ResultWrapper
-import com.example.domain.features.cart.model.CartResponse
 import com.example.domain.features.wishlist.model.WishListResponse
 import com.example.domain.features.wishlist.repository.WishListRepository
 import kotlinx.coroutines.flow.Flow

@@ -7,7 +7,8 @@ enum class ECommerceScreens {
     MainScreen,
     NestedCategory,
     ProductsScreen,
-    ProductDetailsScreen;
+    ProductDetailsScreen,
+    CartScreen;
 
     companion object {
         fun fromRoute(route: String?): ECommerceScreens = when (route?.substringBefore("/")) {

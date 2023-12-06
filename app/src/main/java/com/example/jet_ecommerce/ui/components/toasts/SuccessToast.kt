@@ -1,3 +1,4 @@
+import android.os.Message
 import android.widget.Toast
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -10,19 +11,8 @@ import androidx.compose.ui.unit.dp
 import es.dmoral.toasty.Toasty
 
 @Composable
-fun SuccessToast() {
+fun SuccessToast(message: String) {
     val ctx = LocalContext.current
-    Button(
-        modifier = Modifier
-            .width(300.dp)
-            .padding(7.dp),
 
-        onClick = {
-
-            Toasty.success(ctx, "This is a Success toast.", Toast.LENGTH_SHORT, true).show()
-
-        }) {
-
-        Text(text = "Success Toast")
-    }
+            Toasty.success(ctx, message, Toast.LENGTH_SHORT, true).show()
 }

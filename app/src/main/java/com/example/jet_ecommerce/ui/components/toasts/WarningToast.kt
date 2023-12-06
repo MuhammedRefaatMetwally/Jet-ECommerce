@@ -14,17 +14,7 @@ import es.dmoral.toasty.Toasty
 @Composable
 fun WarningToast() {
     val ctx = LocalContext.current
-    Button(
-
-        modifier = Modifier
-            .width(300.dp)
-            .padding(7.dp),
-
-        onClick = {
-
             Toasty.warning(ctx, "This is a Warning toast.", Toast.LENGTH_SHORT, true).show()
 
-        }) {
-        Text(text = "Warning Toast")
-    }
+
 }

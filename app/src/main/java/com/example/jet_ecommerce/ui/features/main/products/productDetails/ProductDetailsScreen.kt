@@ -1,5 +1,8 @@
 package com.example.jet_ecommerce.ui.features.main.products.productDetails
 
+import ErrorToast
+import SuccessToast
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -35,6 +38,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -50,6 +54,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -57,6 +62,12 @@ import com.example.domain.features.products.model.Product
 import com.example.jet_ecommerce.R
 import com.example.jet_ecommerce.ui.components.CustomAlertDialog
 import com.example.jet_ecommerce.ui.components.CustomLoadingWidget
+import com.example.jet_ecommerce.ui.components.CustomTopBar
+import com.example.jet_ecommerce.ui.features.auth.TokenViewModel
+import com.example.jet_ecommerce.ui.features.main.carts.CartContract
+import com.example.jet_ecommerce.ui.features.main.carts.CartViewModel
+import com.example.jet_ecommerce.ui.features.main.home.RenderCustomTopBar
+import com.example.jet_ecommerce.ui.navigation_comp.screensNav.ECommerceScreens
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
@@ -68,11 +79,17 @@ fun ProductDetailsScreen(vm: ProductDetailsViewModel, navController: NavHostCont
     RenderViewState(vm, navController)
 }
 
+@SuppressLint("ProduceStateDoesNotAssignValue")
 @Composable
-fun RenderViewState(vm: ProductDetailsViewModel, navController: NavHostController) {
+fun RenderViewState(
+    vm: ProductDetailsViewModel,
+    navController: NavHostController,
+    cartViewModel: CartViewModel = hiltViewModel(),
+) {
     val productDetailsStates by vm.productDetailsStates.collectAsState()
     val productDetailsEvents by vm.productDetailsEvents.collectAsState()
     val addToCartStates by vm.addToCartStates.collectAsState()
+    cartViewModel.invokeAction(CartContract.Action.GetUserProducts)
     when (productDetailsStates) {
         is ProductDetailsContract.ProductDetailsStates.Loading -> {
             CustomLoadingWidget()
@@ -107,36 +124,25 @@ fun RenderViewState(vm: ProductDetailsViewModel, navController: NavHostControlle
         }
     }
 
-    when (addToCartStates) {
-        is ProductDetailsContract.AddToCartStates.Error -> {
-            var showDialog by remember { mutableStateOf(true) }
-            CustomAlertDialog(showDialog = showDialog,
-                dialogTitle = "Error",
-                dialogDescription = (addToCartStates as ProductDetailsContract.AddToCartStates.Error).message,
-                onDismiss = { showDialog = false },
-                onConfirm = { showDialog = false })
-        }
 
-        is ProductDetailsContract.AddToCartStates.Loading -> {
-            CustomLoadingWidget()
-        }
+    val events =
+        produceState<ProductDetailsContract.ProductDetailsEvents>(initialValue = ProductDetailsContract.ProductDetailsEvents.Idle) {
+            vm.eventsFlow.collect {
+                value = it
+            }
+        }.value
 
-        is ProductDetailsContract.AddToCartStates.Success -> {
-            var showDialog by remember { mutableStateOf(true) }
-            CustomAlertDialog(showDialog = showDialog,
-                dialogTitle = "Done",
-                dialogDescription = (addToCartStates as ProductDetailsContract.AddToCartStates.Success).response.message.toString(),
-                onDismiss = { showDialog = false },
-                onConfirm = { showDialog = false })
-        }
-
-        ProductDetailsContract.AddToCartStates.Idle -> {}
-    }
-
-    when (productDetailsEvents) {
+    when (events) {
         is ProductDetailsContract.ProductDetailsEvents.Idle -> {}
         is ProductDetailsContract.ProductDetailsEvents.NavigateToCart -> {
-            //Navigate to CartScreen
+            navController.navigate(ECommerceScreens.CartScreen.name)
+        }
+        is ProductDetailsContract.ProductDetailsEvents.ShowError -> {
+            ErrorToast(message = "Something Went Wrong! Could Not Add it.")
+        }
+
+       is  ProductDetailsContract.ProductDetailsEvents.ShowSuccess -> {
+            SuccessToast(message = "Product Added Successfully To Cart!")
         }
     }
 }
@@ -144,12 +150,22 @@ fun RenderViewState(vm: ProductDetailsViewModel, navController: NavHostControlle
 @Composable
 fun ProductDetailsContent(
     navController: NavHostController,
+    vm: ProductDetailsViewModel = hiltViewModel(),
+    cartViewModel: CartViewModel = hiltViewModel(),
+    tokenViewModel: TokenViewModel = hiltViewModel(),
     product: Product,
     onAddToWishListClick: () -> Unit,
     onAddToCartClick: (quantity: Int) -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
-        TopAppBar(navController)
+        RenderCustomTopBar(nonDetailsTopBarTitle = "Product Details",
+            cartViewModel = cartViewModel,
+            tokenViewModel = tokenViewModel,
+            navController = navController,
+            detailsTopBar = false,
+            isMainScreen = false, onBackClick = { navController.popBackStack() },
+            onCartClick = { vm.invokeAction(ProductDetailsContract.Action.ClickOnCartIcon) }
+        )
         ProductDetailsItem(
             product = product,
             onAddToWishListClick = { onAddToWishListClick() },
@@ -373,7 +389,8 @@ fun ProductDetailsItem(
                     .background(
                         color = Color(0xFF004182),
                         shape = RoundedCornerShape(size = 20.dp)
-                    ).padding(start = 32.dp, top = 12.dp, end = 79.dp, bottom = 12.dp),
+                    )
+                    .padding(start = 32.dp, top = 12.dp, end = 79.dp, bottom = 12.dp),
                     onClick = {
                         //handle add to cart button
                         onAddToCartClick(productQuantity.intValue)
@@ -490,43 +507,5 @@ fun IndicatorDot(
             .clip(CircleShape)
             .background(color)
     )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopAppBar(navController: NavHostController) {
-    TopAppBar(title = {
-        Text(
-            "Product Details",
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center
-        )
-    }, navigationIcon = {
-        IconButton(onClick = {
-            //back button
-        }) {
-            Icon(
-                painter = painterResource(id = R.drawable.__icon__arrow_back_outline_),
-                contentDescription = "Back",
-                tint = Color.Unspecified
-            )
-        }
-    }, actions = {
-        IconButton(onClick = { /* Handle search icon click */ }) {
-            Icon(
-                painterResource(id = R.drawable.__icon__search_), contentDescription = "Search",
-                tint = Color.Unspecified
-            )
-        }
-        IconButton(onClick = { /* Handle shopping cart icon click */ }) {
-            Icon(
-                painterResource(id = R.drawable.__icon__shopping_cart_),
-                contentDescription = "Cart",
-                tint = Color.Unspecified
-            )
-        }
-    })
-
-
 }
 

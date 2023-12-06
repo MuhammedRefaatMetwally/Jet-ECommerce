@@ -12,16 +12,7 @@ import androidx.compose.ui.unit.dp
 import es.dmoral.toasty.Toasty
 
 @Composable
-fun InfoToast() {
+fun InfoToast(message : String) {
     val ctx = LocalContext.current
-    Button(
-        modifier = Modifier
-            .width(300.dp)
-            .padding(7.dp),
-        onClick = {
-            Toasty.info(ctx, "This is a Info toast.", Toast.LENGTH_SHORT, true).show()
-
-        }) {
-        Text(text = "Info Toast")
-    }
+            Toasty.info(ctx, message, Toast.LENGTH_SHORT, true).show()
 }

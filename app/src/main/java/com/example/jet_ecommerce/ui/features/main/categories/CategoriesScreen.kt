@@ -39,6 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.domain.features.category.model.Category
@@ -47,11 +48,20 @@ import com.example.jet_ecommerce.R
 import com.example.jet_ecommerce.ui.components.CustomAlertDialog
 import com.example.jet_ecommerce.ui.components.CustomLoadingWidget
 import com.example.jet_ecommerce.ui.components.CustomTopBar
+import com.example.jet_ecommerce.ui.features.auth.TokenViewModel
+import com.example.jet_ecommerce.ui.features.main.carts.CartContract
+import com.example.jet_ecommerce.ui.features.main.carts.CartViewModel
+import com.example.jet_ecommerce.ui.features.main.home.RenderCustomTopBar
 import com.example.jet_ecommerce.ui.navigation_comp.screensNav.ECommerceScreens
 
 @Composable
-fun RenderViewState(vm: CategoriesViewModel, navController: NavHostController) {
-
+fun RenderViewState(
+    vm: CategoriesViewModel,
+    navController: NavHostController,
+    cartViewModel: CartViewModel = hiltViewModel(),
+    tokenViewModel: TokenViewModel = hiltViewModel()
+) {
+    cartViewModel.invokeAction(CartContract.Action.GetUserProducts)
     val states by vm.states.collectAsState()
     val events by vm.events.collectAsState()
     val subCategoriesState by vm.subCategoriesState.collectAsState()
@@ -59,7 +69,7 @@ fun RenderViewState(vm: CategoriesViewModel, navController: NavHostController) {
     when (states) {
         is CategoriesContract.State.Error -> {
             var showDialog by remember { mutableStateOf(true) }
-            CustomAlertDialog(dialogTitle = "Ops! Error",showDialog = showDialog,
+            CustomAlertDialog(dialogTitle = "Ops! Error", showDialog = showDialog,
                 (states as CategoriesContract.State.Error).message,
                 onConfirm = {
                     showDialog = false
@@ -77,7 +87,8 @@ fun RenderViewState(vm: CategoriesViewModel, navController: NavHostController) {
             },
             onSubCategoryItemClick = {
                 vm.invokeAction(CategoriesContract.Action.SubCategoryItemClick(it))
-            })
+            }, navController = navController
+        )
     }
     when (events) {
         is CategoriesContract.Event.Idle -> {}
@@ -94,7 +105,7 @@ fun RenderViewState(vm: CategoriesViewModel, navController: NavHostController) {
 
 @Composable
 fun CategoriesScreen(
-    vm: CategoriesViewModel, navController: NavHostController
+    vm: CategoriesViewModel, navController: NavHostController,
 ) {
     RenderViewState(vm, navController)
 }
@@ -105,6 +116,9 @@ fun CategoriesContent(
     subCategoriesList: List<SubCategory>,
     onCategoryItemClick: (category: Category) -> Unit,
     onSubCategoryItemClick: (categoryId: String) -> Unit,
+    cartViewModel: CartViewModel = hiltViewModel(),
+    tokenViewModel: TokenViewModel = hiltViewModel(),
+    navController: NavHostController
 
 ) {
     var category by remember { mutableStateOf(Category()) }
@@ -112,7 +126,12 @@ fun CategoriesContent(
     Column(
         modifier = Modifier.padding(start = 8.dp), verticalArrangement = Arrangement.SpaceBetween
     ) {
-        CustomTopBar(isMainScreen = false)
+        RenderCustomTopBar( //showing another loading
+            cartViewModel = cartViewModel,
+            tokenViewModel = tokenViewModel,
+            navController = navController,
+            isMainScreen = false
+        )
         Row(
             Modifier
                 .padding(top = 16.dp, bottom = 36.dp)

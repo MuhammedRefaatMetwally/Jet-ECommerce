@@ -18,7 +18,7 @@ fun CustomAlertDialog(
             onDismissRequest = onDismiss,
             confirmButton = {
                 TextButton(onClick = onConfirm)
-                { Text(text = "OK") }
+                { Text(text = "Yes") }
             },
             dismissButton = {
                 TextButton(onClick = onDismiss)

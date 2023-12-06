@@ -1,6 +1,6 @@
 package com.example.jet_ecommerce.ui.features.main.products.productDetails
 
-import com.example.domain.features.cart.model.CartResponse
+import com.example.domain.features.cart.model.addToCart.CartResponse
 import com.example.domain.features.products.model.Product
 import kotlinx.coroutines.flow.StateFlow
 
@@ -34,9 +34,13 @@ class ProductDetailsContract {
         data class Success(val response: CartResponse):AddToWishListStates
     }
 
+
+
     sealed interface ProductDetailsEvents {
         data object Idle : ProductDetailsEvents
         data object NavigateToCart : ProductDetailsEvents
+        data object  ShowSuccess  : ProductDetailsEvents
+        data object  ShowError  : ProductDetailsEvents
     }
 
     sealed interface Action {

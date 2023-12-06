@@ -58,7 +58,7 @@ fun SearchField(
 
     OutlinedTextField(
         modifier = modifier
-            .fillMaxWidth().padding(8.dp),
+            .fillMaxWidth(.9f).padding(8.dp),
         value = searchText,
         onValueChange = onSearchTextChanged,
         placeholder = {

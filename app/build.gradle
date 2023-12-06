@@ -110,6 +110,9 @@ dependencies {
 
     implementation 'com.github.GrenderG:Toasty:1.5.2'
 
+    implementation 'androidx.fragment:fragment-ktx:1.6.2'
+
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2"
     //constraint layout
     implementation "androidx.constraintlayout:constraintlayout-compose:1.0.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"

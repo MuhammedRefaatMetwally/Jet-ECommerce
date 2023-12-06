@@ -10,25 +10,10 @@ import androidx.compose.ui.unit.dp
 import es.dmoral.toasty.Toasty
 
 @Composable
-fun ErrorToast() {
+fun ErrorToast(message : String) {
 
     val ctx = LocalContext.current
-
-        Button(
-            // on below line we are adding width
-            // for our button and padding to it.
-            modifier = Modifier
-                .width(300.dp)
-                .padding(7.dp),
-
-            onClick = {
-
-                Toasty.error(ctx, "This is an error toast.", Toast.LENGTH_SHORT, true).show()
-            }) {
-
-            Text(text = "Error Toast")
-        }
-
+                Toasty.error(ctx, message, Toast.LENGTH_SHORT, true).show()
 
     }
 

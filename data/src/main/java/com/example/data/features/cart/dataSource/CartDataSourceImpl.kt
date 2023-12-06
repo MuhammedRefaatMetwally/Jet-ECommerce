@@ -3,13 +3,12 @@ package com.example.data.features.cart.dataSource
 import com.example.data.api.WebServices
 import com.example.data.safeAPiCall
 import com.example.domain.common.ResultWrapper
-import com.example.domain.features.cart.model.AddToCartRequest
-import com.example.domain.features.cart.model.Cart
-import com.example.domain.features.cart.model.CartQuantityResponse
-import com.example.domain.features.cart.model.CartResponse
-import com.example.domain.features.cart.model.UpdateUserCartRequest
+import com.example.domain.features.cart.model.addToCart.AddToCartRequest
+import com.example.domain.features.cart.model.getLoggedUse.CartQuantity
+import com.example.domain.features.cart.model.getLoggedUse.CartQuantityResponse
+import com.example.domain.features.cart.model.addToCart.CartResponse
+import com.example.domain.features.cart.model.updateUserCart.UpdateUserCartRequest
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class CartDataSourceImpl @Inject constructor(
@@ -27,8 +26,12 @@ class CartDataSourceImpl @Inject constructor(
         return   webServices.updateCartProductQuantity(token, updateUserCartRequest, productId)
     }
 
-    override suspend fun getLoggedUserCart(token: String): Flow<ResultWrapper<Cart?>?> {
+    override suspend fun getLoggedUserCart(token: String): Flow<ResultWrapper<CartQuantity?>?> {
         return safeAPiCall { webServices.getLoggedUserCart(token) }
+    }
+
+    override suspend fun clearCart(token: String) {
+        webServices.clearCart(token)
     }
 
 }

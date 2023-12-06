@@ -14,15 +14,7 @@ import es.dmoral.toasty.Toasty
 @Composable
 fun NormalToast() {
     val ctx = LocalContext.current
-    Button(
-        modifier = Modifier
-            .width(300.dp)
-            .padding(7.dp),
-        onClick = {
 
             Toasty.normal(ctx, "This is a Normal toast.").show()
-        }) {
 
-        Text(text = "Normal Toast")
-    }
 }

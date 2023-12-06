@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -24,13 +25,18 @@ import com.example.jet_ecommerce.ui.components.CustomAlertDialog
 import com.example.jet_ecommerce.ui.components.CustomLoadingWidget
 import com.example.jet_ecommerce.ui.components.CustomTopBar
 import com.example.jet_ecommerce.ui.components.ProductItem
+import com.example.jet_ecommerce.ui.features.auth.TokenViewModel
+import com.example.jet_ecommerce.ui.features.main.carts.CartContract
+import com.example.jet_ecommerce.ui.features.main.carts.CartViewModel
+import com.example.jet_ecommerce.ui.features.main.home.RenderCustomTopBar
 import com.example.jet_ecommerce.ui.navigation_comp.screensNav.ECommerceScreens
 
 @Composable
-fun RenderViewState(vm: ProductsViewModel, navController: NavHostController) {
+fun RenderViewState(vm: ProductsViewModel, navController: NavHostController,
+                    cartViewModel : CartViewModel = hiltViewModel(),) {
     val states by vm.states.collectAsState()
     val events by vm.events.collectAsState()
-
+  cartViewModel.invokeAction(CartContract.Action.GetUserProducts)
     when (states) {
         is ProductsContract.States.Error -> {
             var showDialog by remember { mutableStateOf(true) }
@@ -51,6 +57,7 @@ fun RenderViewState(vm: ProductsViewModel, navController: NavHostController) {
             onItemClick = { vm.invokeAction(ProductsContract.Action.ProductClick(it)) },
             onAddToCartClick = { vm.invokeAction(ProductsContract.Action.AddToCartButtonClick(it.id!!)) },
             onAddToWishListClick = { vm.invokeAction(ProductsContract.Action.AddToWishListButtonClick(it.id!!)) },
+            navController =  navController
         )
     }
     when (events) {
@@ -73,12 +80,20 @@ fun ProductsListScreen(vm: ProductsViewModel, navController: NavHostController) 
 fun ProductsContent(
     productsLazyPagingItems: LazyPagingItems<Product>,
     onItemClick: (productId: String) -> Unit,
+    cartViewModel : CartViewModel = hiltViewModel(),
     onAddToCartClick: (item: Product) -> Unit,
     onAddToWishListClick: (item: Product) -> Unit,
+    tokenViewModel : TokenViewModel = hiltViewModel(),
+    navController: NavHostController
 ) {
 
     Column(verticalArrangement = Arrangement.SpaceBetween) {
-        CustomTopBar(isMainScreen = false)
+        RenderCustomTopBar( //showing another loading
+            cartViewModel = cartViewModel,
+            tokenViewModel = tokenViewModel,
+            navController = navController,
+            isMainScreen = false
+        )
         ProductsVerticalGrid(productsLazyPagingItems, Modifier.padding(8.dp),
             onItemClick = { onItemClick(it) },
             onAddToCartClick = { onAddToCartClick(it) },

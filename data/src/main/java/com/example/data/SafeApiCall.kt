@@ -15,7 +15,7 @@ import java.io.IOException
 import java.util.concurrent.TimeoutException
 
 
-suspend fun <T> safeAPiCall(apiCall: suspend () -> BaseResponse<T>): Flow<ResultWrapper<T>> =
+suspend fun <T> safeAPiCall(apiCall: suspend  () ->  BaseResponse<T>): Flow<ResultWrapper<T>> =
 
     flow {
         emit(ResultWrapper.Loading)

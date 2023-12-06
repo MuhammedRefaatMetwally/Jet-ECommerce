@@ -2,11 +2,12 @@ package com.example.data.api
 
 
 import com.example.data.model.BaseResponse
-import com.example.domain.features.cart.model.AddToCartRequest
-import com.example.domain.features.cart.model.Cart
-import com.example.domain.features.cart.model.CartQuantityResponse
-import com.example.domain.features.cart.model.CartResponse
-import com.example.domain.features.cart.model.UpdateUserCartRequest
+import com.example.domain.features.cart.model.addToCart.AddToCartRequest
+import com.example.domain.features.cart.model.getLoggedUse.CartQuantity
+import com.example.domain.features.cart.model.getLoggedUse.CartQuantityResponse
+
+import com.example.domain.features.cart.model.addToCart.CartResponse
+import com.example.domain.features.cart.model.updateUserCart.UpdateUserCartRequest
 import com.example.domain.features.category.model.Category
 import com.example.domain.features.login.model.LoginEntity
 import com.example.domain.features.login.model.LoginRequest
@@ -18,6 +19,7 @@ import com.example.domain.features.subCategories.model.SubCategory
 import com.example.domain.features.wishlist.model.WishListResponse
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
@@ -78,7 +80,7 @@ interface WebServices {
 
     @Headers("Content-Type: application/json")
     @GET("api/v1/cart")
-    suspend fun getLoggedUserCart(@Header("token") token: String): BaseResponse<Cart>
+    suspend fun getLoggedUserCart(@Header("token") token: String): BaseResponse<CartQuantity>
 
     @Headers("Content-Type: application/json")
     @POST("api/v1/wishlist")
@@ -90,5 +92,9 @@ interface WebServices {
     @Headers("Content-Type: application/json")
     @GET("/api/v1/wishlist")
     suspend fun getLoggedUserWishList(@Header("token") token: String): BaseResponse<List<Product>>
+
+
+    @DELETE("api/v1/cart")
+    suspend fun clearCart(@Header("token") token : String) : BaseResponse<Any>
 
 }
