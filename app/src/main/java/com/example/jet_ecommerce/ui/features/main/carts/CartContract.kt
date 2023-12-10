@@ -30,6 +30,7 @@ sealed class CartContract {
     sealed interface Action {
         data object GetUserProducts : Action
         data class DeleteSpecificCartItem(val productId: String, val product: ProductItem?) : Action
+        data class UpdateCartProductQuantity(val count : Int,val productId: String) : Action
         data object ClearCart : Action
 
     }

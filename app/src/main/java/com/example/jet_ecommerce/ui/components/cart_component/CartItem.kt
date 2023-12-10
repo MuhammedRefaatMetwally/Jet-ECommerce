@@ -38,7 +38,7 @@ fun CartItem(
     imgUrl: String,
     productName: String,
     productPrice: Int,
-    quantityValue: Comparable<*>,
+    quantityValue: Int,
     onDeleteClick : () -> Unit,
     onMinusClick: () -> Unit,
     onPlusClick: () -> Unit

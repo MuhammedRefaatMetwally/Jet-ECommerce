@@ -119,6 +119,8 @@ fun RenderViewState(
                     vm.invokeAction(ProductDetailsContract.Action.AddProductToWishList(product.id!!))
                 })
         }
+
+        else -> {}
     }
 
 
@@ -141,6 +143,8 @@ fun RenderViewState(
        is  ProductDetailsContract.ProductDetailsEvents.ShowSuccess -> {
             SuccessToast(message = "Product Added Successfully To Cart!")
         }
+
+        else -> {}
     }
 }
 

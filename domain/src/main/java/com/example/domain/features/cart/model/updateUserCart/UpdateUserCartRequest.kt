@@ -1,5 +1,5 @@
 package com.example.domain.features.cart.model.updateUserCart
 
 data class UpdateUserCartRequest(
-    val count: String? = null
+    val count: Int? = null
 )

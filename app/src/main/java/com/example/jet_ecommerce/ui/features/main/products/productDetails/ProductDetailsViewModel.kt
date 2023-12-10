@@ -112,7 +112,7 @@ class ProductDetailsViewModel @Inject constructor(
             try {
                 val response = updateCartProductQuantityUseCase(
                     token,
-                    UpdateUserCartRequest(quantity.toString()),
+                    UpdateUserCartRequest(quantity),
                     productId,
                 )
             } catch (e: Exception) {

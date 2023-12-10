@@ -103,4 +103,10 @@ interface WebServices {
     @DELETE("api/v1/cart")
     suspend fun clearCart(@Header("token") token: String): BaseResponse<Any>
 
+    @PUT("api/v1/cart/{product_id}")
+    suspend fun updateCartProductQuantity(
+        @Header("token") token: String,
+        @Path("product_id") productId: String,
+        @Body count:String,
+    ):CartQuantityResponse
 }

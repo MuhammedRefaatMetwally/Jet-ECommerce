@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -15,6 +16,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.domain.features.cart.model.getLoggedUse.CartQuantity
 import com.example.jet_ecommerce.ui.components.CustomAlertDialog
 import com.example.jet_ecommerce.ui.components.CustomLoadingWidget
 import com.example.jet_ecommerce.ui.components.cart_component.CartItem
@@ -43,31 +45,8 @@ fun RenderCartStates(viewModel: CartViewModel = hiltViewModel()) {
         CartContract.State.Idle -> {}
         CartContract.State.Loading -> CustomLoadingWidget()
         is CartContract.State.Success -> {
-             val   cartProducts = viewModel.cartProducts
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(cartProducts.size, key = { index -> index}) { index ->
-                    val productId = cartProducts[index]?.product?.id ?: ""
-                    CartItem(
-                        imgUrl = cartProducts[index]?.product?.imageCover ?: "",
-                        productName = cartProducts[index]?.product?.title ?: "",
-                        productPrice = cartProducts[index]?.price ?: 0,
-                        quantityValue = cartProducts[index]?.product?.quantity ?: "",
-                        onDeleteClick = {
-                            viewModel.invokeAction(
-                                CartContract.Action.DeleteSpecificCartItem(
-                                    productId = productId,
-                                    product = cartProducts[index]
-                                )
-                            )
-                        },
-                        onMinusClick = {
-
-                        }) {
-
-                    }
-                }
-            }
-
+            val products = states.data
+            ListOfCartProducts(products)
         }
     }
 
@@ -78,12 +57,62 @@ fun RenderCartStates(viewModel: CartViewModel = hiltViewModel()) {
             }
         }.value
 
-    when(events){
+    when (events) {
         CartContract.Event.Idle -> {}
-        CartContract.Event.ShowError -> {ErrorToast(message = "Something Went Wrong! Could Not Remove it.")}
+        CartContract.Event.ShowError -> {
+            ErrorToast(message = "Something Went Wrong! Could Not Remove it.")
+        }
+
         CartContract.Event.ShowSuccess -> {
             SuccessToast(message = "Product Removed Successfully")
 
+        }
+    }
+}
+
+@Composable
+fun ListOfCartProducts(products : CartQuantity, viewModel: CartViewModel = hiltViewModel()) {
+    val productCount = remember { mutableIntStateOf(1) }
+    val productTotalPrice = remember { mutableIntStateOf(0) }
+
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        items(products.products?.size ?: 0, key = { index -> index }) { index->
+            productCount.intValue = products.products?.get(index)?.count ?:0
+            productTotalPrice.intValue = products.totalCartPrice ?:0
+            val productId = products.products?.get(index)?.product?.id ?: ""
+            CartItem(
+                imgUrl = products.products?.get(index)?.product?.imageCover ?: "",
+                productName = products.products?.get(index)?.product?.title ?: "",
+                productPrice = productTotalPrice.intValue,
+                quantityValue = productCount.intValue,
+                onDeleteClick = {
+                    viewModel.invokeAction(
+                        CartContract.Action.DeleteSpecificCartItem(
+                            productId = productId,
+                            product = products.products?.get(index)
+                        )
+                    )
+                },
+                onMinusClick = {
+                    if (productCount.intValue > 1)
+                        productCount.intValue--
+                    viewModel.invokeAction(
+                        CartContract.Action.UpdateCartProductQuantity(
+                            count = productCount.intValue ,
+                            productId
+                        )
+                    )
+                    productTotalPrice.intValue = products.totalCartPrice ?:0
+                }) {
+                productCount.intValue++
+                viewModel.invokeAction(
+                    CartContract.Action.UpdateCartProductQuantity(
+                        count = productCount.intValue,
+                        productId
+                    )
+                )
+                productTotalPrice.intValue = products.totalCartPrice ?:0
+            }
         }
     }
 }

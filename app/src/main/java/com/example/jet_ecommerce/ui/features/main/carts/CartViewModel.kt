@@ -6,9 +6,11 @@ import com.example.data.api.TokenManager
 import com.example.domain.common.ResultWrapper
 import com.example.domain.features.cart.model.getLoggedUse.CartQuantity
 import com.example.domain.features.cart.model.getLoggedUse.ProductItem
+import com.example.domain.features.cart.model.updateUserCart.UpdateUserCartRequest
 import com.example.domain.features.cart.usecase.ClearCartUseCase
 import com.example.domain.features.cart.usecase.DeleteSpecificCartItemUseCase
 import com.example.domain.features.cart.usecase.GetLoggedUserCartUseCase
+import com.example.domain.features.cart.usecase.UpdateCartProductQuantityUseCase
 import com.example.jet_ecommerce.IoDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -24,6 +26,7 @@ import javax.inject.Inject
 class CartViewModel @Inject constructor(
     private val getLoggedUserCartUseCase: GetLoggedUserCartUseCase,
     private val deleteSpecificCartItem: DeleteSpecificCartItemUseCase,
+    private val updateCartProductQuantityUseCase: UpdateCartProductQuantityUseCase,
     private val clearCartUseCase : ClearCartUseCase,
     private val tokenManager: TokenManager,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
@@ -41,7 +44,7 @@ class CartViewModel @Inject constructor(
     override val events: StateFlow<CartContract.Event>
         get() = _events
 
-    var cartProducts = mutableListOf<ProductItem?>()
+    private var cartProducts = mutableListOf<ProductItem?>()
     var cartProductsSize : Int? = 0
 
     private val eventChannel = Channel<CartContract.Event>(Channel.BUFFERED)
@@ -62,6 +65,20 @@ class CartViewModel @Inject constructor(
                deleteSpecificItem(action.productId, action.product)
 
             }
+
+            is CartContract.Action.UpdateCartProductQuantity -> updateCartProductQuantity(
+                count = action.count,
+                productId = action.productId
+            )
+        }
+    }
+
+    private fun updateCartProductQuantity(count : Int , productId: String) {
+        viewModelScope.launch(ioDispatcher) {
+            updateCartProductQuantityUseCase.invoke(token = token, UpdateUserCartRequest(
+                count = count
+            ),productId)
+            getUserProducts()
         }
     }
 
