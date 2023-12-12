@@ -27,10 +27,6 @@ import com.example.jet_ecommerce.ui.features.main.home.renderStatesComponents.Re
 import com.example.jet_ecommerce.ui.features.main.home.renderStatesComponents.RenderProductStates
 import com.example.jet_ecommerce.ui.navigation_comp.screensNav.ECommerceScreens
 
-@Composable
-fun HomeContent() {
-
-}
 
 @Composable
 fun HomeScreen(
@@ -108,7 +104,6 @@ fun RenderCustomTopBar(
                 isMainScreen = isMainScreen,
                 modifier = Modifier.clickable {
                     tokenViewModel.deleteToken()
-                    navController.popBackStack()
                     navController.navigate(ECommerceScreens.LoginScreen.name)
                 }, onCartClick = {onCartClick()}, onBackClick = {onBackClick()}, onLongCartClick = onLongCartClick,
                 onMainCartClick = { navController.navigate(ECommerceScreens.CartScreen.name) })

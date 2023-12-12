@@ -2,11 +2,14 @@ package com.example.data.api
 
 
 import com.example.data.model.BaseResponse
+import com.example.domain.features.cart.model.ShoppingAddingRequest
 import com.example.domain.features.cart.model.addToCart.AddToCartRequest
 import com.example.domain.features.cart.model.getLoggedUse.CartQuantity
 import com.example.domain.features.cart.model.getLoggedUse.CartQuantityResponse
 
 import com.example.domain.features.cart.model.addToCart.CartResponse
+import com.example.domain.features.cart.model.check_out.CashOrderData
+import com.example.domain.features.cart.model.check_out.Session
 import com.example.domain.features.cart.model.updateUserCart.UpdateUserCartRequest
 import com.example.domain.features.category.model.Category
 import com.example.domain.features.login.model.LoginEntity
@@ -17,9 +20,12 @@ import com.example.domain.features.register.model.RegisterRequest
 import com.example.domain.features.register.model.RegisterResponse
 import com.example.domain.features.subCategories.model.SubCategory
 import com.example.domain.features.wishlist.model.WishListResponse
+import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
+import retrofit2.http.FieldMap
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
@@ -82,17 +88,6 @@ interface WebServices {
     @GET("api/v1/cart")
     suspend fun getLoggedUserCart(@Header("token") token: String): BaseResponse<CartQuantity>
 
-    @Headers("Content-Type: application/json")
-    @POST("api/v1/wishlist")
-    suspend fun addProductToWishList(
-        @Header("token") token: String,
-        @Body productId: String
-    ): WishListResponse
-
-    @Headers("Content-Type: application/json")
-    @GET("/api/v1/wishlist")
-    suspend fun getLoggedUserWishList(@Header("token") token: String): BaseResponse<List<Product>>
-
 
     @DELETE("api/v1/cart/{product_id}")
     suspend fun deleteSpecificCartItem(
@@ -103,10 +98,43 @@ interface WebServices {
     @DELETE("api/v1/cart")
     suspend fun clearCart(@Header("token") token: String): BaseResponse<Any>
 
-    @PUT("api/v1/cart/{product_id}")
-    suspend fun updateCartProductQuantity(
+
+
+    @Headers("Content-Type: application/json")
+    @POST("api/v1/wishlist")
+    suspend fun addProductToWishList(
         @Header("token") token: String,
-        @Path("product_id") productId: String,
-        @Body count:String,
-    ):CartQuantityResponse
+        @Body addToCartRequest: AddToCartRequest
+    ): WishListResponse
+
+    @DELETE("api/v1/wishlist/{product_id}")
+    suspend fun removeProductFromWishList(
+        @Header("token") token : String,
+        @Path("product_id") cartProductId : String
+    ):BaseResponse<Any>
+
+    @Headers("Content-Type: application/json")
+    @GET("api/v1/wishlist")
+    suspend fun getLoggedUserWishList(@Header("token") token: String): BaseResponse<List<Product>>
+
+
+
+    @POST("api/v1/orders/{user_id}")
+    suspend fun createCastOrder(
+        @Header("token") token: String,
+        @Path("user_id") userId: String,
+        @Body shoppingAddressRequest : ShoppingAddingRequest
+    ):BaseResponse<CashOrderData>
+
+    @POST("api/v1/orders/checkout-session/{user_id}")
+    suspend fun checkOutSession(
+        @Header("token") token: String,
+        @Path("user_id") userId : String,
+        @Query("url") url : String = "http://localhost:4200"
+    ) : BaseResponse<Session>
+
+
+
+
+
 }

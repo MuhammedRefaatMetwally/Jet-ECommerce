@@ -7,7 +7,7 @@ open class BaseResponse<T>(
     val statusMsg: String? = null,
     @field:SerializedName("message")
     val message: String? = null,
-    @field:SerializedName(value = "data")
+    @field:SerializedName(value = "data" , alternate = ["session"])
     val data: T? = null,
 
 )

@@ -49,7 +49,8 @@ fun ProductItem(
     isInWishList: Boolean = false,
     onItemClick: () -> Unit = {},
     onAddToCartClick: () -> Unit = {},
-    onAddToWishListClick: () -> Unit = {}
+    onAddToWishListClick: () -> Unit = {},
+    onRemoveFromWishListClick : () -> Unit ={}
 ) {
     Card(
         modifier = modifier
@@ -75,8 +76,8 @@ fun ProductItem(
                     alignment = Alignment.TopCenter,
                     contentDescription = "img"
                 )
-                FavoriteItem(isInWishList) {
-                    onAddToWishListClick()
+                FavoriteItem( onAddToWishListClick =  onAddToWishListClick) {
+                   onRemoveFromWishListClick()
                 }
             }
 
@@ -151,19 +152,3 @@ fun ProductItem(
 }
 
 
-@Composable
-fun FavoriteItem(isInWishList: Boolean, onAddToWishListClick: () -> Unit) {
-    Card(shape = CircleShape, modifier = Modifier
-        .padding(8.dp)
-        .clickable {
-            onAddToWishListClick()
-        }) {
-        Icon(
-            modifier = Modifier.padding(8.dp),
-            painter = painterResource(id = if (isInWishList) R.drawable.active_heart else R.drawable.unactive_heart),
-            contentDescription = "favorite",
-            tint = Color.Unspecified
-        )
-    }
-
-}

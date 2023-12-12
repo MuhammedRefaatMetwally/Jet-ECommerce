@@ -20,6 +20,8 @@ import androidx.navigation.NavHostController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.data.api.AppSharedReferences
+import com.example.domain.features.cart.model.addToCart.AddToCartRequest
 import com.example.domain.features.products.model.Product
 import com.example.jet_ecommerce.ui.components.CustomAlertDialog
 import com.example.jet_ecommerce.ui.components.CustomLoadingWidget
@@ -28,11 +30,18 @@ import com.example.jet_ecommerce.ui.features.auth.TokenViewModel
 import com.example.jet_ecommerce.ui.features.main.carts.CartContract
 import com.example.jet_ecommerce.ui.features.main.carts.CartViewModel
 import com.example.jet_ecommerce.ui.features.main.home.RenderCustomTopBar
+import com.example.jet_ecommerce.ui.features.main.wishlist.WishListContract
+import com.example.jet_ecommerce.ui.features.main.wishlist.WishListViewModel
 import com.example.jet_ecommerce.ui.navigation_comp.screensNav.ECommerceScreens
 
 @Composable
-fun RenderViewState(vm: ProductsViewModel, navController: NavHostController,
-                    cartViewModel : CartViewModel = hiltViewModel(),) {
+fun RenderViewState(
+    vm: ProductsViewModel = hiltViewModel(),
+    navController: NavHostController,
+    cartViewModel: CartViewModel = hiltViewModel(),
+    wishListViewModel: WishListViewModel = hiltViewModel(),
+    productsViewModel: ProductsViewModel = hiltViewModel(),
+) {
     val states by vm.states.collectAsState()
     val events by vm.events.collectAsState()
   cartViewModel.invokeAction(CartContract.Action.GetUserProducts)
@@ -51,13 +60,23 @@ fun RenderViewState(vm: ProductsViewModel, navController: NavHostController,
             CustomLoadingWidget()
         }
 
-        is ProductsContract.States.Success -> ProductsContent(
-            (states as ProductsContract.States.Success).productsList?.collectAsLazyPagingItems()!!,
-            onItemClick = { vm.invokeAction(ProductsContract.Action.ProductClick(it)) },
-            onAddToCartClick = { vm.invokeAction(ProductsContract.Action.AddToCartButtonClick(it.id!!)) },
-            onAddToWishListClick = { vm.invokeAction(ProductsContract.Action.AddToWishListButtonClick(it.id!!)) },
-            navController =  navController
-        )
+        is ProductsContract.States.Success -> {
+            ProductsContent(
+                (states as ProductsContract.States.Success).productsList?.collectAsLazyPagingItems()!!,
+                productsViewModel = productsViewModel,
+                onItemClick = { vm.invokeAction(ProductsContract.Action.ProductClick(it)) },
+                onAddToCartClick = {
+                    vm.invokeAction(ProductsContract.Action.AddToCartButtonClick(it.id!!))
+                                   },
+                onAddToWishListClick = {
+                    wishListViewModel.invokeAction(WishListContract.Action.AddProductToWishLIst(addToCartRequest = AddToCartRequest(
+                        productId = it.id!!
+                    )))
+
+                },
+                navController =  navController
+            )
+        }
     }
     when (events) {
         is ProductsContract.Events.Idle -> {}
@@ -83,7 +102,8 @@ fun ProductsContent(
     onAddToCartClick: (item: Product) -> Unit,
     onAddToWishListClick: (item: Product) -> Unit,
     tokenViewModel : TokenViewModel = hiltViewModel(),
-    navController: NavHostController
+    navController: NavHostController,
+    productsViewModel: ProductsViewModel
 ) {
 
     Column(verticalArrangement = Arrangement.SpaceBetween) {
@@ -95,6 +115,7 @@ fun ProductsContent(
         )
         ProductsVerticalGrid(productsLazyPagingItems, Modifier.padding(8.dp),
             onItemClick = { onItemClick(it) },
+            productsViewModel =productsViewModel ,
             onAddToCartClick = { onAddToCartClick(it) },
             onAddToWishListClick = { onAddToWishListClick(it) })
     }
@@ -106,7 +127,8 @@ fun ProductsVerticalGrid(
     modifier: Modifier,
     onItemClick: (productId: String) -> Unit,
     onAddToCartClick: (item: Product) -> Unit,
-    onAddToWishListClick: (item: Product) -> Unit
+    onAddToWishListClick: (item: Product) -> Unit,
+    productsViewModel: ProductsViewModel
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -116,6 +138,7 @@ fun ProductsVerticalGrid(
     ) {
         items(productsLazyPagingItems.itemCount) { index ->
             val item = productsLazyPagingItems[index]
+            AppSharedReferences.write("productId",item?.id?:"")
             ProductItem(
                 modifier = modifier,
                 imageURL = item?.images?.get(0) ?: "",

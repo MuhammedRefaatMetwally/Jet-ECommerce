@@ -35,6 +35,7 @@ class ProductsViewModel @Inject constructor(
     init {
         val categoryId = savedStateHandle.get<String>("category_id")
         invokeAction(ProductsContract.Action.LoadProducts(categoryId))
+
     }
 
     override fun invokeAction(action: ProductsContract.Action) {

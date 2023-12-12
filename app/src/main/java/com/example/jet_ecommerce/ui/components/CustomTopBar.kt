@@ -53,6 +53,7 @@ fun CustomTopBar(
     nonDetailsTopBarTitle: String = "",
     onLongCartClick : ()->Unit ={},
     onMainCartClick: () -> Unit = {},
+    onLogoutClick : () -> Unit = {},
     onBackClick: () -> Unit = {}
 ) {
     if (detailsTopBar) {

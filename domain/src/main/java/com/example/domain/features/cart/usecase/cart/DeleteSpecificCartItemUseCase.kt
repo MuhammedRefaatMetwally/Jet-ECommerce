@@ -1,4 +1,4 @@
-package com.example.domain.features.cart.usecase
+package com.example.domain.features.cart.usecase.cart
 
 import com.example.domain.features.cart.repository.CartRepository
 import javax.inject.Inject

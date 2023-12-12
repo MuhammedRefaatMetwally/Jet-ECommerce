@@ -1,4 +1,4 @@
-package com.example.domain.features.cart.usecase
+package com.example.domain.features.cart.usecase.cart
 
 import com.example.domain.features.cart.model.addToCart.AddToCartRequest
 import com.example.domain.features.cart.model.addToCart.CartResponse

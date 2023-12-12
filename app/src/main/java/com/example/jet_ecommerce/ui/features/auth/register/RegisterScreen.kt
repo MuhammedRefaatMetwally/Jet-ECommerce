@@ -162,7 +162,10 @@ fun RegisterContent(
             state = vm.name,
             errorState = vm.nameError,
             keyboardType = KeyboardType.Text,
-            visualTransformation = VisualTransformation.None
+            visualTransformation = VisualTransformation.None,
+            focusedLabelColor = Color.White,
+            unfocusedLabelColor = Color.Black,
+            containerColor = Color.White
         )
 
         Spacer(modifier = Modifier.padding(top = 24.dp))

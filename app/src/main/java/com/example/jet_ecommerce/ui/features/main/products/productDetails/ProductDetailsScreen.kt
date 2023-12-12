@@ -3,6 +3,7 @@ package com.example.jet_ecommerce.ui.features.main.products.productDetails
 import ErrorToast
 import SuccessToast
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -53,6 +54,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -167,6 +169,7 @@ fun ProductDetailsContent(
             isMainScreen = false, onBackClick = { navController.popBackStack() },
             onCartClick = { vm.invokeAction(ProductDetailsContract.Action.ClickOnCartIcon) }
         )
+
         ProductDetailsItem(
             product = product,
             onAddToWishListClick = { onAddToWishListClick() },

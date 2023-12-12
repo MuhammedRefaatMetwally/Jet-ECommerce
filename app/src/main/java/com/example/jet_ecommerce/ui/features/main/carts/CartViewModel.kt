@@ -4,13 +4,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.data.api.TokenManager
 import com.example.domain.common.ResultWrapper
+import com.example.domain.features.cart.model.ShoppingAddingRequest
+import com.example.domain.features.cart.model.check_out.Session
 import com.example.domain.features.cart.model.getLoggedUse.CartQuantity
 import com.example.domain.features.cart.model.getLoggedUse.ProductItem
 import com.example.domain.features.cart.model.updateUserCart.UpdateUserCartRequest
-import com.example.domain.features.cart.usecase.ClearCartUseCase
-import com.example.domain.features.cart.usecase.DeleteSpecificCartItemUseCase
-import com.example.domain.features.cart.usecase.GetLoggedUserCartUseCase
-import com.example.domain.features.cart.usecase.UpdateCartProductQuantityUseCase
+import com.example.domain.features.cart.usecase.cart.ClearCartUseCase
+import com.example.domain.features.cart.usecase.cart.DeleteSpecificCartItemUseCase
+import com.example.domain.features.cart.usecase.cart.GetLoggedUserCartUseCase
+import com.example.domain.features.cart.usecase.cart.UpdateCartProductQuantityUseCase
+import com.example.domain.features.cart.usecase.checkout.CartCheckOutUseCase
+import com.example.domain.features.cart.usecase.checkout.CreateCastOrderUseCase
 import com.example.jet_ecommerce.IoDispatcher
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -28,6 +32,8 @@ class CartViewModel @Inject constructor(
     private val deleteSpecificCartItem: DeleteSpecificCartItemUseCase,
     private val updateCartProductQuantityUseCase: UpdateCartProductQuantityUseCase,
     private val clearCartUseCase : ClearCartUseCase,
+    private val checkOutUseCase: CartCheckOutUseCase,
+    private val createCheckOutUseCase: CreateCastOrderUseCase,
     private val tokenManager: TokenManager,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel(), CartContract.ViewModel {
@@ -44,7 +50,8 @@ class CartViewModel @Inject constructor(
     override val events: StateFlow<CartContract.Event>
         get() = _events
 
-    private var cartProducts = mutableListOf<ProductItem?>()
+     var cartProducts = mutableListOf<ProductItem?>()
+    var totalPrice = 0;
     var cartProductsSize : Int? = 0
 
     private val eventChannel = Channel<CartContract.Event>(Channel.BUFFERED)
@@ -70,6 +77,76 @@ class CartViewModel @Inject constructor(
                 count = action.count,
                 productId = action.productId
             )
+
+            is CartContract.Action.CheckOut -> checkOutProduct(action.userId)
+            is CartContract.Action.CreateCastOrder -> createCastOrder(action.userId,action.shoppingAddingRequest)
+            else -> {}
+        }
+    }
+
+    private fun createCastOrder(userId: String, shoppingAddingRequest: ShoppingAddingRequest) {
+        viewModelScope.launch(ioDispatcher) {
+            createCheckOutUseCase.invoke(token,userId,shoppingAddingRequest).collect{
+                when (it) {
+                    is ResultWrapper.Error -> {
+                        _states.emit(CartContract.State.Error(it.error.message.toString()))
+
+                    }
+
+                    is ResultWrapper.Loading -> {
+                        _states.emit(
+                            CartContract.State.Loading
+                        )
+
+                    }
+
+                    is ResultWrapper.ServerError -> {
+                        _states.emit(
+                            CartContract.State.Error(it.error.message.toString())
+                        )
+                    }
+
+                    is ResultWrapper.Success -> {
+                        _states.emit(CartContract.State.Success(createCheckoutData = it.data))
+
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+    }
+
+    private fun checkOutProduct(userId : String) {
+        viewModelScope.launch(ioDispatcher) {
+            checkOutUseCase.invoke(token,userId).collect{
+                when (it) {
+                    is ResultWrapper.Error -> {
+                        _states.emit(CartContract.State.Error(it.error.message.toString()))
+
+                    }
+
+                    is ResultWrapper.Loading -> {
+                        _states.emit(
+                            CartContract.State.Loading
+                        )
+
+                    }
+
+                    is ResultWrapper.ServerError -> {
+                        _states.emit(
+                            CartContract.State.Error(it.error.message.toString())
+                        )
+                    }
+
+                    is ResultWrapper.Success -> {
+                        _states.emit(CartContract.State.Success(checkOutData = it.data))
+                        eventChannel.send(CartContract.Event.NavigateToStripe)
+                    }
+
+                    else -> {}
+                }
+            }
         }
     }
 
@@ -110,22 +187,17 @@ class CartViewModel @Inject constructor(
                 when (it) {
                     is ResultWrapper.Error -> {
                         _states.emit(CartContract.State.Error(it.error.message.toString()))
-
                     }
-
                     is ResultWrapper.Loading -> {
                         _states.emit(
                             CartContract.State.Loading
                         )
-
                     }
-
                     is ResultWrapper.ServerError -> {
                         _states.emit(
                             CartContract.State.Error(it.error.message.toString())
                         )
                     }
-
                     is ResultWrapper.Success -> {
                         _states.emit(CartContract.State.Success(data = it.data ?: CartQuantity()))
                         cartProducts = it.data?.products?.toMutableList()!!

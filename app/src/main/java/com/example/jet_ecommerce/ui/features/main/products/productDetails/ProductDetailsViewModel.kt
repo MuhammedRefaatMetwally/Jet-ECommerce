@@ -7,11 +7,10 @@ import com.example.data.api.TokenManager
 import com.example.domain.common.ResultWrapper
 import com.example.domain.features.cart.model.addToCart.AddToCartRequest
 import com.example.domain.features.cart.model.updateUserCart.UpdateUserCartRequest
-import com.example.domain.features.cart.usecase.AddProductToCartUseCase
-import com.example.domain.features.cart.usecase.UpdateCartProductQuantityUseCase
+import com.example.domain.features.cart.usecase.cart.AddProductToCartUseCase
+import com.example.domain.features.cart.usecase.cart.UpdateCartProductQuantityUseCase
 import com.example.domain.features.products.usecase.GetSpecificProductUseCase
 import com.example.jet_ecommerce.IoDispatcher
-import com.example.jet_ecommerce.ui.features.main.carts.CartContract
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.Channel
@@ -51,12 +50,15 @@ class ProductDetailsViewModel @Inject constructor(
 
     private val eventChannel = Channel<ProductDetailsContract.ProductDetailsEvents>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()//single live event
+
+
     init {
         viewModelScope.launch {
             tokenManager.getToken().collect { token = it!! }
         }
 
         val productId = savedStateHandle.get<String>("product_id")
+
         invokeAction(ProductDetailsContract.Action.LoadProduct(productId ?: ""))
     }
 
