@@ -138,7 +138,7 @@ fun ProductsVerticalGrid(
     ) {
         items(productsLazyPagingItems.itemCount) { index ->
             val item = productsLazyPagingItems[index]
-            AppSharedReferences.write("productId",item?.id?:"")
+
             ProductItem(
                 modifier = modifier,
                 imageURL = item?.images?.get(0) ?: "",

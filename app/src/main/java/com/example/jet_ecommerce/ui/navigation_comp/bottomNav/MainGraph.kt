@@ -7,7 +7,6 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import androidx.navigation.navigation
 import com.example.jet_ecommerce.ui.features.auth.login.LoginScreen
 import com.example.jet_ecommerce.ui.features.main.carts.CartScreen
 import com.example.jet_ecommerce.ui.features.main.categories.CategoriesScreen
@@ -20,67 +19,64 @@ import com.example.jet_ecommerce.ui.features.main.products.productDetails.Produc
 import com.example.jet_ecommerce.ui.features.main.profile.ProfileScreen
 import com.example.jet_ecommerce.ui.features.main.wishlist.WishListScreen
 import com.example.jet_ecommerce.ui.navigation_comp.screensNav.ECommerceScreens
+import com.example.jet_ecommerce.ui.navigation_comp.screensNav.Graph
 
 @Composable
-fun ECommerceBottomNavigation(
-    navController: NavHostController,
-    mainNavController: NavHostController
-) {
-
+fun MainGraph(navHostController: NavHostController) {
     NavHost(
-        navController = navController,
+        navController = navHostController,
+        route = Graph.MAIN,
         startDestination = BottomNavItem.Home.screen_route
     ) {
-
         composable(BottomNavItem.Home.screen_route) {
             //  val viewModel = SplashViewModel()
-            HomeScreen(navController = navController)
+            HomeScreen(navController = navHostController)
+        }
+        composable(BottomNavItem.Categories.screen_route) {
+            val vm: CategoriesViewModel = hiltViewModel()
+            CategoriesScreen(vm, navController = navHostController)
         }
 
-        navigation(
-            route = ECommerceScreens.NestedCategory.name,
-            startDestination = BottomNavItem.Categories.screen_route
+        composable(
+            route = "${ECommerceScreens.ProductsScreen.name}/{category_id}",
+            arguments = listOf(navArgument("category_id") {
+                type = NavType.StringType
+            })
         ) {
-            composable(BottomNavItem.Categories.screen_route) {
-                val vm: CategoriesViewModel = hiltViewModel()
-                CategoriesScreen(vm, navController = navController)
-            }
-            composable(
-                route = "${ECommerceScreens.ProductsScreen.name}/{category_id}",
-                arguments = listOf(navArgument("category_id") {
-                    type = NavType.StringType
-                })
-            ) {
-                val vm: ProductsViewModel = hiltViewModel()
-                ProductsListScreen(vm = vm, navController = navController)
-            }
-            composable(
-                route = "${ECommerceScreens.ProductDetailsScreen.name}/{product_id}",
-                arguments = listOf(navArgument("product_id") {
-                    type = NavType.StringType
-                })
-            ) {
-                val vm: ProductDetailsViewModel = hiltViewModel()
-                ProductDetailsScreen(vm = vm, navController = navController)
-            }
+            val vm: ProductsViewModel = hiltViewModel()
+            ProductsListScreen(vm = vm, navController = navHostController)
+        }
+        composable(
+            route = "${ECommerceScreens.ProductDetailsScreen.name}/{product_id}",
+            arguments = listOf(navArgument("product_id") {
+                type = NavType.StringType
+            }),
+
+        ) {
+            val vm: ProductDetailsViewModel = hiltViewModel()
+            ProductDetailsScreen(vm = vm, navController = navHostController)
         }
 
         composable(BottomNavItem.WishList.screen_route) {
             //val homeViewModel = hiltViewModel<HomeScreenViewModel>()
-            WishListScreen(navController = navController)
+            WishListScreen(navController = navHostController)
         }
 
         composable(BottomNavItem.Profile.screen_route) {
 
-            ProfileScreen(navController = navController)
-        }
-        
-        composable(ECommerceScreens.LoginScreen.name){
-            LoginScreen(navController = mainNavController)
+            ProfileScreen(navController = navHostController)
         }
 
-        composable(ECommerceScreens.CartScreen.name){
-            CartScreen(navController)
+        composable(ECommerceScreens.CartScreen.name) {
+            CartScreen(navHostController)
+        }
+
+
+
+
+        composable(ECommerceScreens.LoginScreen.name) {
+            //  val viewModel = LoginViewModel()
+            LoginScreen(navController = navHostController)
         }
     }
 }

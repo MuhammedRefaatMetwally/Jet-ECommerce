@@ -51,7 +51,7 @@ class ProductDetailsViewModel @Inject constructor(
     private val eventChannel = Channel<ProductDetailsContract.ProductDetailsEvents>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()//single live event
 
-
+    val productId2 = savedStateHandle.get<String>("product_id")
     init {
         viewModelScope.launch {
             tokenManager.getToken().collect { token = it!! }

@@ -11,9 +11,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.jet_ecommerce.ui.navigation_comp.screensNav.ECommerceNavigation
+import androidx.navigation.compose.rememberNavController
+import com.example.jet_ecommerce.ui.navigation_comp.bottomNav.RootNavigationGraph
 import com.example.jet_ecommerce.ui.theme.JetECommerceTheme
 import dagger.hilt.android.AndroidEntryPoint
+
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -33,7 +36,7 @@ fun ECommerce() {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-               ECommerceNavigation()
+                RootNavigationGraph(rememberNavController())
             }
         }
     }

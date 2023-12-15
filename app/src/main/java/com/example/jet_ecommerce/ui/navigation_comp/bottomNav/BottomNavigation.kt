@@ -47,7 +47,15 @@ fun BottomNavigationBar(navController: NavHostController) {
                 alwaysShowLabel = true,
                 selected = selected,
                 onClick = {
-                    navController.navigate(item.screen_route)
+                    navController.navigate(item.screen_route){
+                        navController.graph.startDestinationRoute?.let { route ->
+                            popUpTo(route) {
+                                saveState = true
+                            }
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 }
             )
         }else{
@@ -58,7 +66,15 @@ fun BottomNavigationBar(navController: NavHostController) {
                 alwaysShowLabel = true,
                 selected = selected,
                 onClick = {
-                    navController.navigate(item.screen_route)
+                    navController.navigate(item.screen_route){
+                        navController.graph.startDestinationRoute?.let { route ->
+                            popUpTo(route) {
+                                saveState = true
+                            }
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 }
             )
         }

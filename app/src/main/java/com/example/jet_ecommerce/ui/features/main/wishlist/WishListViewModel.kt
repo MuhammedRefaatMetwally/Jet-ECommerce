@@ -1,5 +1,8 @@
 package com.example.jet_ecommerce.ui.features.main.wishlist
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -31,12 +34,11 @@ class WishListViewModel @Inject constructor(
     private val addProductToWishListUseCase: AddProductToWishListUseCase,
     private val removeProductFromWishList: RemoveProductFromWishListUseCase,
     private val getLoggedUserWishListUseCase: GetLoggedUserWishListUseCase,
-    private val getProductsPagingUseCase: GetProductsPagingUseCase,
     private val tokenManager: TokenManager,
+    savedStateHandle : SavedStateHandle,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel(),
     WishListContract.ViewModel {
-
     private lateinit var token : String
     private val _states: MutableStateFlow<WishListContract.State> =
         MutableStateFlow(WishListContract.State.Idle)
@@ -50,6 +52,8 @@ class WishListViewModel @Inject constructor(
 
     private val eventChannel = Channel<WishListContract.Event>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()//single live event
+
+      val productId = savedStateHandle.get<String>("product_id")
     init {
         viewModelScope.launch {
             tokenManager.getToken().collect { token = it!! }
@@ -109,9 +113,6 @@ class WishListViewModel @Inject constructor(
             removeProductFromWishList.invoke(token, productId = productId)
         }
     }
-
-     var productState: MutableStateFlow<PagingData<Product>> =
-        MutableStateFlow(value = PagingData.empty())
 
 
 }

@@ -25,9 +25,11 @@ import com.example.jet_ecommerce.ui.features.auth.TokenViewModel
 import com.example.jet_ecommerce.ui.features.main.carts.CartContract
 import com.example.jet_ecommerce.ui.features.main.carts.CartViewModel
 import com.example.jet_ecommerce.ui.features.main.home.RenderCustomTopBar
+import com.example.jet_ecommerce.ui.features.main.products.ProductsContract
 import com.example.jet_ecommerce.ui.features.main.products.ProductsViewModel
 import com.example.jet_ecommerce.ui.features.main.products.productDetails.ProductDetailsContract
 import com.example.jet_ecommerce.ui.features.main.products.productDetails.ProductDetailsViewModel
+import kotlin.math.log
 
 
 @Composable
@@ -92,7 +94,7 @@ fun RenderWishListStates(
                     .padding(top = 48.dp)
             ) {
                 items(wishListProduct) { product ->
-                    //
+                    Log.d("__", "RenderWishListStates: ${0}")
                     WishListItem(isNewToWishList =true,
                         imgUrl = product.imageCover ?: "",
                         productName = product.title ?: "",

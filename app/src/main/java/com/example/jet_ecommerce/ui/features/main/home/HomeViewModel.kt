@@ -8,6 +8,7 @@ import com.example.domain.common.ResultWrapper
 import com.example.domain.features.category.usecase.GetCategoriesUseCase
 import com.example.domain.features.products.usecase.GetProductsUseCase
 import com.example.jet_ecommerce.IoDispatcher
+import com.example.jet_ecommerce.ui.features.main.wishlist.WishListViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow

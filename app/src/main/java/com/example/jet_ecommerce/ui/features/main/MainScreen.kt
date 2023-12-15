@@ -7,14 +7,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.example.jet_ecommerce.ui.navigation_comp.bottomNav.ECommerceBottomNavigation
+import com.example.jet_ecommerce.ui.navigation_comp.bottomNav.MainGraph
+import com.example.jet_ecommerce.ui.navigation_comp.bottomNav.RootNavigationGraph
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(mainNavController: NavHostController) {
-    val navController = rememberNavController()
-    Scaffold(bottomBar = { BottomNavigationBar(navController = navController) }) {
-        ECommerceBottomNavigation(navController,mainNavController)
+fun MainScreen(navHostController: NavHostController  = rememberNavController()) {
+    Scaffold(bottomBar = { BottomNavigationBar(navController = navHostController) }) {
+        MainGraph(navHostController = navHostController)
     }
 }

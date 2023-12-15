@@ -8,6 +8,7 @@ import androidx.paging.cachedIn
 import com.example.domain.features.products.model.Product
 import com.example.domain.features.products.usecase.GetProductsPagingUseCase
 import com.example.jet_ecommerce.IoDispatcher
+import com.example.jet_ecommerce.ui.features.main.wishlist.WishListViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +17,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProductsViewModel @Inject constructor(
+class  ProductsViewModel @Inject constructor(
     private val getProductsPagingUseCase: GetProductsPagingUseCase,
     savedStateHandle: SavedStateHandle,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher

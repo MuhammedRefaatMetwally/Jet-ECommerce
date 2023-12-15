@@ -12,9 +12,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import com.example.jet_ecommerce.R
 import com.example.jet_ecommerce.ui.components.CustomAlertDialog
@@ -22,10 +24,12 @@ import com.example.jet_ecommerce.ui.components.CustomLoadingWidget
 import com.example.jet_ecommerce.ui.components.HomeProductsLazyRow
 import com.example.jet_ecommerce.ui.features.main.home.HomeViewModel
 import com.example.jet_ecommerce.ui.features.main.home.ProductContract
+import com.example.jet_ecommerce.ui.features.main.wishlist.WishListViewModel
 
 @Composable
 fun RenderProductStates(
-    viewModel: HomeViewModel = hiltViewModel(), navController: NavHostController
+    viewModel: HomeViewModel = hiltViewModel(), navController: NavHostController,
+    wishListViewModel: WishListViewModel = hiltViewModel()
 ) {
 
     val states = produceState<ProductContract.State>(initialValue = ProductContract.State.Idle) {
@@ -56,6 +60,7 @@ fun RenderProductStates(
         is ProductContract.State.Loading -> {
             CustomLoadingWidget()
         }
+
 
         is ProductContract.State.ProductSuccess -> {
             val womenProducts = states.products?.filter { product ->

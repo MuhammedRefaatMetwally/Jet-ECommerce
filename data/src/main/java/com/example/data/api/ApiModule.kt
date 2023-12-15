@@ -3,6 +3,7 @@ package com.example.data.api
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import com.example.domain.features.wishlist.repository.WishListRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -95,4 +96,6 @@ object ApiModule {
     fun provideAuthenticator(tokenManager: TokenManager):Interceptor{
         return AuthInterceptor(tokenManager)
     }
+
+
 }

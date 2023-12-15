@@ -21,6 +21,7 @@ import com.example.jet_ecommerce.R
 import com.example.jet_ecommerce.ui.components.CustomTopBar
 import com.example.jet_ecommerce.ui.features.auth.TokenViewModel
 import com.example.jet_ecommerce.ui.navigation_comp.screensNav.ECommerceScreens
+import com.example.jet_ecommerce.ui.navigation_comp.screensNav.Graph
 import kotlinx.coroutines.delay
 
 
@@ -40,7 +41,7 @@ fun SplashScreen(navController: NavHostController,tokenViewModel: TokenViewModel
         delay(2500L)
 
         if(token.value != null){
-            navController.navigate(ECommerceScreens.MainScreen.name)
+            navController.navigate(Graph.MAIN)
         }else{
             navController.navigate(ECommerceScreens.LoginScreen.name)
         }

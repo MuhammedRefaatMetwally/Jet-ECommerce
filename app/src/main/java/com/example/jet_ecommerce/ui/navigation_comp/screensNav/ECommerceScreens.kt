@@ -5,7 +5,6 @@ enum class ECommerceScreens {
     LoginScreen,
     RegisterScreen,
     MainScreen,
-    NestedCategory,
     ProductsScreen,
     ProductDetailsScreen,
     CartScreen;
@@ -21,3 +20,4 @@ enum class ECommerceScreens {
         }
     }
 }
+
