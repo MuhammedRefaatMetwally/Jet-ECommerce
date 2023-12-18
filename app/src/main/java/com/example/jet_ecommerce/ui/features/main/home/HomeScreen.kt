@@ -1,5 +1,6 @@
 package com.example.jet_ecommerce.ui.features.main.home
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,6 +39,7 @@ fun HomeScreen(
     viewModel.invokeCategoriesAction(HomeContract.Action.LoadCategories)
     viewModel.invokeProductsAction(ProductContract.Action.LoadProducts)
     cartViewModel.invokeAction(CartContract.Action.GetUserProducts)
+
 
     LazyColumn(
         Modifier

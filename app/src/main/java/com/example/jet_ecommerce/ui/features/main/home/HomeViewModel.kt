@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.common.ResultWrapper
 import com.example.domain.features.category.usecase.GetCategoriesUseCase
+import com.example.domain.features.products.model.Product
 import com.example.domain.features.products.usecase.GetProductsUseCase
 import com.example.jet_ecommerce.IoDispatcher
 import com.example.jet_ecommerce.ui.features.main.wishlist.WishListViewModel
@@ -48,7 +49,8 @@ class HomeViewModel @Inject constructor(
         get() = _productEvents
 
 
-
+var listOfProducts : List<Product?>? = null
+var menProducts : List<Product?>? = null
     override fun invokeCategoriesAction(action: HomeContract.Action) {
         when (action) {
 
@@ -105,6 +107,7 @@ class HomeViewModel @Inject constructor(
               when (response) {
 
                   is ResultWrapper.Success -> {
+                      listOfProducts = response.data
                       _productsStates.emit(ProductContract.State.ProductSuccess(response.data))
                   }
 

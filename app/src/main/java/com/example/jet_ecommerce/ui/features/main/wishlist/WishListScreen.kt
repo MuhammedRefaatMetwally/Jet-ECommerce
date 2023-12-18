@@ -24,6 +24,8 @@ import com.example.jet_ecommerce.ui.components.wish_list_component.WishListItem
 import com.example.jet_ecommerce.ui.features.auth.TokenViewModel
 import com.example.jet_ecommerce.ui.features.main.carts.CartContract
 import com.example.jet_ecommerce.ui.features.main.carts.CartViewModel
+import com.example.jet_ecommerce.ui.features.main.home.HomeViewModel
+import com.example.jet_ecommerce.ui.features.main.home.ProductContract
 import com.example.jet_ecommerce.ui.features.main.home.RenderCustomTopBar
 import com.example.jet_ecommerce.ui.features.main.products.ProductsContract
 import com.example.jet_ecommerce.ui.features.main.products.ProductsViewModel
@@ -37,10 +39,13 @@ fun WishListScreen(
     navController: NavHostController,
     cartViewModel: CartViewModel = hiltViewModel(),
     tokenViewModel: TokenViewModel = hiltViewModel(),
-    wishListViewModel: WishListViewModel = hiltViewModel()
+    wishListViewModel: WishListViewModel = hiltViewModel(),
+    homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
     cartViewModel.invokeAction(CartContract.Action.GetUserProducts)
     wishListViewModel.invokeAction(WishListContract.Action.GetWishListProducts)
+    homeViewModel.invokeProductsAction(ProductContract.Action.LoadProducts)
+
     Column(modifier = Modifier.fillMaxSize()) {
         RenderCustomTopBar(
             cartViewModel = cartViewModel,
@@ -50,7 +55,7 @@ fun WishListScreen(
         )
 
 
-        RenderWishListStates()
+        RenderWishListStates(homeViewModel = homeViewModel)
     }
 
 
@@ -61,7 +66,7 @@ fun WishListScreen(
 fun RenderWishListStates(
     viewModel: WishListViewModel = hiltViewModel(),
     productDetailsViewModel: ProductDetailsViewModel = hiltViewModel(),
-    productsViewModel: ProductsViewModel = hiltViewModel(),
+    homeViewModel: HomeViewModel = hiltViewModel(),
 
     ) {
     val states = produceState<WishListContract.State>(initialValue = WishListContract.State.Idle) {
@@ -93,22 +98,23 @@ fun RenderWishListStates(
                     .fillMaxSize()
                     .padding(top = 48.dp)
             ) {
-                items(wishListProduct) { product ->
-                    Log.d("__", "RenderWishListStates: ${0}")
-                    WishListItem(isNewToWishList =true,
-                        imgUrl = product.imageCover ?: "",
-                        productName = product.title ?: "",
-                        productPrice = product.price ?: 0,
+                items(wishListProduct.size) { index ->
+                    Log.d("Wish", "HomeScreen: ${homeViewModel.listOfProducts?.get(index)?.id}")
+                    Log.d("Wish2", "HomeScreen: ${ wishListProduct[index].id}")
+                    WishListItem(isNewToWishList = homeViewModel.listOfProducts?.get(index)?.id == wishListProduct[index].id,
+                        imgUrl = wishListProduct[index].imageCover ?: "",
+                        productName = wishListProduct[index].title ?: "",
+                        productPrice = wishListProduct[index].price ?: 0,
                         onRemoveFromWishLis = {
                             viewModel.invokeAction(
                                 WishListContract.Action.RemoveProductFomWishList(
-                                    product.id ?: ""
+                                    wishListProduct[index].id ?: ""
                                 )
                             )
                         }) {
                         productDetailsViewModel.invokeAction(
                             ProductDetailsContract.Action.AddProductToCart(
-                                product.id ?: "",
+                                wishListProduct[index].id ?: "",
                                 1
                             )
                         )

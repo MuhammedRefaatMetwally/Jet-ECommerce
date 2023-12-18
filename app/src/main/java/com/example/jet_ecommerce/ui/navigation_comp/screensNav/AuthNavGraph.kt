@@ -6,7 +6,10 @@ import androidx.navigation.compose.navigation
 import com.example.jet_ecommerce.ui.features.auth.login.LoginScreen
 import com.example.jet_ecommerce.ui.features.main.MainScreen
 import com.example.jet_ecommerce.ui.features.auth.register.RegisterScreen
+import com.example.jet_ecommerce.ui.features.main.home.HomeViewModel
 import com.example.jet_ecommerce.ui.features.splash.SplashScreen
+import com.example.jet_ecommerce.ui.navigation_comp.bottomNav.sharedViewModel
+
 fun NavGraphBuilder.authNavGraph(navController: NavHostController){
 navigation(
      route= Graph.AUTH,
@@ -14,6 +17,7 @@ navigation(
 ){
     composable(ECommerceScreens.SplashScreen.name) {
         //  val viewModel = SplashViewModel()
+        val viewModel = it.sharedViewModel<HomeViewModel>(navController = navController)
         SplashScreen(navController = navController)
 
     }
@@ -27,12 +31,6 @@ navigation(
         //val homeViewModel = hiltViewModel<HomeScreenViewModel>()
         RegisterScreen(navController = navController)
     }
-
-    composable(ECommerceScreens.MainScreen.name) {
-        MainScreen()
-    }
-
-
 }
 }
 

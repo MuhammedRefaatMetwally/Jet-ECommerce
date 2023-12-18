@@ -1,5 +1,6 @@
 package com.example.jet_ecommerce.ui.features.main.home.renderStatesComponents
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -63,12 +64,16 @@ fun RenderProductStates(
 
 
         is ProductContract.State.ProductSuccess -> {
+
             val womenProducts = states.products?.filter { product ->
                 product?.category?.name == "Women's Fashion"
             }
             val menProducts = states.products?.filter { product ->
                 product?.category?.name == "Men's Fashion"
             }
+
+            viewModel.menProducts = menProducts
+
             val eloProducts = states.products?.filter { product ->
                 product?.category?.name == "Electronics"
             }
